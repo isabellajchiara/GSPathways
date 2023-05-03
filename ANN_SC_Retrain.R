@@ -52,27 +52,20 @@ clusterData <- clusters$data
 
 clusterData <- clusterData[order(clusterData$cluster),]
 
-cluster1 <- clusterData[clusterData$cluster==1,]
-cluster2 <- clusterData[clusterData$cluster==2,]
-cluster3 <- clusterData[clusterData$cluster==3,]
-cluster4 <- clusterData[clusterData$cluster==4,]
-cluster5 <- clusterData[clusterData$cluster==5,]
-cluster6 <- clusterData[clusterData$cluster==6,]
-cluster7 <- clusterData[clusterData$cluster==7,]
-cluster8 <- clusterData[clusterData$cluster==8,]
-cluster9 <- clusterData[clusterData$cluster==9,]
-cluster10 <- clusterData[clusterData$cluster==10,]
+nclusters = nrow(clusterData)
 
-trn1 <- cluster1[sample(0.75*nrow(cluster1)),]
-trn2 <- cluster2[sample(0.75*nrow(cluster2)),]
-trn3 <- cluster3[sample(0.75*nrow(cluster3)),]
-trn4 <- cluster4[sample(0.75*nrow(cluster4)),]
-trn5 <- cluster5[sample(0.75*nrow(cluster5)),]
-trn6 <- cluster6[sample(0.75*nrow(cluster6)),]
-trn7 <- cluster7[sample(0.75*nrow(cluster7)),]
-trn8 <- cluster8[sample(0.75*nrow(cluster8)),]
-trn9 <- cluster9[sample(0.75*nrow(cluster9)),]
-trn10 <- cluster9[sample(0.75*nrow(cluster10)),]
+for (i in nclusters) {
+  clustername <- paste0("cluster",i)
+  clustername <- clusterData[clusterData$cluster=i] 
+  
+  trnname <- paste0("trn",i)
+  trnname <- clustername[sample(0.3*nrow(clustername)),]
+  
+  i = i + 1
+  if (i > ncluster){ 
+    break
+  }
+  
 TRN <- rbind(trn1, trn2,trn3,trn4,trn5, trn6, trn7,trn8,trn9,trn10)
 TRN <- na.omit(TRN)
 
