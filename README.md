@@ -11,3 +11,5 @@ Models can use random(RD) or stratified clusters(SC) training set.
 Parent selections are made at F2
 
 Relocate the parent selection script to select parents at a different generation
+
+You may replace genetic maps and haplotype data with your own genetic map and SNP data.
