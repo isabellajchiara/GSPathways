@@ -2,7 +2,11 @@
 
 Here you can run 3 breeding cycles in a row
 
-Start with MultipleCyclesF2 and it will source the following required scripts
+Start with MultipleCyclesF2 and it will source Cycle2 and Cycle3 
+
+Try different models by sourcing: random forest(RF), neural net(ANN), support vector machine(SVM) or ridge regression(RRBLUP)
+
+Models can use random(RD) or stratified clusters(SC) training set. 
 
 Parent selections are made at F2
 
