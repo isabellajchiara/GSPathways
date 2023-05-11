@@ -1,4 +1,4 @@
-# These scripts run three breeding cycles. They are used to investigate when to select parents for the next cycle, and which generation to include in model training. 
+# These scripts run three breeding cycles. They are used to investigate when to select parents for the next cycle in a GS scenario, and which generation to include in model training. 
 
 Here you can run 3 breeding cycles in a row
 
