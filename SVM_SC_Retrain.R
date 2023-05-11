@@ -26,7 +26,7 @@ clusterData <- clusters$data
 
 clusterData <- clusterData[order(clusterData$cluster),]
 
-nclusters = nrow(clusterData)
+nclusters <- as.numeric(clusterData[as.numeric(nrow(clusterData)),as.numeric(ncol(clusterData))])
 
 for (i in nclusters) {
   clustername <- paste0("cluster",i)
