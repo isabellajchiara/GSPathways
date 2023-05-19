@@ -34,15 +34,11 @@ F1 = randCross(TopParents, 200, nProgeny=3)
 
 ## self and bulk F1 to form F2 ##
 
-F2 = self(F1, nProgeny = 30)
+F2 = self(F1)
 F2 = setPheno(F2)
 
 #source GS Prediction Model
 source("rrblup_F2data.R")
-
-newParents = selectInd(F2, 10, use="ebv", top=TRUE)
-varMatC1[2,] = varG(newParents)
-gvMatC1[2,] <- mean(gv(newParents))
 
 M_F2 <-pullSegSiteGeno(F2)
 G_F2 = M_F2-1
@@ -50,6 +46,10 @@ EBVF2 <- G_F2 %*% markerEffects
 
 F2@ebv <- as.matrix(EBVF2)
 corMatC1[1,] = cor(bv(F2), ebv(F2))
+
+newParents = selectInd(F2, 10, use="ebv", top=TRUE)
+varMatC1[2,] = varG(newParents)
+gvMatC1[2,] <- mean(gv(newParents))
 
 allelesMatNP <- pullSegSiteHaplo(newParents)
 Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
@@ -71,7 +71,7 @@ allelesMatF1 <- cbind(Gen, allelesMatF1)
 
 ## self and bulk F1 to form F2 ##
 
-F2 = self(F1, nProgeny = 30) 
+F2 = self(F1, nProgeny=10) 
 varMatC1[4,] = varG(F2)
 gvMatC1[4,] <- mean(gv(F2))
 
@@ -94,7 +94,7 @@ source("SelectParentsF2.R")
 ## select top individuals from F2 bulk  to form F3 ##
 
 TopFamF2 = selectFam(F2, 10, use="pheno", top=TRUE) 
-SelectionsF2 = selectWithinFam(TopFamF2, 100, use="ebv", top=TRUE)
+SelectionsF2 = selectWithinFam(TopFamF2, 5, use="ebv", top=TRUE)
 
 F3 = self(SelectionsF2)
 F3 = setPheno(F3)
@@ -119,7 +119,7 @@ corMatC1[3,] = cor(bv(F3),ebv(F3))
 ##select top within familiy from F3 to form F4 ##
 
 TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
+SelectionsF3 = selectWithinFam(TopFamF3, 3, use="pheno", top=TRUE)
 
 F4 = self(SelectionsF3)
 F4 = setPheno(F4)
@@ -157,7 +157,7 @@ allelesMatF5 <- cbind(Gen, allelesMatF5)
 ##set EBV using BLUP model##
 M_F5 <-pullSegSiteGeno(F5)
 G_F5 = M_F5-1
-EBVF5 <- G_F5 %*% markerEffects2
+EBVF5 <- G_F5 %*% markerEffects
 
 F5@ebv <- as.matrix(EBVF5)
 corMatC1[5,] = cor(bv(F5),ebv(F5))
@@ -179,7 +179,7 @@ allelesMatPYT <- cbind(Gen, allelesMatPYT)
 ##set EBV using BLUP model##
 M_PYT <-pullSegSiteGeno(PYT)
 G_PYT = M_PYT-1
-EBVPYT <- G_PYT %*% markerEffects2
+EBVPYT <- G_PYT %*% markerEffects
 
 PYT@ebv <- as.matrix(EBVPYT)
 corMatC1[6,] = cor(bv(PYT),ebv(PYT))
@@ -201,7 +201,7 @@ allelesMatAYT <- cbind(Gen, allelesMatAYT)
 ##set EBV using BLUP model##
 M_AYT <-pullSegSiteGeno(AYT)
 G_AYT = M_AYT-1
-EBVAYT <- G_AYT %*% markerEffects2
+EBVAYT <- G_AYT %*% markerEffects
 
 AYT@ebv <- as.matrix(EBVAYT)
 corMatC1[7,] = cor(bv(AYT),ebv(AYT))
@@ -225,36 +225,40 @@ allelesMatC1 <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, al
 bvebv <- cbind(bv(newParents), ebv(newParents))
 Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
 bvebv <- cbind(Gen, bvebv)
+colnames(bvebv) <- c("Gen","bv","ebv")
 
 bvebv1 <- cbind(bv(F2), ebv(F2))
 Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 bvebv1 <- cbind(Gen, bvebv1)
+colnames(bvebv1) <- c("Gen","bv","ebv")
 
 bvebv2 <- cbind(bv(F3), ebv(F3))
 Gen <- as.data.frame(rep("F3", times=nInd(F3)))
 bvebv2 <- cbind(Gen, bvebv2)
+colnames(bvebv2) <- c("Gen","bv","ebv")
 
 bvebv3 <- cbind(bv(F4), ebv(F4))
 Gen <- as.data.frame(rep("F4", times=nInd(F4)))
 bvebv3 <- cbind(Gen, bvebv3)
+colnames(bvebv3) <- c("Gen","bv","ebv")
 
 bvebv4 <- cbind(bv(F5), ebv(F5))
 Gen <- as.data.frame(rep("F5", times=nInd(F5)))
 bvebv4 <- cbind(Gen, bvebv4)
+colnames(bvebv4) <- c("Gen","bv","ebv")
 
 bvebv5 <- cbind(bv(PYT), ebv(PYT))
 Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
 bvebv5 <- cbind(Gen, bvebv5)
+colnames(bvebv5) <- c("Gen","bv","ebv")
 
 bvebv6 <- cbind(bv(AYT), ebv(AYT))
 Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
 bvebv6 <- cbind(Gen, bvebv6)
+colnames(bvebv6) <- c("Gen","bv","ebv")
 
 
 bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
-colnames(bv_ebv) <- c("Gen","bv","ebv")
-
-
 
 
 #write files - naming convention: "model_trainingSet_descriptor_populationType_trait.csv"
@@ -262,6 +266,4 @@ colnames(bv_ebv) <- c("Gen","bv","ebv")
 
 
 source("1CycleTwo_rrblup.R")
-
-
 
