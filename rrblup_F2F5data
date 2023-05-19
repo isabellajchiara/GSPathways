@@ -1,0 +1,19 @@
+M2 <- pullSegSiteGeno(F2)
+y2 <- pheno(F2)
+
+M5 <- pullSegSiteGeno(F5)
+y5 <- pheno(F5)
+
+M <- rbind(M2, M5)
+y <- rbind(y2,y5)
+
+trainIndex <- as.matrix(sample(1:nInd(TP), 0.75*(nrow(M)))) 
+
+phenoTrain <- y[trainIndex,]
+genoTrain <- M[trainIndex,]
+
+BV <- phenoTrain
+
+EBVans <-mixed.solve(BV, Z=genoTrain, K=NULL, SE=FALSE, return.Hinv=FALSE)
+markerEffects <- EBVans$u
+markerEffects <- as.vector(markerEffects)
