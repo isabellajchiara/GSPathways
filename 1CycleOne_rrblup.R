@@ -119,7 +119,7 @@ corMatC1[3,] = cor(bv(F3),ebv(F3))
 ##select top within familiy from F3 to form F4 ##
 
 TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 3, use="pheno", top=TRUE)
+SelectionsF3 = selectWithinFam(TopFamF3, 3, use="ebv", top=TRUE)
 
 F4 = self(SelectionsF3)
 F4 = setPheno(F4)
@@ -142,7 +142,7 @@ corMatC1[4,] = cor(bv(F4),ebv(F4))
 
 ## select top families from F4 to form F5 ##
 
-SelectionsF4 = selectFam(F4, 4, use="ebv")
+SelectionsF4 = selectFam(F4, 4, use="ebv", top=TRUE)
 F5 = self(SelectionsF4)
 varMatC1[7,]= varG(F5)
 gvMatC1[7,] <- mean(gv(F5))
@@ -164,7 +164,7 @@ corMatC1[5,] = cor(bv(F5),ebv(F5))
 
 ## select top F5 families for preliminary yield trial ##
 
-SelectionsF5 = selectFam(F5, 3, use="ebv") 
+SelectionsF5 = selectFam(F5, 3, use="ebv", top=TRUE) 
 PYT = self(SelectionsF5)
 varMatC1[8,] = varG(PYT)
 gvMatC1[8,] <- mean(gv(PYT))
@@ -207,7 +207,7 @@ AYT@ebv <- as.matrix(EBVAYT)
 corMatC1[7,] = cor(bv(AYT),ebv(AYT))
 
 ## select top plants to form variety ##
-VarietySel = selectInd(AYT, 1, use="ebv")
+VarietySel = selectInd(AYT, 1, use="ebv", top=TRUE)
 Variety = self(VarietySel)
 varMatC1[10,] = varG(Variety)
 gvMatC1[10,] <- mean(gv(Variety))
@@ -266,4 +266,5 @@ bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
 
 
 source("1CycleTwo_rrblup.R")
+
 
