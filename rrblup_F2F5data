@@ -7,7 +7,7 @@ y5 <- pheno(F5)
 M <- rbind(M2, M5)
 y <- rbind(y2,y5)
 
-trainIndex <- as.matrix(sample(1:nInd(TP), 0.75*(nrow(M)))) 
+trainIndex <- as.matrix(sample(1:(nInd(F2) +nInd(F5)), 0.75*(nrow(M)))) 
 
 phenoTrain <- y[trainIndex,]
 genoTrain <- M[trainIndex,]
