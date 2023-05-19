@@ -6,9 +6,9 @@ library(rrBLUP)
 
 #Create Results Matrices
 
-gvMat <- matrix(nrow=10, ncol=1)
-corMat <- matrix(nrow=7, ncol=1)
-varMat <- matrix(nrow=10, ncol=1)
+gvMatC1 <- matrix(nrow=10, ncol=1)
+corMatC1 <- matrix(nrow=7, ncol=1)
+varMatC1 <- matrix(nrow=10, ncol=1)
 
 
 #establish simulation parameters
@@ -24,7 +24,7 @@ SP <- SimParam$new(founderPop)
 SP$addTraitAEG(10, mean=8.8)
 SP$setVarE(h2=0.25)
 
-#build training pop
+#INITIAL TRAINING POP
 
 ## randomly cross 200 parents 
 Parents = newPop(founderPop)
@@ -37,56 +37,19 @@ F1 = randCross(TopParents, 200, nProgeny=3)
 F2 = self(F1, nProgeny = 30)
 F2 = setPheno(F2)
 
-## select top individuals from each family to form F2. Bulk and self to form F3
-TopFamF2 = selectFam(F2, 10, use="pheno", top=TRUE) 
-SelectionsF2 = selectWithinFam(TopFamF2, 100, use="pheno", top=TRUE)
-
-F3 = self(SelectionsF2)
-F3 = setPheno(F3)
-
-##select top individuals within F3 families to form F4 ##
-
-TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
-
-F4 = self(SelectionsF3)
-F4 = setPheno(F4)
-
-## select top families from F4 to form F5 ##
-
-F5Sel = selectFam(F4, 4, use="pheno", top=TRUE)
-F5 = self(F5Sel)
-F5 = setPheno(F5)
-
-## select top families from F5 for PYTs ##
-
-PYTSel = selectFam(F5, 3, use="pheno", top=TRUE) 
-PYT = self(PYTSel, nProgeny = 10)
-PYT = setPheno(PYT, reps=2)
-gvMat[1,] <- mean(gv(PYT))
-varMat[1,] <- varG(PYT)
-
-## use PYTs as training data
-
-TrainingGeno <- pullSegSiteGeno(PYT)
-TrainingPheno <- pheno(PYT)
-
-
-#load in GS prediction model and use it to select parents for next cycle
-
 #source GS Prediction Model
 source("rrblup_F2data.R")
 
-M_PYT <-pullSegSiteGeno(PYT)
-G_PYT = M_PYT-1
-EBVPYT <- G_PYT %*% markerEffects
+newParents = selectInd(F2, 10, use="ebv", top=TRUE)
+varMatC1[2,] = varG(newParents)
+gvMatC1[2,] <- mean(gv(newParents))
 
-PYT@ebv <- as.matrix(EBVPYT)
-corMat[1,] = cor(bv(PYT), ebv(PYT))
+M_F2 <-pullSegSiteGeno(F2)
+G_F2 = M_F2-1
+EBVF2 <- G_F2 %*% markerEffects
 
-newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
-varMat[2,] = varG(newParents)
-gvMat[2,] <- mean(gv(newParents))
+F2@ebv <- as.matrix(EBVF2)
+corMatC1[1,] = cor(bv(F2), ebv(F2))
 
 allelesMatNP <- pullSegSiteHaplo(newParents)
 Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
@@ -98,8 +61,8 @@ allelesMatNP <- cbind(Gen, allelesMatNP)
 ##start with 200 random crosses
 
 F1 = randCross(newParents, 200) 
-varMat[3,] = varG(F1)
-gvMat[3,] <- mean(gv(F1))
+varMatC1[3,] = varG(F1)
+gvMatC1[3,] <- mean(gv(F1))
 
 allelesMatF1 <- pullSegSiteHaplo(F1)
 Gen <- as.data.frame(rep("F1", times=nInd(F1)))
@@ -109,10 +72,8 @@ allelesMatF1 <- cbind(Gen, allelesMatF1)
 ## self and bulk F1 to form F2 ##
 
 F2 = self(F1, nProgeny = 30) 
-varMat[4,] = varG(F2)
-gvMat[4,] <- mean(gv(F2))
-
-source("SelectParentsF2.R")
+varMatC1[4,] = varG(F2)
+gvMatC1[4,] <- mean(gv(F2))
 
 allelesMatF2 <- pullSegSiteHaplo(F2)
 Gen <- as.data.frame(rep("F2", times=nInd(F2)))
@@ -125,7 +86,10 @@ G_F2 = M_F2-1
 EBVF2 <- G_F2 %*% markerEffects
 
 F2@ebv <- as.matrix(EBVF2)
-corMat[2] = cor(bv(F2), ebv(F2))
+corMatC1[2] = cor(bv(F2), ebv(F2))
+
+source("SelectParentsF2.R")
+
 
 ## select top individuals from F2 bulk  to form F3 ##
 
@@ -134,8 +98,8 @@ SelectionsF2 = selectWithinFam(TopFamF2, 100, use="ebv", top=TRUE)
 
 F3 = self(SelectionsF2)
 F3 = setPheno(F3)
-varMat[5,] = varG(F3)
-gvMat[5,] <- mean(gv(F3))
+varMatC1[5,] = varG(F3)
+gvMatC1[5,] <- mean(gv(F3))
 
 allelesMatF3 <- pullSegSiteHaplo(F3)
 Gen <- as.data.frame(rep("F3", times=nInd(F3)))
@@ -150,7 +114,7 @@ G_F3 = M_F3-1
 EBVF3 <- G_F3 %*% markerEffects
 
 F3@ebv <- as.matrix(EBVF3)
-corMat[3,] = cor(bv(F3),ebv(F3))
+corMatC1[3,] = cor(bv(F3),ebv(F3))
 
 ##select top within familiy from F3 to form F4 ##
 
@@ -159,8 +123,8 @@ SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
 
 F4 = self(SelectionsF3)
 F4 = setPheno(F4)
-varMat[6,] = varG(F4)
-gvMat[6,] <- mean(gv(F4))
+varMatC1[6,] = varG(F4)
+gvMatC1[6,] <- mean(gv(F4))
 
 allelesMatF4 <- pullSegSiteHaplo(F4)
 Gen <- as.data.frame(rep("F4", times=nInd(F4)))
@@ -174,24 +138,19 @@ G_F4 = M_F4-1
 EBVF4 <- G_F4 %*% markerEffects
 
 F4@ebv <- as.matrix(EBVF4)
-corMat[4,] = cor(bv(F4),ebv(F4))
+corMatC1[4,] = cor(bv(F4),ebv(F4))
 
 ## select top families from F4 to form F5 ##
 
 SelectionsF4 = selectFam(F4, 4, use="ebv")
 F5 = self(SelectionsF4)
-varMat[7,]= varG(F5)
-gvMat[7,] <- mean(gv(F5))
+varMatC1[7,]= varG(F5)
+gvMatC1[7,] <- mean(gv(F5))
 
 allelesMatF5 <- pullSegSiteHaplo(F5)
 Gen <- as.data.frame(rep("F5", times=nInd(F5)))
 colnames(Gen) <- "Gen"
 allelesMatF5 <- cbind(Gen, allelesMatF5)
-
-
-#use F5 to retrain the model
-
-source("rrblup_RD_Retrain.R")
 
 #continue pipeline
 
@@ -201,14 +160,14 @@ G_F5 = M_F5-1
 EBVF5 <- G_F5 %*% markerEffects2
 
 F5@ebv <- as.matrix(EBVF5)
-corMat[5,] = cor(bv(F5),ebv(F5))
+corMatC1[5,] = cor(bv(F5),ebv(F5))
 
 ## select top F5 families for preliminary yield trial ##
 
 SelectionsF5 = selectFam(F5, 3, use="ebv") 
 PYT = self(SelectionsF5)
-varMat[8,] = varG(PYT)
-gvMat[8,] <- mean(gv(PYT))
+varMatC1[8,] = varG(PYT)
+gvMatC1[8,] <- mean(gv(PYT))
 
 allelesMatPYT <- pullSegSiteHaplo(PYT)
 Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
@@ -223,14 +182,14 @@ G_PYT = M_PYT-1
 EBVPYT <- G_PYT %*% markerEffects2
 
 PYT@ebv <- as.matrix(EBVPYT)
-corMat[6,] = cor(bv(PYT),ebv(PYT))
+corMatC1[6,] = cor(bv(PYT),ebv(PYT))
 
 ## select top families from PYT for AYT ##
 
 SelectionsPYT = selectFam(PYT,  1, use="ebv", reps=5, top=TRUE) 
 AYT = self(SelectionsPYT)
-varMat[9,] = varG(AYT)
-gvMat[9,] <- mean(gv(AYT))
+varMatC1[9,] = varG(AYT)
+gvMatC1[9,] <- mean(gv(AYT))
 
 allelesMatAYT <- pullSegSiteHaplo(AYT)
 Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
@@ -245,20 +204,20 @@ G_AYT = M_AYT-1
 EBVAYT <- G_AYT %*% markerEffects2
 
 AYT@ebv <- as.matrix(EBVAYT)
-corMat[7,] = cor(bv(AYT),ebv(AYT))
+corMatC1[7,] = cor(bv(AYT),ebv(AYT))
 
 ## select top plants to form variety ##
 VarietySel = selectInd(AYT, 1, use="ebv")
 Variety = self(VarietySel)
-varMat[10,] = varG(Variety)
-gvMat[10,] <- mean(gv(Variety))
+varMatC1[10,] = varG(Variety)
+gvMatC1[10,] <- mean(gv(Variety))
 
 allelesMatVar <- pullSegSiteHaplo(Variety)
 Gen <- as.data.frame(rep("Variety", times=nInd(Variety)))
 colnames(Gen) <- "Gen"
 allelesMatVar <- cbind(Gen, allelesMatVar)
 
-allelesMat <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
+allelesMatC1 <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
 
 
 ###collect bvs and ebvs###
@@ -292,11 +251,8 @@ Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
 bvebv6 <- cbind(Gen, bvebv6)
 
 
-bv_ebv <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
+bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
 colnames(bv_ebv) <- c("Gen","bv","ebv")
-
-
-
 
 
 
@@ -305,5 +261,7 @@ colnames(bv_ebv) <- c("Gen","bv","ebv")
 
 
 
-source("1CycleTwoF2.R")
+source("1CycleTwo_rrblup.R")
+
+
 
