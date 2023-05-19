@@ -1,7 +1,7 @@
 M <- pullSegSiteGeno(F5)
 y <- pheno(F5)
 
-trainIndex <- as.matrix(sample(1:nInd(TP), 0.75*(nrow(M)))) 
+trainIndex <- as.matrix(sample(1:nInd(F5), 0.75*(nrow(M)))) 
 
 phenoTrain <- y[trainIndex,]
 genoTrain <- M[trainIndex,]
