@@ -1,41 +1,62 @@
-nGVs = 8
-nCors = 6
-nVars= 7
+## define variables ##
+
+library(purrr)
+
+nModels = 7
 nReps = 2
+nGen = 10
+nVar = 10
 
+## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
-## establish empty matrices to hold outputs 
+geneticvaluesC1 <- matrix(nrow=nGen, ncol=nReps)
+geneticvaluesC2 <- matrix(nrow=nGen, ncol=nReps)
+geneticvaluesC3 <- matrix(nrow=nGen, ncol=nReps)
 
-C1GV = matrix(nrow=nGVs, ncol=nReps)
-C2GV = matrix(nrow=nGVs, ncol=nReps)
-C3GV = matrix(nrow=nGVs, ncol=nReps)
+correlationsC1 <- matrix(nrow=nModels, ncol=nReps)
+correlationsC2 <- matrix(nrow=nModels, ncol=nReps)
+correlationsC3 <- matrix(nrow=nModels, ncol=nReps)
 
-C1COR = matrix(nrow=nCors, ncol=nReps)
-C2COR = matrix(nrow=nCors, ncol=nReps)
-C3COR = matrix(nrow=nCors, ncol=nReps)
+variancesC1 <- matrix(nrow=nVar,ncol=nReps)
+variancesC2 <- matrix(nrow=nVar,ncol=nReps)
+variancesC3 <- matrix(nrow=nVar,ncol=nReps)
 
-C1VAR = matrix(nrow=nVars, ncol=nReps)
-C2VAR = matrix(nrow=nVars, ncol=nReps)
-C3VAR = matrix(nrow=nVars, ncol=nReps)
+allelesC1 <- vector("list", length = nReps)
+allelesC2 <- vector("list", length = nReps)
+allelesC3 <- vector("list", length = nReps)
+
+bv_ebvC1 <- vector("list", length = nReps)
+bv_ebvC2 <- vector("list", length = nReps)
+bv_ebvC3 <- vector("list", length = nReps)
+
 
 
 ## Run repeat loop to run reps ##
 
 i = 1
 repeat{
-  source("1MultipleCyclesF2.R") ##Source the SCript for the SCenario you would like to run##
+  source("1CycleOne_rrblup.R") ##Source the SCript for the SCenario you would like to run##
   
-  C1GV[,i] <- cycle1gvs
-  C2GV[,i] <- cycle2gvs
-  C3GV[,i] <- cycle3gvs
+  C1GV[,i] <- gvMatC1
+  C2GV[,i] <- gvMatC2
+  C3GV[,i] <- gvMatC3
   
-  C1COR[,i] <- cycle1cors
-  C2COR[,i] <- cycle2cors
-  C3COR[,i] <- cycle3cors
+  C1COR[,i] <- corMatC1
+  C2COR[,i] <- corMatC2
+  C3COR[,i] <- corMatC3
   
-  C1VAR[,i] <- cycle1vars
-  C2VAR[,i] <- cycle2vars
-  C3VAR[,i] <- cycle3vars
+  C1VAR[,i] <- varMatC1
+  C2VAR[,i] <- varMatC2
+  C3VAR[,i] <- varMatC3
+  
+  allelesC1[[i]] <- allelesMatC1
+  allelesC2[[i]] <- allelesMatC2
+  allelesC3[[i]] <- allelesMatC3
+  
+  
+  bv_ebvC1[[i]] <- bv_ebvC1
+  bv_ebvC2[[i]] <- bv_ebvC2
+  bv_ebvC3[[i]] <- bv_ebvC3
   
   i <- i + 1
   
@@ -46,43 +67,44 @@ repeat{
   
   
   ##create data frames and label##
-  cycle1gvs <- as.data.frame(cycle1gvs)
-  C1GVmean <- rowMeans(cycle1gvs)
+  geneticvalues <- as.data.frame(geneticvalues)
+  colnames(geneticvalues) <- c(1:nReps)
+  rownames(geneticvalues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety")
   
-  cycle2gvs <- as.data.frame(cycle2gvs)
-  C2GVmean <- rowMeans(cycle2gvs)
+  correlations <- as.data.frame(correlations)
+  colnames(correlations) <- c(1:nReps)
+  rownames(correlations) <- c("PrevCycPYT", "F2","F3","F4","F5","PYT","AYT")
   
-  cycle3gvs <- as.data.frame(cycle3gvs)
-  C3GVmean <- rowMeans(cycle3gvs)
-  
-  AllCyclesGV <- cbind(C1GVmean, C2GVmean, C3GVmean )
-  write.csv(AllCyclesGV,"MCF2_GVS_rrblup_RD_SNP_yield.csv")
-  
-  cycle1cors <- as.data.frame(cycle1cors)
-  C1CORmean <- rowMeans(cycle1cors)
-  cycle2cors <- as.data.frame(cycle2cors)
-  C2CORmean <- rowMeans(cycle2cors)
-  cycle3cors <- as.data.frame(cycle3cors)
-  C3CORmean <- rowMeans(cycle3cors)
-  
-  AllCyclesCOR <- cbind(C1CORmean, C2CORmean, C3CORmean )
-  write.csv(AllCyclesCOR,"MCF2_CORS_rrblup_RD_SNP_yield.csv")
+  variances <- as.data.frame(variances)
+  colnames(variances) <- c(1:nReps)
+  rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT",
+                           "Variety")
   
   
-  cycle1vars <- as.data.frame(cycle1vars)
-  C1VARmean <- rowMeans(cycle1vars)
-  cycle2vars <- as.data.frame(cycle2vars)
-  C2VARmean <- rowMeans(cycle2vars)
-  cycle3vars <- as.data.frame(cycle3vars)
-  C3VARmean <- rowMeans(cycle3vars)
-  
-  AllCyclesVAR <- cbind(C1VARmean, C2VARmean, C3VARmean )
-  write.csv(AllCyclesVAR,"MCF2_VARS_rrblup_RD_SNP_yield.csv")
+  ##write files
+  write.csv(geneticvaluesC1, "1C1_rrblup_rd_gvs_snp_yield.csv")
+  write.csv(geneticvaluesC2, "1C2_rrblup_rd_gvs_snp_yield.csv")
+  write.csv(geneticvaluesC3, "1C3_rrblup_rd_gvs_snp_yield.csv")
   
   
+  write.csv(correlationsC1, "1C1_rrblup_rd_cors_snp_yield.csv")
+  write.csv(correlationsC2, "1C2_rrblup_rd_cors_snp_yield.csv")
+  write.csv(correlationsC3, "1C3_rrblup_rd_cors_snp_yield.csv")
+  
+  write.csv(variancesC1, "1C1_rrblup_rd_vars_snp_yield.csv")
+  write.csv(variancesC2, "1C2_rrblup_rd_vars_snp_yield.csv")
+  write.csv(variancesC3, "1C3_rrblup_rd_vars_snp_yield.csv")
+  
+  saveRDS(allelesC1, file="1C1rrblup_rd_alleles_snp_yield.rds")
+  saveRDS(allelesC2, file="1C2rrblup_rd_alleles_snp_yield.rds")
+  saveRDS(allelesC3, file="1C3rrblup_rd_alleles_snp_yield.rds")
+  
+  saveRDS(bv_ebvC1, file="1C1rrblup_rd_bvebv_snp_yield.rds")
+  saveRDS(bv_ebvC2, file="1C2rrblup_rd_bvebv_snp_yield.rds")
+  saveRDS(bv_ebvC3, file="1C3rrblup_rd_bvebv_snp_yield.rds")
   
   
   
 }
-
-################################################################################
+  
+ 
