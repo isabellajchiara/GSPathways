@@ -4,6 +4,7 @@ var1 <-varG(F1)
 F2 = self(F1, nProgeny = 5) ##nProgeny = number of progeny per cross## 
 var2 <-varG(F2)
 
+source("rrblup_F2data.R")
 
 ##set EBV using BLUP model##
 M_F2 <-pullSegSiteGeno(F2)
@@ -48,9 +49,6 @@ var4 = varG(F4)
 
 F5Sel = selectFam(F4, 10, use="ebv")
 F5 = self(F5Sel, nProgeny=3)
-
-
-source("RF_RD_RetrainF2F5.R")
 
 #continue pipeline
 
