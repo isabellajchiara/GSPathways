@@ -5,11 +5,13 @@ gvMatC2 <- matrix(nrow=10, ncol=1)
 corMatC2 <- matrix(nrow=7, ncol=1)
 varMatC2 <- matrix(nrow=10, ncol=1)
 
+SelectParents = source("SelectParentsF2.R")
+
+ModelTrain = source("rrblup_F2data.R")
 
 F1 = makeCross(newCycleSelections, crossPlan = cross, nProgeny = 5)
 varMatC2[3,] = varG(F1)
 gvMatC2[3,] <- mean(gv(F1))
-
 
 allelesMatF1 <- pullSegSiteHaplo(F1)
 Gen <- as.data.frame(rep("F1", times=nInd(F1)))
@@ -27,7 +29,7 @@ Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 colnames(Gen) <- "Gen"
 allelesMatF2 <- cbind(Gen, allelesMatF2)
 
-source("rrblup_F2data.R")
+ModelTrain
 
 ##set EBV using BLUP model##
 M_F2 <-pullSegSiteGeno(F2)
@@ -39,7 +41,7 @@ corMatC2[2] = cor(bv(F2), ebv(F2))
 
 
 rm(newCycleSelections)
-source("SelectParentsF2.R")
+SelectParents
 
 ## select top individuals from F2 bulk  to form F3 ##
 
@@ -125,8 +127,6 @@ Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
 colnames(Gen) <- "Gen"
 allelesMatPYT <- cbind(Gen, allelesMatPYT)
 
-
-
 ##set EBV using BLUP model##
 M_PYT <-pullSegSiteGeno(PYT)
 G_PYT = M_PYT-1
@@ -146,8 +146,6 @@ allelesMatAYT <- pullSegSiteHaplo(AYT)
 Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
 colnames(Gen) <- "Gen"
 allelesMatAYT <- cbind(Gen, allelesMatAYT)
-
-
 
 ##set EBV using BLUP model##
 M_AYT <-pullSegSiteGeno(AYT)
@@ -169,9 +167,6 @@ colnames(Gen) <- "Gen"
 allelesMatVar <- cbind(Gen, allelesMatVar)
 
 allelesMatC2 <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
-
-
-###collect bvs and ebvs###
 
 ###collect bvs and ebvs###
 
@@ -212,7 +207,6 @@ colnames(bvebv6) <- c("Gen","bv","ebv")
 
 
 bv_ebvC2 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
-
 
 
 
