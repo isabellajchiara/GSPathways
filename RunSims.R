@@ -1,7 +1,8 @@
+
 ## define variables ##
 
 nModels = 7
-nReps = 25
+nReps = 15
 nGen = 10
 nVar = 9
 
@@ -83,39 +84,27 @@ repeat{
   colnames(AllgeneticvaluesC3) <- c(1:nReps)
   
   correlationsC1 <- as.data.frame(correlationsC1)
-  C1mean <- as.data.frame(rowMeans(correlationsC1))
-  correlationsC1 <- as.data.frame(cbind(C1mean,correlationsC1))
   rownames(correlationsC1) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
-  colnames(correlationsC1) <- c(1:nReps+1)
+  colnames(correlationsC1) <- c(1:nReps)
   
   correlationsC2 <- as.data.frame(correlationsC2)
-  C2mean <- as.data.frame(rowMeans(correlationsC2))
-  correlationsC2 <- as.data.frame(cbind(C2mean,correlationsC2))
   rownames(correlationsC2) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
-  colnames(correlationsC2) <- c(1:nReps+1)
+  colnames(correlationsC2) <- c(1:nReps)
   
   correlationsC3 <- as.data.frame(correlationsC3)
-  C3mean <- as.data.frame(rowMeans(correlationsC3))
-  correlationsC3 <- as.data.frame(cbind(C3mean,correlationsC3))
   rownames(correlationsC3) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
-  colnames(correlationsC3) <- c(1:nReps+1)
+  colnames(correlationsC3) <- c(1:nReps)
   
   variancesC1 <- as.data.frame(variancesC1)
-  C1mean <- as.data.frame(rowMeans(variancesC1))
-  variancesC1 <- as.data.frame(cbind(C1mean,variancesC1))
-  colnames(variancesC1) <- c(1:nReps+1)
+  colnames(variancesC1) <- c(1:nReps)
   rownames(variancesC1) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
 
   variancesC2 <- as.data.frame(variancesC2)
-  C2mean <- as.data.frame(rowMeans(variancesC2))
-  variancesC2 <- as.data.frame(cbind(C2mean,variancesC2))
-  colnames(variancesC2) <- c(1:nReps+1)
+  colnames(variancesC2) <- c(1:nReps)
   rownames(variancesC2) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
   
   variancesC3 <- as.data.frame(variancesC3)
-  C3mean <- as.data.frame(rowMeans(variancesC3))
-  variancesC3 <- as.data.frame(cbind(C3mean,variancesC3))
-  colnames(variancesC3) <- c(1:nReps+1)
+  colnames(variancesC3) <- c(1:nReps)
   rownames(variancesC3) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
   
   
@@ -145,4 +134,3 @@ repeat{
   
 }
   
- 
