@@ -3,6 +3,9 @@ gvMatC3 <- matrix(nrow=10, ncol=1)
 corMatC3 <- matrix(nrow=7, ncol=1)
 varMatC3 <- matrix(nrow=10, ncol=1)
 
+SelectParents = source("SelectParentsF2.R")
+
+ModelTrain = source("rrblup_F2data.R")
 
 F1 = makeCross(newCycleSelections, crossPlan = cross, nProgeny = 5)
 varMatC3[3,] = varG(F1)
@@ -25,8 +28,7 @@ Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 colnames(Gen) <- "Gen"
 allelesMatF2 <- cbind(Gen, allelesMatF2)
 
-source("rrblup_F2data.R")
-
+ModelTrain
 
 ##set EBV using BLUP model##
 M_F2 <-pullSegSiteGeno(F2)
@@ -36,7 +38,7 @@ EBVF2 <- G_F2 %*% markerEffects
 F2@ebv <- as.matrix(EBVF2)
 corMatC3[2] = cor(bv(F2), ebv(F2))
 
-source("SelectParentsF2.R")
+SelectParents
 
 ## select top individuals from F2 bulk  to form F3 ##
 
@@ -166,9 +168,6 @@ colnames(Gen) <- "Gen"
 allelesMatVar <- cbind(Gen, allelesMatVar)
 
 allelesMatC3 <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
-
-
-###collect bvs and ebvs###
 
 ###collect bvs and ebvs###
 
