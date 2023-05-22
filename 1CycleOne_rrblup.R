@@ -8,15 +8,11 @@ library(rrBLUP)
 
 gvMatC1 <- matrix(nrow=10, ncol=1)
 corMatC1 <- matrix(nrow=7, ncol=1)
-varMatC1 <- matrix(nrow=10, ncol=1)
-
-SelectParents = source("SelectParentsF2.R")
-
-ModelTrain = source("rrblup_F2data.R")
+varMatC1 <- matrix(nrow=9, ncol=1)
 
 #establish simulation parameters
-genMap <- readRDS("genMapSNPs.Rdata")
-haplotypes <- readRDS("haplotypesSNPs.Rdata")
+genMap <- readRDS("genMapSNPs.RData")
+haplotypes <- readRDS("haplotypesSNPs.RData")
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
@@ -40,7 +36,7 @@ F1 = randCross(TopParents, 200, nProgeny=3)
 F2 = self(F1)
 F2 = setPheno(F2)
 
-ModelTrain
+source("rrblup_F2data.R")
 
 M_F2 <-pullSegSiteGeno(F2)
 G_F2 = M_F2-1
@@ -77,7 +73,7 @@ F2 = self(F1, nProgeny=10)
 varMatC1[4,] = varG(F2)
 gvMatC1[4,] <- mean(gv(F2))
 
-ModelTrain
+source("rrblup_F2data.R")
 
 allelesMatF2 <- pullSegSiteHaplo(F2)
 Gen <- as.data.frame(rep("F2", times=nInd(F2)))
@@ -92,7 +88,7 @@ EBVF2 <- G_F2 %*% markerEffects
 F2@ebv <- as.matrix(EBVF2)
 corMatC1[2,] = cor(bv(F2), ebv(F2))
 
-SelectParents
+SelectParents = source("SelectParentsF2.R")
 
 ## select top individuals from F2 bulk  to form F3 ##
 
@@ -212,7 +208,6 @@ corMatC1[7,] = cor(bv(AYT),ebv(AYT))
 ## select top plants to form variety ##
 VarietySel = selectInd(AYT, 1, use="ebv", top=TRUE)
 Variety = self(VarietySel)
-varMatC1[10,] = varG(Variety)
 gvMatC1[10,] <- mean(gv(Variety))
 
 allelesMatVar <- pullSegSiteHaplo(Variety)
@@ -269,5 +264,4 @@ bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
 
 
 source("1CycleTwo_rrblup.R")
-
 
