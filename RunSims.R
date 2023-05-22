@@ -85,19 +85,19 @@ repeat{
   colnames(geneticvaluesC3) <- c(1:nReps)
   
   correlationsC1 <- as.data.frame(correlationsC1)
-  C1mean <- as.data.frame(t(rowMeans(correlationsC1)))
+  C1mean <- as.data.frame(rowMeans(correlationsC1))
   correlationsC1 <- as.data.frame(cbind(C1mean,correlationsC1))
   rownames(correlationsC1) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
   colnames(correlationsC1) <- c(1:nReps+1)
   
   correlationsC2 <- as.data.frame(correlationsC2)
-  C2mean <- as.data.frame(t(rowMeans(correlationsC2)))
+  C2mean <- as.data.frame(rowMeans(correlationsC2))
   correlationsC2 <- as.data.frame(cbind(C2mean,correlationsC2))
   rownames(correlationsC2) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
   colnames(correlationsC2) <- c(1:nReps+1)
   
   correlationsC3 <- as.data.frame(correlationsC3)
-  C3mean <- as.data.frame(t(rowMeans(correlationsC3)))
+  C3mean <- as.data.frame(rowMeans(correlationsC3))
   correlationsC3 <- as.data.frame(cbind(C3mean,correlationsC3))
   rownames(correlationsC3) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
   colnames(correlationsC3) <- c(1:nReps+1)
@@ -146,5 +146,7 @@ repeat{
   
   
 }
+  
+ 
   
  
