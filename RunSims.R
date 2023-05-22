@@ -1,7 +1,7 @@
 ## define variables ##
 
 nModels = 7
-nReps = 2
+nReps = 25
 nGen = 10
 nVar = 9
 
@@ -52,7 +52,6 @@ repeat{
   allelesC2[[i]] <- allelesMatC2
   allelesC3[[i]] <- allelesMatC3
   
-  
   bv_ebvC1[[i]] <- bv_ebvC1
   bv_ebvC2[[i]] <- bv_ebvC2
   bv_ebvC3[[i]] <- bv_ebvC3
@@ -64,25 +63,24 @@ repeat{
   }
   
   
-  
   ##create data frames and label##
   geneticvaluesC1 <- as.data.frame(geneticvaluesC1)
   C1gain <- as.data.frame(geneticvaluesC1[10,] - geneticvaluesC1[2,])
-  geneticvaluesC1 <- as.data.frame(rbind(geneticvaluesC1, C1gain))
-  rownames(geneticvaluesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
-  colnames(geneticvaluesC1) <- c(1:nReps)
+  AllgeneticvaluesC1 <- as.data.frame(rbind(geneticvaluesC1, C1gain))
+  rownames(AllgeneticvaluesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
+  colnames(AllgeneticvaluesC1) <- c(1:nReps)
   
   geneticvaluesC2 <- as.data.frame(geneticvaluesC2)
   C2gain <- as.data.frame(geneticvaluesC2[10,] - geneticvaluesC2[3,])
-  geneticvaluesC2 <- as.data.frame(rbind(geneticvaluesC2, C2gain))
-  rownames(geneticvaluesC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
-  colnames(geneticvaluesC2) <- c(1:nReps)
+  AllgeneticvaluesC2 <- as.data.frame(rbind(geneticvaluesC2, C2gain))
+  rownames(AllgeneticvaluesC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
+  colnames(AllgeneticvaluesC2) <- c(1:nReps)
   
   geneticvaluesC3 <- as.data.frame(geneticvaluesC3)
   C3gain <- as.data.frame(geneticvaluesC3[10,] - geneticvaluesC3[3,])
-  geneticvaluesC3 <- as.data.frame(rbind(geneticvaluesC3, C3gain))
-  rownames(geneticvaluesC3) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
-  colnames(geneticvaluesC3) <- c(1:nReps)
+  AllgeneticvaluesC3 <- as.data.frame(rbind(geneticvaluesC3, C3gain))
+  rownames(AllgeneticvaluesC3) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
+  colnames(AllgeneticvaluesC3) <- c(1:nReps)
   
   correlationsC1 <- as.data.frame(correlationsC1)
   C1mean <- as.data.frame(rowMeans(correlationsC1))
@@ -122,9 +120,9 @@ repeat{
   
   
   ##write files
-  write.csv(geneticvaluesC1, "1C1_rrblup_rd_gvs_snp_yield.csv")
-  write.csv(geneticvaluesC2, "1C2_rrblup_rd_gvs_snp_yield.csv")
-  write.csv(geneticvaluesC3, "1C3_rrblup_rd_gvs_snp_yield.csv")
+  write.csv(AllgeneticvaluesC1, "1C1_rrblup_rd_gvs_snp_yield.csv")
+  write.csv(AllgeneticvaluesC2, "1C2_rrblup_rd_gvs_snp_yield.csv")
+  write.csv(AllgeneticvaluesC3, "1C3_rrblup_rd_gvs_snp_yield.csv")
   
   
   write.csv(correlationsC1, "1C1_rrblup_rd_cors_snp_yield.csv")
@@ -146,7 +144,5 @@ repeat{
   
   
 }
-  
- 
   
  
