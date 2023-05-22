@@ -10,6 +10,9 @@ gvMatC1 <- matrix(nrow=10, ncol=1)
 corMatC1 <- matrix(nrow=7, ncol=1)
 varMatC1 <- matrix(nrow=10, ncol=1)
 
+SelectParents = source("SelectParentsF2.R")
+
+ModelTrain = source("rrblup_F2data.R")
 
 #establish simulation parameters
 genMap <- readRDS("genMapSNPs.Rdata")
@@ -37,8 +40,7 @@ F1 = randCross(TopParents, 200, nProgeny=3)
 F2 = self(F1)
 F2 = setPheno(F2)
 
-#source GS Prediction Model
-source("rrblup_F2data.R")
+ModelTrain
 
 M_F2 <-pullSegSiteGeno(F2)
 G_F2 = M_F2-1
@@ -75,6 +77,8 @@ F2 = self(F1, nProgeny=10)
 varMatC1[4,] = varG(F2)
 gvMatC1[4,] <- mean(gv(F2))
 
+ModelTrain
+
 allelesMatF2 <- pullSegSiteHaplo(F2)
 Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 colnames(Gen) <- "Gen"
@@ -86,10 +90,9 @@ G_F2 = M_F2-1
 EBVF2 <- G_F2 %*% markerEffects
 
 F2@ebv <- as.matrix(EBVF2)
-corMatC1[2] = cor(bv(F2), ebv(F2))
+corMatC1[2,] = cor(bv(F2), ebv(F2))
 
-source("SelectParentsF2.R")
-
+SelectParents
 
 ## select top individuals from F2 bulk  to form F3 ##
 
