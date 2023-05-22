@@ -1,11 +1,9 @@
 
 gvMatC3 <- matrix(nrow=10, ncol=1)
 corMatC3 <- matrix(nrow=7, ncol=1)
-varMatC3 <- matrix(nrow=10, ncol=1)
+varMatC3 <- matrix(nrow=9, ncol=1)
 
-SelectParents = source("SelectParentsF2.R")
-
-ModelTrain = source("rrblup_F2data.R")
+corMatC3[1] = cor(bv(newCycleSelections), ebv(newCycleSelections))
 
 F1 = makeCross(newCycleSelections, crossPlan = cross, nProgeny = 5)
 varMatC3[3,] = varG(F1)
@@ -28,7 +26,7 @@ Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 colnames(Gen) <- "Gen"
 allelesMatF2 <- cbind(Gen, allelesMatF2)
 
-ModelTrain
+source("rrblup_F2data.R")
 
 ##set EBV using BLUP model##
 M_F2 <-pullSegSiteGeno(F2)
@@ -38,7 +36,7 @@ EBVF2 <- G_F2 %*% markerEffects
 F2@ebv <- as.matrix(EBVF2)
 corMatC3[2] = cor(bv(F2), ebv(F2))
 
-SelectParents
+source("SelectParentsF2.R")
 
 ## select top individuals from F2 bulk  to form F3 ##
 
@@ -159,7 +157,6 @@ corMatC3[7,] = cor(bv(AYT),ebv(AYT))
 ## select top plants to form variety ##
 VarietySel = selectInd(AYT, 1, use="ebv", top=TRUE)
 Variety = self(VarietySel)
-varMatC3[10,] = varG(Variety)
 gvMatC3[10,] <- mean(gv(Variety))
 
 allelesMatVar <- pullSegSiteHaplo(Variety)
@@ -211,4 +208,3 @@ bv_ebvC3 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
 
 
 #write files - naming convention: "model_trainingSet_descriptor_populationType_trait.csv"
-
