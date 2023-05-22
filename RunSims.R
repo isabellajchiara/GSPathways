@@ -70,42 +70,66 @@ repeat{
   ##create data frames and label##
   geneticvaluesC1 <- as.data.frame(geneticvaluesC1)
   colnames(geneticvaluesC1) <- c(1:nReps)
-  rownames(geneticvaluesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety")
+  C1gain <- as.data.frame(geneticvaluesC1[10,] - geneticvaluesC1[2,])
+  geneticvaluesC1 <- as.data.frame(rbind(geneticvaluesC1, C1gain))
+  rownames(geneticvaluesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
   
   geneticvaluesC2 <- as.data.frame(geneticvaluesC2)
   colnames(geneticvaluesC2) <- c(1:nReps)
-  rownames(geneticvaluesC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety")
+  C2gain <- as.data.frame(geneticvaluesC2[10,] - geneticvaluesC2[2,])
+  geneticvaluesC2 <- as.data.frame(rbind(geneticvaluesC2, C2gain))
+  rownames(geneticvaluesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
   
   geneticvaluesC3 <- as.data.frame(geneticvaluesC3)
   colnames(geneticvaluesC3) <- c(1:nReps)
-  rownames(geneticvaluesC3) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety")
+  C3gain <- as.data.frame(geneticvaluesC3[10,] - geneticvaluesC3[2,])
+  geneticvaluesC3 <- as.data.frame(rbind(geneticvaluesC3, C3gain))
+  rownames(geneticvaluesC3) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
   
   correlationsC1 <- as.data.frame(correlationsC1)
   colnames(correlationsC1) <- c(1:nReps)
-  rownames(correlationsC1) <- c("PrevCycPYT", "F2","F3","F4","F5","PYT","AYT")
+  C1mean <- as.data.frame(colmeans(correlationsC1))
+  correlationsC1 <- as.data.frame(rbind(correlationsC1, C1mean))
+  rownames(correlationsC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
+  
   
   correlationsC2 <- as.data.frame(correlationsC2)
   colnames(correlationsC2) <- c(1:nReps)
-  rownames(correlationsC2) <- c("PrevCycPYT", "F2","F3","F4","F5","PYT","AYT")
+  C2mean <- as.data.frame(colmeans(correlationsC2))
+  correlationsC2 <- as.data.frame(rbind(correlationsC2, C2mean))
+  rownames(correlationsC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
   
   correlationsC3 <- as.data.frame(correlationsC3)
   colnames(correlationsC3) <- c(1:nReps)
-  rownames(correlationsC3) <- c("PrevCycPYT", "F2","F3","F4","F5","PYT","AYT")
+  C3mean <- as.data.frame(colmeans(correlationsC3))
+  correlationsC3 <- as.data.frame(rbind(correlationsC3, C3mean))
+  rownames(correlationsC3) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
   
   variancesC1 <- as.data.frame(variancesC1)
   colnames(variancesC1) <- c(1:nReps)
   rownames(variancesC1) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT",
                            "Variety")
+  C1mean <- as.data.frame(colmeans(variancesC1))
+  variancesC1 <- as.data.frame(rbind(variancesC1, C1mean))
+  rownames(variancesC1) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
   
   variancesC2 <- as.data.frame(variancesC2)
   colnames(variancesC2) <- c(1:nReps)
   rownames(variancesC2) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT",
                              "Variety")
+  C2mean <- as.data.frame(colmeans(variancesC2))
+  variancesC2 <- as.data.frame(rbind(variancesC2, C2mean))
+  rownames(variancesC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
+  
   
   variancesC3 <- as.data.frame(variancesC3)
   colnames(variancesC3) <- c(1:nReps)
   rownames(variancesC3) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT",
                              "Variety")
+  C2mean <- as.data.frame(colmeans(variancesC2))
+  variancesC2 <- as.data.frame(rbind(variancesC2, C2mean))
+  rownames(variancesC2) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanCor")
+  
   
   
   
