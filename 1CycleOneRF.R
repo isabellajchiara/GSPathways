@@ -268,6 +268,6 @@ bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
 
 
 
-source("1CycleTwo_rrblup.R")
+source("1CycleTwo_RF.R")
 
 #write files - naming convention: "model_trainingSet_descriptor_populationType_trait.csv"
