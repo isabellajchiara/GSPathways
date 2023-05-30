@@ -11,13 +11,13 @@ library(randomForest)
 
 #Create Results Matrices
 
-  gvMat <- matrix(nrow=10, ncol=1)
-  corMat <- matrix(nrow=7, ncol=1)
-  varMat <- matrix(nrow=10, ncol=1)
+gvMatC1 <- matrix(nrow=10, ncol=1)
+corMatC1 <- matrix(nrow=7, ncol=1)
+varMatC1 <- matrix(nrow=9, ncol=1)
 
 #establish simulation parameters
-genMap <- readRDS("genMapSNPs.Rdata")
-haplotypes <- readRDS("haplotypesSNPs.Rdata")
+genMap <- readRDS("genMapSNPs.RData")
+haplotypes <- readRDS("haplotypesSNPs.RData")
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
@@ -25,10 +25,10 @@ founderPop = newMapPop(genMap,
                        ploidy = 2L)
 
 SP <- SimParam$new(founderPop)
-  SP$addTraitAEG(10, mean=8.8)
-  SP$setVarE(h2=0.25)
+SP$addTraitAEG(10, mean=8.8)
+SP$setVarE(h2=0.25)
 
-#build training pop
+#INITIAL TRAINING POP
 
 ## randomly cross 200 parents 
 Parents = newPop(founderPop)
@@ -38,61 +38,22 @@ F1 = randCross(TopParents, 200, nProgeny=3)
 
 ## self and bulk F1 to form F2 ##
 
-F2 = self(F1, nProgeny = 30)
+F2 = self(F1)
 F2 = setPheno(F2)
 
-## select top individuals from each family to form F2. Bulk and self to form F3
-TopFamF2 = selectFam(F2, 10, use="pheno", top=TRUE) 
-SelectionsF2 = selectWithinFam(TopFamF2, 100, use="pheno", top=TRUE)
+source("RF_F2data.R")
 
-F3 = self(SelectionsF2)
-F3 = setPheno(F3)
-
-##select top individuals within F3 families to form F4 ##
-
-TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
-
-F4 = self(SelectionsF3)
-F4 = setPheno(F4)
-
-## select top families from F4 to form F5 ##
-
-F5Sel = selectFam(F4, 4, use="pheno", top=TRUE)
-F5 = self(F5Sel)
-F5 = setPheno(F5)
-
-## select top families from F5 for PYTs ##
-
-PYTSel = selectFam(F5, 3, use="pheno", top=TRUE) 
-PYT = self(PYTSel, nProgeny = 2)
-PYT = setPheno(PYT, reps=2)
-gvMat[1,] <- mean(gv(PYT))
-varMat[1,] <- varG(PYT)
-
-## use PYTs as training data
-
-TP <- PYT
-TrainingGeno <- pullSegSiteGeno(PYT)
-TrainingPheno <- pheno(PYT)
-
-
-#load in GS prediction model and use it to select parents for next cycle
-
-#source GS Prediction Model
-source("RF_RD_F2data.R")
-
-M = as.data.frame(pullSegSiteGeno(PYT))
+##set EBV using RF model##
+M = as.data.frame(pullSegSiteGeno(F2))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-PYTebv <- as.numeric(predict(rf_fit, M))
+EBVF2 <- as.numeric(predict(rf_fit, M))
 
-PYT@ebv <- as.matrix(EBVPYT)
-corMat[1,] = cor(bv(PYT), ebv(PYT))
+F2@ebv <- as.matrix(EBVF2)
+corMatC1[1,] = cor(bv(F2), ebv(F2))
 
-
-newParents = newCycleSelections
-varMat[2,] = varG(newParents)
-gvMat[2,] <- mean(gv(newParents))
+newParents = selectInd(F2, 10, use="ebv", top=TRUE)
+varMatC1[2,] = varG(newParents)
+gvMatC1[2,] <- mean(gv(newParents))
 
 allelesMatNP <- pullSegSiteHaplo(newParents)
 Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
@@ -104,8 +65,8 @@ allelesMatNP <- cbind(Gen, allelesMatNP)
 ##start with 200 random crosses
 
 F1 = randCross(newParents, 200) 
-varMat[3,] = varG(F1)
-gvMat[3,] <- mean(gv(F1))
+varMatC1[3,] = varG(F1)
+gvMatC1[3,] <- mean(gv(F1))
 
 allelesMatF1 <- pullSegSiteHaplo(F1)
 Gen <- as.data.frame(rep("F1", times=nInd(F1)))
@@ -114,35 +75,36 @@ allelesMatF1 <- cbind(Gen, allelesMatF1)
 
 ## self and bulk F1 to form F2 ##
 
-F2 = self(F1, nProgeny = 30) 
-varMat[4,] = varG(F2)
-gvMat[4,] <- mean(gv(F2))
+F2 = self(F1, nProgeny=10) 
+varMatC1[4,] = varG(F2)
+gvMatC1[4,] <- mean(gv(F2))
+
+source("RF_F2data.R")
 
 allelesMatF2 <- pullSegSiteHaplo(F2)
 Gen <- as.data.frame(rep("F2", times=nInd(F2)))
 colnames(Gen) <- "Gen"
 allelesMatF2 <- cbind(Gen, allelesMatF2)
 
-##set EBV using BLUP model##
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(F2))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-F2ebv <- as.numeric(predict(rf_fit, M))
+EBVF3 <- as.numeric(predict(rf_fit, M))
 
+F2@ebv <- as.matrix(EBVF2)
+corMatC1[2,] = cor(bv(F2), ebv(F2))
 
-F2@ebv <- as.matrix(F2ebv)
-corMat[2] = cor(bv(F2), ebv(F2))
-
-source("SelectParentsF2.R")
+SelectParents = source("SelectParentsF2.R")
 
 ## select top individuals from F2 bulk  to form F3 ##
 
 TopFamF2 = selectFam(F2, 10, use="pheno", top=TRUE) 
-SelectionsF2 = selectWithinFam(TopFamF2, 100, use="ebv", top=TRUE)
+SelectionsF2 = selectWithinFam(TopFamF2, 5, use="ebv", top=TRUE)
 
 F3 = self(SelectionsF2)
 F3 = setPheno(F3)
-varMat[5,] = varG(F3)
-gvMat[5,] <- mean(gv(F3))
+varMatC1[5,] = varG(F3)
+gvMatC1[5,] <- mean(gv(F3))
 
 allelesMatF3 <- pullSegSiteHaplo(F3)
 Gen <- as.data.frame(rep("F3", times=nInd(F3)))
@@ -150,118 +112,116 @@ colnames(Gen) <- "Gen"
 allelesMatF3 <- cbind(Gen, allelesMatF3)
 
 
-##set EBV using BLUP model##
+
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(F3))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-F3ebv <- as.numeric(predict(rf_fit, M))
+EVBF3 <- as.numeric(predict(rf_fit, M))
 
-F3@ebv <- as.matrix(F3ebv)
-corMat[3,] = cor(bv(F3),ebv(F3))
+F3@ebv <- as.matrix(EBVF3)
+corMatC1[3,] = cor(bv(F3),ebv(F3))
 
 ##select top within familiy from F3 to form F4 ##
 
 TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
+SelectionsF3 = selectWithinFam(TopFamF3, 3, use="ebv", top=TRUE)
 
 F4 = self(SelectionsF3)
 F4 = setPheno(F4)
-varMat[6,] = varG(F4)
-gvMat[6,] <- mean(gv(F4))
+varMatC1[6,] = varG(F4)
+gvMatC1[6,] <- mean(gv(F4))
 
 allelesMatF4 <- pullSegSiteHaplo(F4)
 Gen <- as.data.frame(rep("F4", times=nInd(F4)))
 colnames(Gen) <- "Gen"
 allelesMatF4 <- cbind(Gen, allelesMatF4)
 
-
-##set EBV using BLUP model##
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(F4))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-F4ebv <- as.numeric(predict(rf_fit, M))
+EBVF4 <- as.numeric(predict(rf_fit, M))
 
-F4@ebv <- as.matrix(F4ebv)
-corMat[4,] = cor(bv(F4),ebv(F4))
+F4@ebv <- as.matrix(EBVF4)
+corMatC1[4,] = cor(bv(F4),ebv(F4))
 
 ## select top families from F4 to form F5 ##
 
-SelectionsF4 = selectFam(F4, 4, use="ebv")
+SelectionsF4 = selectFam(F4, 4, use="ebv", top=TRUE)
 F5 = self(SelectionsF4)
-varMat[7,]= varG(F5)
-gvMat[7,] <- mean(gv(F5))
+varMatC1[7,]= varG(F5)
+gvMatC1[7,] <- mean(gv(F5))
 
 allelesMatF5 <- pullSegSiteHaplo(F5)
 Gen <- as.data.frame(rep("F5", times=nInd(F5)))
 colnames(Gen) <- "Gen"
 allelesMatF5 <- cbind(Gen, allelesMatF5)
 
-#use F5 to retrain the model
-
-source("RF_RD_Retrain.R")
-
-
-#continue pipeline
-
-##set EBV using BLUP model##
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(F5))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-F5ebv <- as.numeric(predict(rf_fit2, M))
+EBVF5 <- as.numeric(predict(rf_fit, M))
 
-F5@ebv <- as.matrix(F5ebv)
-corMat[5,] = cor(bv(F5),ebv(F5))
+F5@ebv <- as.matrix(EBVF5)
+corMatC1[5,] = cor(bv(F5),ebv(F5))
 
 ## select top F5 families for preliminary yield trial ##
 
-SelectionsF5 = selectFam(F5, 3, use="ebv") 
+SelectionsF5 = selectFam(F5, 3, use="ebv", top=TRUE) 
 PYT = self(SelectionsF5)
-varMat[8,] = varG(PYT)
-gvMat[8,] <- mean(gv(PYT))
+varMatC1[8,] = varG(PYT)
+gvMatC1[8,] <- mean(gv(PYT))
 
 allelesMatPYT <- pullSegSiteHaplo(PYT)
 Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
 colnames(Gen) <- "Gen"
 allelesMatPYT <- cbind(Gen, allelesMatPYT)
 
-##set EBV using BLUP model##
+
+
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(PYT))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-PYTebv <- as.numeric(predict(rf_fit2, M))
+EBVPYT <- as.numeric(predict(rf_fit, M))
 
-PYT@ebv <- as.matrix(PYTebv)
-corMat[6,] = cor(bv(PYT),ebv(PYT))
+
+PYT@ebv <- as.matrix(EBVPYT)
+corMatC1[6,] = cor(bv(PYT),ebv(PYT))
 
 ## select top families from PYT for AYT ##
 
 SelectionsPYT = selectFam(PYT,  1, use="ebv", reps=5, top=TRUE) 
 AYT = self(SelectionsPYT)
-varMat[9,] = varG(AYT)
-gvMat[9,] <- mean(gv(AYT))
+varMatC1[9,] = varG(AYT)
+gvMatC1[9,] <- mean(gv(AYT))
 
 allelesMatAYT <- pullSegSiteHaplo(AYT)
 Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
 colnames(Gen) <- "Gen"
 allelesMatAYT <- cbind(Gen, allelesMatAYT)
 
-##set EBV using BLUP model##
+
+
+##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(AYT))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-AYTebv <- as.numeric(predict(rf_fit2, M))
+EBVAYT <- as.numeric(predict(rf_fit, M))
 
-AYT@ebv <- as.matrix(AYTebv)
-corMat[7,] = cor(bv(AYT),ebv(AYT))
 
+AYT@ebv <- as.matrix(EBVAYT)
+corMatC1[7,] = cor(bv(AYT),ebv(AYT))
 
 ## select top plants to form variety ##
-VarietySel = selectInd(AYT, 1, use="ebv")
+VarietySel = selectInd(AYT, 1, use="ebv", top=TRUE)
 Variety = self(VarietySel)
-varMat[10,] = varG(Variety)
-gvMat[10,] <- mean(gv(Variety))
+gvMatC1[10,] <- mean(gv(Variety))
 
 allelesMatVar <- pullSegSiteHaplo(Variety)
 Gen <- as.data.frame(rep("Variety", times=nInd(Variety)))
 colnames(Gen) <- "Gen"
 allelesMatVar <- cbind(Gen, allelesMatVar)
 
-allelesMat <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
+allelesMatC1 <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
+
 
 ###collect bvs and ebvs###
 
@@ -301,13 +261,13 @@ bvebv6 <- cbind(Gen, bvebv6)
 colnames(bvebv6) <- c("Gen","bv","ebv")
 
 
-bv_ebv <- as.data.frame(rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
+bv_ebvC1 <- rbind(bvebv,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6)
+
+
+#write files - naming convention: "model_trainingSet_descriptor_populationType_trait.csv"
 
 
 
-
-
-source(1CycleTwoRF.R")
-
+source("1CycleTwo_rrblup.R")
 
 #write files - naming convention: "model_trainingSet_descriptor_populationType_trait.csv"
