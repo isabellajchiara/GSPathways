@@ -1,4 +1,4 @@
-genotypes <- readRDS("4C1rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("1C1rrblup_rd_alleles_snp_yield.rds")
 
 C1MAF <- matrix(nrow=3547, ncol=9)
 
@@ -29,7 +29,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -52,7 +52,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -73,7 +73,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -93,7 +93,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -113,7 +113,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -133,7 +133,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -153,7 +153,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -173,7 +173,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -193,7 +193,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -204,7 +204,7 @@ colnames(C1MAF) <- c("Base","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
 ###
 
-genotypes <- readRDS("4C2rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("1C2rrblup_rd_alleles_snp_yield.rds")
 
 C2MAF <- matrix(nrow=3547, ncol=9)
 
@@ -235,7 +235,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -258,7 +258,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -279,7 +279,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -299,7 +299,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -319,7 +319,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -339,7 +339,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -359,7 +359,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -379,7 +379,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -399,7 +399,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -410,7 +410,7 @@ colnames(C2MAF) <- c("Base","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
 
 ###
-genotypes <- readRDS("4C3rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("1C3rrblup_rd_alleles_snp_yield.rds")
 
 C3MAF <- matrix(nrow=3547, ncol=9)
 
@@ -441,7 +441,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -464,7 +464,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -485,7 +485,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -505,7 +505,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -525,7 +525,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -545,7 +545,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -565,7 +565,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -585,7 +585,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -605,7 +605,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x<0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -633,7 +633,9 @@ colnames(EOC) <- c("freq","stage")
 
 alldata <- rbind(BOC,EOC)
 
+library(overlapping)
+library(lattice)
 
-ggplot(alldata, aes(x=freq, color=stage)) +
-  geom_density()
+x <- list(C1=BOC$freq, C3=EOC$freq)
 
+overlap(x, plot=TRUE, type="2")
