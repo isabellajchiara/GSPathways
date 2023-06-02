@@ -1,4 +1,4 @@
-genotypes <- readRDS("1C1rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("8C1rrblup_rd_alleles_snp_yield.rds")
 
 C1MAF <- matrix(nrow=3547, ncol=9)
 
@@ -21,7 +21,7 @@ for (i in 1:nreps) {
   parents <- parents[,-1]
   alleleSum <- as.matrix(colSums(parents))
   alleleFreq <- as.data.frame(alleleSum/nrow(parents))
-
+  
   MAJMIN <- alleleSum
   MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
   MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
@@ -29,7 +29,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -43,16 +43,16 @@ for (i in 1:nreps) {
   F1 <- F1[F1$Gen=="F1",]
   F1 <- F1[,-1]
   alleleSum <- as.matrix(colSums(F1))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F1))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F1)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F1)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -64,16 +64,16 @@ for (i in 1:nreps) {
   F2 <- F2[F2$Gen=="F2",]
   F2 <- F2[,-1]
   alleleSum <- as.matrix(colSums(F2))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F2))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F2)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F2)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -84,16 +84,16 @@ for (i in 1:nreps) {
   F3 <- F3[F3$Gen=="F3",]
   F3 <- F3[,-1]
   alleleSum <- as.matrix(colSums(F3))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F3))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F3)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F3)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -104,16 +104,16 @@ for (i in 1:nreps) {
   F4 <- F4[F4$Gen=="F4",]
   F4 <- F4[,-1]
   alleleSum <- as.matrix(colSums(F4))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F4))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F4)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F4)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -124,16 +124,16 @@ for (i in 1:nreps) {
   F5 <- F5[F5$Gen=="F5",]
   F5 <- F5[,-1]
   alleleSum <- as.matrix(colSums(F5))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F5))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F5)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F5)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -144,16 +144,16 @@ for (i in 1:nreps) {
   PYT <- PYT[PYT$Gen=="PYT",]
   PYT <- PYT[,-1]
   alleleSum <- as.matrix(colSums(PYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(PYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(PYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(PYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -164,16 +164,16 @@ for (i in 1:nreps) {
   AYT <- AYT[AYT$Gen=="AYT",]
   AYT <- AYT[,-1]
   alleleSum <- as.matrix(colSums(AYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(AYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(AYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(AYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -184,16 +184,16 @@ for (i in 1:nreps) {
   Variety <- Variety[Variety$Gen=="Variety",]
   Variety <- Variety[,-1]
   alleleSum <- as.matrix(colSums(Variety))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(Variety))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(Variety)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(Variety)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -204,7 +204,7 @@ colnames(C1MAF) <- c("Base","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
 ###
 
-genotypes <- readRDS("1C2rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("8C2rrblup_rd_alleles_snp_yield.rds")
 
 C2MAF <- matrix(nrow=3547, ncol=9)
 
@@ -235,7 +235,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -249,16 +249,16 @@ for (i in 1:nreps) {
   F1 <- F1[F1$Gen=="F1",]
   F1 <- F1[,-1]
   alleleSum <- as.matrix(colSums(F1))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F1))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F1)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F1)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -270,16 +270,16 @@ for (i in 1:nreps) {
   F2 <- F2[F2$Gen=="F2",]
   F2 <- F2[,-1]
   alleleSum <- as.matrix(colSums(F2))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F2))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F2)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F2)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -290,16 +290,16 @@ for (i in 1:nreps) {
   F3 <- F3[F3$Gen=="F3",]
   F3 <- F3[,-1]
   alleleSum <- as.matrix(colSums(F3))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F3))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F3)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F3)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -310,16 +310,16 @@ for (i in 1:nreps) {
   F4 <- F4[F4$Gen=="F4",]
   F4 <- F4[,-1]
   alleleSum <- as.matrix(colSums(F4))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F4))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F4)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F4)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -330,16 +330,16 @@ for (i in 1:nreps) {
   F5 <- F5[F5$Gen=="F5",]
   F5 <- F5[,-1]
   alleleSum <- as.matrix(colSums(F5))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F5))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F5)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F5)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -350,16 +350,16 @@ for (i in 1:nreps) {
   PYT <- PYT[PYT$Gen=="PYT",]
   PYT <- PYT[,-1]
   alleleSum <- as.matrix(colSums(PYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(PYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(PYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(PYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -370,16 +370,16 @@ for (i in 1:nreps) {
   AYT <- AYT[AYT$Gen=="AYT",]
   AYT <- AYT[,-1]
   alleleSum <- as.matrix(colSums(AYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(AYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(AYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(AYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -390,16 +390,16 @@ for (i in 1:nreps) {
   Variety <- Variety[Variety$Gen=="Variety",]
   Variety <- Variety[,-1]
   alleleSum <- as.matrix(colSums(Variety))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(Variety))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(Variety)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(Variety)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -407,10 +407,8 @@ VarietyFrequencies <-rowMeans(VarietyFrequencies)
 C2MAF[,9] <-VarietyFrequencies
 
 colnames(C2MAF) <- c("Base","F1","F2","F3","F4","F5","PYT","AYT","Variety")
-
-
 ###
-genotypes <- readRDS("1C3rrblup_rd_alleles_snp_yield.rds")
+genotypes <- readRDS("8C3rrblup_rd_alleles_snp_yield.rds")
 
 C3MAF <- matrix(nrow=3547, ncol=9)
 
@@ -441,7 +439,7 @@ for (i in 1:nreps) {
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   
   parentFrequencies[,i] <- MajAlleleFreq
 }
@@ -455,16 +453,16 @@ for (i in 1:nreps) {
   F1 <- F1[F1$Gen=="F1",]
   F1 <- F1[,-1]
   alleleSum <- as.matrix(colSums(F1))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F1))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F1)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F1)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F1Frequencies[,i] <- MajAlleleFreq
 }
 
@@ -476,16 +474,16 @@ for (i in 1:nreps) {
   F2 <- F2[F2$Gen=="F2",]
   F2 <- F2[,-1]
   alleleSum <- as.matrix(colSums(F2))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F2))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F2)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F2)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F2Frequencies[,i] <- MajAlleleFreq
 }
 F2Frequencies <-rowMeans(F2Frequencies)
@@ -496,16 +494,16 @@ for (i in 1:nreps) {
   F3 <- F3[F3$Gen=="F3",]
   F3 <- F3[,-1]
   alleleSum <- as.matrix(colSums(F3))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F3))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F3)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F3)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F3Frequencies[,i] <- MajAlleleFreq
 }
 F3Frequencies <-rowMeans(F3Frequencies)
@@ -516,16 +514,16 @@ for (i in 1:nreps) {
   F4 <- F4[F4$Gen=="F4",]
   F4 <- F4[,-1]
   alleleSum <- as.matrix(colSums(F4))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F4))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F4)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F4)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F4Frequencies[,i] <- MajAlleleFreq
 }
 F4Frequencies <-rowMeans(F4Frequencies)
@@ -536,16 +534,16 @@ for (i in 1:nreps) {
   F5 <- F5[F5$Gen=="F5",]
   F5 <- F5[,-1]
   alleleSum <- as.matrix(colSums(F5))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(F5))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(F5)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(F5)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   F5Frequencies[,i] <- MajAlleleFreq
 }
 F5Frequencies <-rowMeans(F5Frequencies)
@@ -556,16 +554,16 @@ for (i in 1:nreps) {
   PYT <- PYT[PYT$Gen=="PYT",]
   PYT <- PYT[,-1]
   alleleSum <- as.matrix(colSums(PYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(PYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(PYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(PYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   PYTFrequencies[,i] <- MajAlleleFreq
 }
 PYTFrequencies <-rowMeans(PYTFrequencies)
@@ -576,16 +574,16 @@ for (i in 1:nreps) {
   AYT <- AYT[AYT$Gen=="AYT",]
   AYT <- AYT[,-1]
   alleleSum <- as.matrix(colSums(AYT))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(AYT))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(AYT)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(AYT)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   AYTFrequencies[,i] <- MajAlleleFreq
 }
 AYTFrequencies <-rowMeans(AYTFrequencies)
@@ -596,16 +594,16 @@ for (i in 1:nreps) {
   Variety <- Variety[Variety$Gen=="Variety",]
   Variety <- Variety[,-1]
   alleleSum <- as.matrix(colSums(Variety))
-  alleleFreq <- as.data.frame(alleleSum/nrow(parents))
+  alleleFreq <- as.data.frame(alleleSum/nrow(Variety))
   
   MAJMIN <- alleleSum
-  MAJMIN[MAJMIN < (nrow(parents)/2)] <- 0
-  MAJMIN[MAJMIN > (nrow(parents)/2)] <- 1
+  MAJMIN[MAJMIN < (nrow(Variety)/2)] <- 0
+  MAJMIN[MAJMIN > (nrow(Variety)/2)] <- 1
   
   majAllele <- cbind(MAJMIN, alleleFreq)
   x <- as.vector(majAllele[,2])
   
-  MajAlleleFreq <-- as.matrix(ifelse(x>0.5, x-1,x*(-1)))
+  MajAlleleFreq <-- as.matrix(ifelse(x>=0.5, x-1,x*(-1)))
   VarietyFrequencies[,i] <- MajAlleleFreq
   
 }
@@ -613,7 +611,6 @@ VarietyFrequencies <-rowMeans(VarietyFrequencies)
 C3MAF[,9] <-VarietyFrequencies
 
 colnames(C3MAF) <- c("Base","F1","F2","F3","F4","F5","PYT","AYT","Variety")
-
 ###
 
 AllFreq <- as.data.frame(cbind(C1MAF,C2MAF,C3MAF))
@@ -631,11 +628,17 @@ EOC <- as.data.frame(AllFreq[,27])
 EOC$base <- rep(c("C3"), times = nrow(EOC))
 colnames(EOC) <- c("freq","stage")
 
-alldata <- rbind(BOC,EOC)
+alldata <- rbind(MOC,EOC)
 
-library(overlapping)
-library(lattice)
 
-x <- list(C1=BOC$freq, C3=EOC$freq)
+# Density plot with semi-transparent fill
+p<-ggplot(alldata, aes(x=freq, fill=stage)) +
+  geom_density(alpha=0.5)+
+  xlim(0,0.15)+
+  ylim(0,100)
+p
 
-overlap(x, plot=TRUE, type="2")
+# calcjulate overlap proportion
+x <- list(C1=MOC$freq, C3=EOC$freq)
+
+overlap(x, plot=FALSE, type="2")
