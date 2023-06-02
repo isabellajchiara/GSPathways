@@ -1,5 +1,5 @@
-TrainingPheno <- pullSegSiteGeno(F2)
-TrainingGeno <- pheno(F2)
+TrainingGeno <- pullSegSiteGeno(F2)
+TrainingPheno <- pheno(F2)
 
 pheno <- as.data.frame(TrainingPheno)
 geno <- as.data.frame(TrainingGeno)
