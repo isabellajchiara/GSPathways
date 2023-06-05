@@ -4,8 +4,7 @@ TrainingPheno <- pheno(F2)
 pheno <- as.data.frame(TrainingPheno)
 geno <- as.data.frame(TrainingGeno)
 trainingdata <- cbind(pheno, geno)
-colnames(trainingdata) <- paste("ID",1:ncol(trainingdata), sep="") ##1-605 because the SNP chip has 605 SNPs + phenotypes may have to change if you have a different num. SNPS###
-##note ID1 will be the phenotype, IDs 2-606 are genotypes##
+colnames(trainingdata) <- paste("ID",1:ncol(trainingdata), sep="") 
 
 
 ## create TRN TST split ###
