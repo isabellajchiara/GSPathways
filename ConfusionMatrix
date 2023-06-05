@@ -1,6 +1,6 @@
 library(caret)
 
-data <- readRDS("5C2rrblup_rd_bvebv_snp_yield.rds")
+data <- readRDS("rrblup_rd_bvebv_snp_yield.rds")
 data <- data[,1:3]
 
 bv <- as.vector(range(data$bv))
@@ -18,28 +18,36 @@ data2 <- data2[order(data2$ebv),]
 
 
 data1$bvCat <- as.factor(ifelse(data1$bv < data1[157,2], "0",
-                                      ifelse(data1$bv < data1[315,2],"0",
-                                             ifelse(data1$bv < data1[473,2],"0",
-                                                    ifelse(data1$bv < data1[631,2],"0",
-                                                           ifelse(data1$bv < data1[789,2],"0",
-                                                                  ifelse(data1$bv < data1[947,2],"0",
-                                                                         ifelse(data1$bv < data1[1099,2],"1","1"))))))))
+                                ifelse(data1$bv < data1[315,2],"0",
+                                       ifelse(data1$bv < data1[473,2],"0",
+                                              ifelse(data1$bv < data1[631,2],"0",
+                                                     ifelse(data1$bv < data1[789,2],"0",
+                                                            ifelse(data1$bv < data1[947,2],"0",
+                                                                   ifelse(data1$bv < data1[1099,2],"1","1"))))))))
 
 data1Reordered <- data1[order(data1$IDs),]
 bvCat <- as.factor(data1Reordered$bvCat)
 
 
 data2$ebvCat <- as.factor(ifelse(data2$ebv < data2[157,3], "0",
-                             ifelse(data2$ebv < data2[315,3],"0",
-                                    ifelse(data2$ebv < data2[473,3],"0",
-                                           ifelse(data2$ebv < data2[631,3],"0",
-                                                  ifelse(data2$ebv < data2[789,3],"0",
-                                                         ifelse(data2$ebv < data2[947,3],"0",
-                                                                ifelse(data2$ebv < data1[1099,3],"1","1"))))))))
+                                 ifelse(data2$ebv < data2[315,3],"0",
+                                        ifelse(data2$ebv < data2[473,3],"0",
+                                               ifelse(data2$ebv < data2[631,3],"0",
+                                                      ifelse(data2$ebv < data2[789,3],"0",
+                                                             ifelse(data2$ebv < data2[947,3],"0",
+                                                                    ifelse(data2$ebv < data1[1099,3],"1","1"))))))))
 
 
-                                                                              
+
 data2Reordered <- data2[order(data2$IDs),]
 ebvCat <- as.factor(data2Reordered$ebvCat)
 
 CM <- confusionMatrix(data=bvCat, reference = ebvCat)
+
+Acc<- as.data.frame(CM$overall)
+Accuracy <- Acc[1,1]
+SensSpec <- as.data.frame(CM$byClass)
+Sensitivity <- SensSpec[1,1]
+Specificity <- SensSpec[2,1]
+
+performance <-cbind(Accuracy, Sensitivity, Specificity)
