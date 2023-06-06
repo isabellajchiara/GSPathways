@@ -89,7 +89,7 @@ allelesMatF2 <- cbind(Gen, allelesMatF2)
 ##set EBV using RF model##
 M = as.data.frame(pullSegSiteGeno(F2))
 colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-EBVF3 <- as.numeric(predict(rf_fit, M))
+EBVF2 <- as.numeric(predict(rf_fit, M))
 
 F2@ebv <- as.matrix(EBVF2)
 corMatC1[2,] = cor(bv(F2), ebv(F2))
