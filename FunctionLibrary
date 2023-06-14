@@ -23,7 +23,7 @@ selectNewParentsEBV <-function(gen,nInd) {
 }
 
 # Within Family Selections (pheno)
-TopWithinFamPheno <- function(F2,5,3,){
+TopWithinFamPheno <- function(gen,nFam,nIndPerFam){
   TopFam <-selectFam(gen,nFam, use="pheno", top=TRUE)
   Selections <<- selectWithinFam(TopFam, nIndPerFam,use="pheno", top=TRUE)
   self(Selections)
