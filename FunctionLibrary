@@ -108,7 +108,22 @@ GetEBVrrblup <- function(gen){
   EBV <<- genMat %*% markerEffects
 }
 
+# gets alleles matrix of genObj
+getAllelesMat <- function(genObj, genName){
+    allelesMat <- pullSegSiteHaplo(genObj)
+    Gen <- as.data.frame(rep(genName, times=nInd(genObj)))
+    colnames(Gen) <- "Gen"
+    allelesMat <- cbind(Gen, allelesMat)
+    allelesMat
+}
 
-
+# gets dataframe with bv and ebv
+getBvEbv <- function(genObj, genName){
+    bvebv <- cbind(bv(genObj), ebv(genObj))
+    Gen <- as.data.frame(rep(genName, times=nInd(genObj)))
+    bvebv <- cbind(Gen, bvebv)
+    colnames(bvebv) <- c("Gen","bv","ebv")
+    bvebv
+}
 
 

@@ -73,10 +73,7 @@ newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
 varMat[2,] = varG(newParents)
 gvMat[2,] <- mean(gv(newParents))
 
-allelesMatNP <- pullSegSiteHaplo(newParents)
-Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
-colnames(Gen) <- "Gen"
-allelesMatNP <- cbind(Gen, allelesMatNP)
+allelesMatNP <- getAllelesMat(newParents, "NP")
 
 #start new cycle
 
@@ -86,10 +83,7 @@ F1 = randCross(newParents, 200)
 varMat[3,] = varG(F1)
 gvMat[3,] <- mean(gv(F1))
 
-allelesMatF1 <- pullSegSiteHaplo(F1)
-Gen <- as.data.frame(rep("F1", times=nInd(F1)))
-colnames(Gen) <- "Gen"
-allelesMatF1 <- cbind(Gen, allelesMatF1)
+allelesMatF1 <- getAllelesMat(F1, "F1")
 
 ## self and bulk F1 to form F2 ##
 
@@ -97,10 +91,7 @@ F2 = self(F1, nProgeny = 30)
 varMat[4,] = varG(F2)
 gvMat[4,] <- mean(gv(F2))
 
-allelesMatF2 <- pullSegSiteHaplo(F2)
-Gen <- as.data.frame(rep("F2", times=nInd(F2)))
-colnames(Gen) <- "Gen"
-allelesMatF2 <- cbind(Gen, allelesMatF2)
+allelesMatF2 <- getAllelesMat(F2, "F2")
 
 ##set EBV using BLUP model##
 GetEBVrrblup(F2)
@@ -117,12 +108,7 @@ F3 = setPheno(F3)
 varMat[5,] = varG(F3)
 gvMat[5,] <- mean(gv(F3))
 
-allelesMatF3 <- pullSegSiteHaplo(F3)
-Gen <- as.data.frame(rep("F3", times=nInd(F3)))
-colnames(Gen) <- "Gen"
-allelesMatF3 <- cbind(Gen, allelesMatF3)
-
-
+allelesMatF3 <- getAllelesMat(F3, "F3")
 
 ##set EBV using BLUP model##
 GetEBVrrblup(F3)
@@ -139,11 +125,7 @@ F4 = setPheno(F4)
 varMat[6,] = varG(F4)
 gvMat[6,] <- mean(gv(F4))
 
-allelesMatF4 <- pullSegSiteHaplo(F4)
-Gen <- as.data.frame(rep("F4", times=nInd(F4)))
-colnames(Gen) <- "Gen"
-allelesMatF4 <- cbind(Gen, allelesMatF4)
-
+allelesMatF4 <- getAllelesMat(F4, "F4")
 
 ##set EBV using BLUP model##
 GetEBVrrblup(F4)
@@ -157,10 +139,7 @@ F5 = self(SelectionsF4)
 varMat[7,]= varG(F5)
 gvMat[7,] <- mean(gv(F5))
 
-allelesMatF5 <- pullSegSiteHaplo(F5)
-Gen <- as.data.frame(rep("F5", times=nInd(F5)))
-colnames(Gen) <- "Gen"
-allelesMatF5 <- cbind(Gen, allelesMatF5)
+allelesMatF5 <- getAllelesMat(F5, "F5")
 
 #use F5 to retrain the model
 
@@ -180,10 +159,7 @@ PYT = self(SelectionsF5)
 varMat[8,] = varG(PYT)
 gvMat[8,] <- mean(gv(PYT))
 
-allelesMatPYT <- pullSegSiteHaplo(PYT)
-Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
-colnames(Gen) <- "Gen"
-allelesMatPYT <- cbind(Gen, allelesMatPYT)
+allelesMatPYT <- getAllelesMat(PYT, "PYT")
 
 ##set EBV using BLUP model##
 GetEBVrrblup(PYT)
@@ -197,10 +173,7 @@ AYT = self(SelectionsPYT)
 varMat[9,] = varG(AYT)
 gvMat[9,] <- mean(gv(AYT))
 
-allelesMatAYT <- pullSegSiteHaplo(AYT)
-Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
-colnames(Gen) <- "Gen"
-allelesMatAYT <- cbind(Gen, allelesMatAYT)
+allelesMatAYT <- getAllelesMat(AYT, "AYT")
 
 ##set EBV using BLUP model##
 GetEBVrrblup(AYT)
@@ -212,54 +185,22 @@ VarietySel = selectInd(AYT, 1, use="ebv")
 Variety = self(VarietySel)
 gvMat[10,] <- mean(gv(Variety))
 
-allelesMatVar <- pullSegSiteHaplo(Variety)
-Gen <- as.data.frame(rep("Variety", times=nInd(Variety)))
-colnames(Gen) <- "Gen"
-allelesMatVar <- cbind(Gen, allelesMatVar)
+allelesMatVar <- getAllelesMat(Variety, "Variety")
 
 allelesMat <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
 
 
 ###collect bvs and ebvs###
 
-bvebv0 <- cbind(bv(newParents), ebv(newParents))
-Gen <- as.data.frame(rep("NP", times=nInd(newParents)))
-bvebv0 <- cbind(Gen, bvebv0)
-colnames(bvebv0) <- c("Gen","bv","ebv")
-
-bvebv1 <- cbind(bv(F2), ebv(F2))
-Gen <- as.data.frame(rep("F2", times=nInd(F2)))
-bvebv1 <- cbind(Gen, bvebv1)
-colnames(bvebv1) <- c("Gen","bv","ebv")
-
-bvebv2 <- cbind(bv(F3), ebv(F3))
-Gen <- as.data.frame(rep("F3", times=nInd(F3)))
-bvebv2 <- cbind(Gen, bvebv2)
-colnames(bvebv2) <- c("Gen","bv","ebv")
-
-bvebv3 <- cbind(bv(F4), ebv(F4))
-Gen <- as.data.frame(rep("F4", times=nInd(F4)))
-bvebv3 <- cbind(Gen, bvebv3)
-colnames(bvebv3) <- c("Gen","bv","ebv")
-
-bvebv4 <- cbind(bv(F5), ebv(F5))
-Gen <- as.data.frame(rep("F5", times=nInd(F5)))
-bvebv4 <- cbind(Gen, bvebv4)
-colnames(bvebv4) <- c("Gen","bv","ebv")
-
-bvebv5 <- cbind(bv(PYT), ebv(PYT))
-Gen <- as.data.frame(rep("PYT", times=nInd(PYT)))
-bvebv5 <- cbind(Gen, bvebv5)
-colnames(bvebv5) <- c("Gen","bv","ebv")
-
-bvebv6 <- cbind(bv(AYT), ebv(AYT))
-Gen <- as.data.frame(rep("AYT", times=nInd(AYT)))
-bvebv6 <- cbind(Gen, bvebv6)
-colnames(bvebv6) <- c("Gen","bv","ebv")
-
+bvebv0 <- getBvEbv(newParents, "NP")
+bvebv1 <- getBvEbv(F2, "F2")
+bvebv2 <- getBvEbv(F3, "F3")
+bvebv3 <- getBvEbv(F4, "F4")
+bvebv4 <- getBvEbv(F5, "F5")
+bvebv5 <- getBvEbv(PYT, "PYT")
+bvebv6 <- getBvEbv(AYT, "AYT")
 
 bv_ebv <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
-
 
 ###Select parents for next cycle
 
