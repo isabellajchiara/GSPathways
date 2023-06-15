@@ -1,3 +1,4 @@
+# P: suggestion: return the new object instead of setting inside function
 # Defining trait parameters (AEG)
 defineTraitAEG <- function(nQtl,mean,h2) {
   SP <<- SimParam$new(founderPop)
@@ -5,6 +6,7 @@ defineTraitAEG <- function(nQtl,mean,h2) {
   SP$setVarE(h2=h2)
 }
 
+# P: suggestion: return the new object instead of setting inside function
 # Defining trait parameters (A)
 defineTraitA <- function(nQtl,mean,h2) {
   SP <<- SimParam$new(founderPop)
@@ -12,6 +14,8 @@ defineTraitA <- function(nQtl,mean,h2) {
   SP$setVarE(h2=h2)
 }
 
+# P: suggestion: unify ebv and pheno selections in one function
+# P: suggestion: return the new object instead of setting inside function
 # Selecting parents for the next cycle (pheno)
 selectNewParentsPheno <- function(gen,nInd){
   NewParents <<- selectInd(gen, nInd, use="pheno")
@@ -22,6 +26,7 @@ selectNewParentsEBV <-function(gen,nInd) {
   NewParents <<- selectInd(gen, nInd, use="ebv")
 }
 
+# P: Suggestion: pheno/ebv can be arguments
 # Within Family Selections (pheno)
 TopWithinFamPheno <- function(gen,nFam,nIndPerFam){
   TopFam <-selectFam(gen,nFam, use="pheno", top=TRUE)
@@ -126,4 +131,29 @@ getBvEbv <- function(genObj, genName){
     bvebv
 }
 
+## Functions to build dataframes
 
+getAllGeneticValues <- function(geneticValues, lin1, lin2){
+  geneticValues <- as.data.frame(geneticValues)
+  colnames(geneticValues) <- 1:nReps
+  gain <- as.data.frame(geneticValues[lin1,] - geneticValues[lin2,])
+  colnames(gain) <- 1:nReps
+  AllgeneticValues <- as.data.frame(rbind(geneticValues, gain))
+  rownames(AllgeneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
+  colnames(AllgeneticValues) <- c(1:nReps)
+  AllGeneticValues
+}
+
+getCorrelations <- function(correlations){
+  correlations <- as.data.frame(correlations)
+  rownames(correlations) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
+  colnames(correlations) <- c(1:nReps)  
+  correlations
+}
+
+getVariances <- function(variances){
+  variances <- as.data.frame(variances)
+  colnames(variances) <- c(1:nReps)
+  rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
+  variances
+}
