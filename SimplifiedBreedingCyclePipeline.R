@@ -3,7 +3,7 @@ library(AlphaSimR)
 library(rrBLUP)
 source("FunctionsLibrary.R")
 
-# Create Results Matrices
+#Create Results Matrices
 
 gvMat <- matrix(nrow=10, ncol=1)
 corMat <- matrix(nrow=7, ncol=1)
