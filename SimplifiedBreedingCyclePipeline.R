@@ -19,7 +19,7 @@ defineTraitAEG(10,8.8,0.25)
 #yield = (10,8.8,0.25)
 #flowering = (5,35,0.8)
 
-#build training pop
+#FIRST CYCLE TO BUILD INITIAL TRAINING POP
 
 ## randomly cross 200 parents 
 Base = newPop(founderPop)
@@ -63,37 +63,35 @@ TrainingPheno <- pheno(PYT)
 #source GS Prediction Model
 source("rrblup_sc.R")
 
-
+#calculate EBVs
 GetEBVrrblup(PYT)
 PYT@ebv = EBV
-
 corMat[1,] = cor(bv(PYT), ebv(PYT))
 
+#NEW CYCLE
 newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
 varMat[2,] = varG(newParents)
 gvMat[2,] <- mean(gv(newParents))
 
-allelesMatNP <- getAllelesMat(newParents, "NP")
+allelesMatNP <- getAllelesMat(newParents, "NP"
 
-#start new cycle
+## 200 random crosses of new parents
 
-##start with 200 random crosses
-
-F1 = randCross(newParents, 200) 
+F1 = randCross(newParents, 200)
+                              
 varMat[3,] = varG(F1)
 gvMat[3,] <- mean(gv(F1))
-
 allelesMatF1 <- getAllelesMat(F1, "F1")
 
 ## self and bulk F1 to form F2 ##
 
 F2 = self(F1, nProgeny = 30) 
+                              
 varMat[4,] = varG(F2)
 gvMat[4,] <- mean(gv(F2))
-
 allelesMatF2 <- getAllelesMat(F2, "F2")
 
-##set EBV using BLUP model##
+##set EBV using RRBLUP model##
 GetEBVrrblup(F2)
 F2@ebv = EBV
 corMat[2] = as.numeric(cor(bv(F2), ebv(F2)))
@@ -105,9 +103,9 @@ SelectionsF2 = selectWithinFam(TopFamF2, 100, use="ebv", top=TRUE)
 
 F3 = self(SelectionsF2)
 F3 = setPheno(F3)
+                              
 varMat[5,] = varG(F3)
 gvMat[5,] <- mean(gv(F3))
-
 allelesMatF3 <- getAllelesMat(F3, "F3")
 
 ##set EBV using BLUP model##
@@ -122,9 +120,9 @@ SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
 
 F4 = self(SelectionsF3)
 F4 = setPheno(F4)
+                              
 varMat[6,] = varG(F4)
-gvMat[6,] <- mean(gv(F4))
-
+gvMat[6,] <- mean(gv(F4))                            
 allelesMatF4 <- getAllelesMat(F4, "F4")
 
 ##set EBV using BLUP model##
@@ -136,18 +134,17 @@ corMat[4,] = cor(bv(F4),ebv(F4))
 
 SelectionsF4 = selectFam(F4, 4, use="ebv")
 F5 = self(SelectionsF4)
+                              
 varMat[7,]= varG(F5)
 gvMat[7,] <- mean(gv(F5))
-
 allelesMatF5 <- getAllelesMat(F5, "F5")
 
 #use F5 to retrain the model
 
 source("rrblup_sc_retrain.R")
 
-#continue pipeline
 
-##set EBV using BLUP model##
+##set EBV using RRBLUP model##
 GetEBVrrblup(F5)
 F5@ebv = EBV
 corMat[5,] = cor(bv(F5),ebv(F5))
@@ -155,13 +152,14 @@ corMat[5,] = cor(bv(F5),ebv(F5))
 ## select top F5 families for preliminary yield trial ##
 
 SelectionsF5 = selectFam(F5, 3, use="ebv") 
+                              
 PYT = self(SelectionsF5)
+                              
 varMat[8,] = varG(PYT)
 gvMat[8,] <- mean(gv(PYT))
-
 allelesMatPYT <- getAllelesMat(PYT, "PYT")
 
-##set EBV using BLUP model##
+##set EBV using RRBLUP model##
 GetEBVrrblup(PYT)
 PYT@ebv = EBV
 corMat[6,] = cor(bv(PYT),ebv(PYT))
@@ -170,12 +168,12 @@ corMat[6,] = cor(bv(PYT),ebv(PYT))
 
 SelectionsPYT = selectFam(PYT,  1, use="ebv", reps=5, top=TRUE) 
 AYT = self(SelectionsPYT)
+                              
 varMat[9,] = varG(AYT)
 gvMat[9,] <- mean(gv(AYT))
-
 allelesMatAYT <- getAllelesMat(AYT, "AYT")
 
-##set EBV using BLUP model##
+##set EBV using RRBLUP model##
 GetEBVrrblup(AYT)
 AYT@ebv = EBV
 corMat[7,] = cor(bv(AYT),ebv(AYT))
