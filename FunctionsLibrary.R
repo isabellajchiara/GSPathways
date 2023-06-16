@@ -13,38 +13,20 @@ defineTraitA <- function(nQtl,mean,h2) {
 }
 
 # Selecting parents for the next cycle (pheno)
-selectNewParentsPheno <- function(gen,nInd){
-  NewParents <<- selectInd(gen, nInd, use="pheno")
+selectNewParents <- function(gen,nInd,criterion){
+  selectInd(gen, nInd, use=criterion)
 }
 
-# Selecting parents for the next cycle (ebv)
-selectNewParentsEBV <-function(gen,nInd) {
-  NewParents <<- selectInd(gen, nInd, use="ebv")
-}
-
-# Within Family Selections (pheno)
-TopWithinFamPheno <- function(gen,nFam,nIndPerFam){
-  TopFam <-selectFam(gen,nFam, use="pheno", top=TRUE)
-  Selections <<- selectWithinFam(TopFam, nIndPerFam,use="pheno", top=TRUE)
+# Within Family Selections (pheno/ebv)
+TopWithinFam <- function(gen,nFam,nIndPerFam,criterion){
+  TopFam <-selectFam(gen,nFam, use=criterion, top=TRUE)
+  Selections <<- selectWithinFam(TopFam, nIndPerFam,use=criterion, top=TRUE)
   self(Selections)
 }
 
-# Within Family Selections (ebv)
-TopWithinFamEBV <- function(gen,nFam,nIndPerFam){
-  TopFam <-selectFam(gen,nFam, use="ebv", top=TRUE)
-  Selections <<- selectWithinFam(TopFam, nIndPerFam,use="ebv", top=TRUE)
-  self(Selections)
-}
-
-# Family Selections (pheno)
-TopFamilyPheno <- function(gen,nFam){
-  Top = selectFam(gen,nFam, use="pheno", top=TRUE)
-  self(Top)
-}
-
-# Family Selections (ebv)
-TopFamilyEBV <- function(gen,nFam){
-  Top = selectFam(gen,nFam, use="ebv", top=TRUE)
+# Family Selections (pheno/ebv)
+TopFamily <- function(gen,nFam,criterion){
+  Top = selectFam(gen,nFam, use=criterion, top=TRUE)
   self(Top)
 }
 
@@ -126,4 +108,29 @@ getBvEbv <- function(genObj, genName){
     bvebv
 }
 
+## Functions to build dataframes
 
+getAllGeneticValues <- function(geneticValues, lin1, lin2){
+  geneticValues <- as.data.frame(geneticValues)
+  colnames(geneticValues) <- 1:nReps
+  gain <- as.data.frame(geneticValues[lin1,] - geneticValues[lin2,])
+  colnames(gain) <- 1:nReps
+  AllgeneticValues <- as.data.frame(rbind(geneticValues, gain))
+  rownames(AllgeneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
+  colnames(AllgeneticValues) <- c(1:nReps)
+  AllgeneticValues
+}
+
+getCorrelations <- function(correlations){
+  correlations <- as.data.frame(correlations)
+  rownames(correlations) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
+  colnames(correlations) <- c(1:nReps)  
+  correlations
+}
+
+getVariances <- function(variances){
+  variances <- as.data.frame(variances)
+  colnames(variances) <- c(1:nReps)
+  rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
+  variances
+}
