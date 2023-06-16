@@ -1,6 +1,11 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
 library(AlphaSimR)
 library(rrBLUP)
+library(caret)
+library(ranger)
+library(tidyverse)
+library(e1071)
+library(randomForest)
 source("FunctionsLibrary.R")
 
 #Create Results Matrices
