@@ -58,8 +58,7 @@ for (rep in 1:nReps){
 }
 
 ##create data frames and label##
-
-AllgeneticValuesC1 <- getAllGeneticValues(geneticvaluesC1, 10, 2)
+AllgeneticvaluesC1 <- getAllGeneticValues(geneticvaluesC1, 10, 2)
 # AllGeneticValuesC2 <- getAllGeneticValues(geneticvaluesC2, 10, 3)
 # AllGeneticValuesC3 <- getAllGeneticValues(geneticvaluesC3, 10, 3)
 
