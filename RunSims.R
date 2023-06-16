@@ -10,6 +10,12 @@ nCycles = 1
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
+geneticvalues <- list()
+correlations <- list()
+variances <- list()
+alleles <- list()
+bv_ebv <- list()
+
 for (cycle in paste("C", 1:nCycles)){
   geneticvalues[[cycle]] <- matrix(nrow=nGen, ncol=nReps)
   correlations[[cycle]] <- matrix(nrow=nModels, ncol=nReps)
