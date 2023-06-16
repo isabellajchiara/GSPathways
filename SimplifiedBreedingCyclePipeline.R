@@ -107,7 +107,7 @@ corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
 ## select top individuals from F2 bulk to form F3 
 
-F3 = TopWithinFamEBV(F2, 10, 100)
+F3 = TopWithinFam(F2, 10, 100, "ebv")
 F3 = setPheno(F3)
                               
 varMat[5,] = varG(F3)
@@ -121,7 +121,7 @@ F3@ebv = EBV
 corMat[3,] = cor(bv(F3),ebv(F3))
 
 ## select top within familiy from F3 to form F4 
-F4 = TopWithinFamEBV(F3, 5, 50)
+F4 = TopWithinFam(F3, 5, 50, "ebv")
 F4 = setPheno(F4)
                               
 varMat[6,] = varG(F4)
