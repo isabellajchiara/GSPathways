@@ -31,7 +31,7 @@ Base = newPop(founderPop)
 Base = setPheno(Base)
 
 selectNewParents(Base,10,"pheno")
-F1 = randCross(newParents, 200, nProgeny=3)
+F1 = randCross(NewParents, 200, nProgeny=3)
 
 ## self and bulk F1 to form F2 ##
 
