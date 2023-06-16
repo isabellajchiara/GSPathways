@@ -118,7 +118,7 @@ getAllGeneticValues <- function(geneticValues, lin1, lin2){
   AllgeneticValues <- as.data.frame(rbind(geneticValues, gain))
   rownames(AllgeneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
   colnames(AllgeneticValues) <- c(1:nReps)
-  AllGeneticValues
+  AllgeneticValues
 }
 
 getCorrelations <- function(correlations){
