@@ -87,7 +87,7 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
 GetEBVrrblup <- function(gen){
   genMat <- pullSegSiteGeno(gen) 
   genMat <- genMat-1
-  EBV <<- genMat %*% markerEffects
+  genMat %*% markerEffects
 }
 
 # gets alleles matrix of genObj

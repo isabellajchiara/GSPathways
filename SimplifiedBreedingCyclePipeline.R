@@ -69,7 +69,7 @@ TrainingPheno <- pheno(PYT)
 source("rrblup_sc.R")
 
 # calculate EBVs of PYTs
-GetEBVrrblup(PYT) #get EBVs
+EBV <- GetEBVrrblup(PYT) #get EBVs
 PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
@@ -100,7 +100,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using RRBLUP model
 
-    GetEBVrrblup(F2)
+    EBV <- GetEBVrrblup(F2)
     F2@ebv = EBV
     corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
@@ -115,7 +115,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using BLUP model
 
-    GetEBVrrblup(F3)
+    EBV <- GetEBVrrblup(F3)
     F3@ebv = EBV
     corMat[3,] = cor(bv(F3),ebv(F3))
 
@@ -128,7 +128,7 @@ for (cycle in 1:nCycles){
     allelesMatF4 <- getAllelesMat(F4, "F4")
 
     ##set EBV using BLUP model##
-    GetEBVrrblup(F4)
+    EBV <- GetEBVrrblup(F4)
     F4@ebv = EBV
     corMat[4,] = cor(bv(F4),ebv(F4))
 
@@ -146,7 +146,7 @@ for (cycle in 1:nCycles){
     source("rrblup_sc_retrain.R")
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(F5)
+    EBV <- GetEBVrrblup(F5)
     F5@ebv = EBV
     corMat[5,] = cor(bv(F5),ebv(F5))
 
@@ -159,7 +159,7 @@ for (cycle in 1:nCycles){
     allelesMatPYT <- getAllelesMat(PYT, "PYT")
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(PYT)
+    EBV <- GetEBVrrblup(PYT)
     PYT@ebv = EBV
     corMat[6,] = cor(bv(PYT),ebv(PYT))
 
@@ -173,7 +173,7 @@ for (cycle in 1:nCycles){
     allelesMatAYT <- getAllelesMat(AYT, "AYT")
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(AYT)
+    EBV <- GetEBVrrblup(AYT)
     AYT@ebv = EBV
     corMat[7,] = cor(bv(AYT),ebv(AYT))
 
