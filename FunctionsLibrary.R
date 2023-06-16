@@ -90,6 +90,12 @@ GetEBVrrblup <- function(gen){
   genMat %*% markerEffects
 }
 
+GetEBVrf <- function(gen){
+  M = as.data.frame(pullSegSiteGeno(gen))
+  colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
+  as.numeric(predict(rf_fit, M))
+}
+
 # gets alleles matrix of genObj
 getAllelesMat <- function(genObj, genName){
     allelesMat <- pullSegSiteHaplo(genObj)
