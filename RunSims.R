@@ -31,6 +31,7 @@ for (rep in 1:nReps){
 }
 
 ##create data frames and label##
+Allgeneticvalues <- list()
 
 for (cycle in paste("C", 1:nCycles)){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
