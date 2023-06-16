@@ -74,7 +74,7 @@ PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
 # NEW CYCLE
-
+for (cycle in 1:nCycles)
 ## select new parents from previous cycle PYTs
 newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
 
@@ -203,3 +203,10 @@ bv_ebv <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
 ###Select parents for next cycle
 
 selectNewParents(F2,5,"ebv")
+
+geneticvalues[[cycle]][,rep] <- gvMat
+correlations[[cycle]][,rep] <- corMat
+variances[[cycle]][,rep] <- varMat
+alleles[[cycle]][[rep]] <- allelesMat
+bv_ebv[[cycle]][[rep]] <- bv_ebv
+
