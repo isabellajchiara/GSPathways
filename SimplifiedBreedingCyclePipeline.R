@@ -198,7 +198,7 @@ bvebv4 <- getBvEbv(F5, "F5")
 bvebv5 <- getBvEbv(PYT, "PYT")
 bvebv6 <- getBvEbv(AYT, "AYT")
 
-bv_ebv <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
+bv_ebv_df <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
 
 ###Select parents for next cycle
 
@@ -208,5 +208,5 @@ geneticvalues[[cycle]][,rep] <- gvMat
 correlations[[cycle]][,rep] <- corMat
 variances[[cycle]][,rep] <- varMat
 alleles[[cycle]][[rep]] <- allelesMat
-bv_ebv[[cycle]][[rep]] <- bv_ebv
+bv_ebv[[cycle]][[rep]] <- bv_ebv_df
 
