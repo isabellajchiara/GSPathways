@@ -30,8 +30,8 @@ defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 Base = newPop(founderPop)
 Base = setPheno(Base)
 
-selectNewParentsPheno(Base,10)
-F1 = randCross(NewParents, 200, nProgeny=3)
+selectNewParents(Base,10,"pheno")
+F1 = randCross(newParents, 200, nProgeny=3)
 
 ## self and bulk F1 to form F2 ##
 
@@ -39,23 +39,22 @@ F2 = self(F1, nProgeny = 30)
 F2 = setPheno(F2)
 
 ## select top individuals from each family to form F2. Bulk and self to form F3
-
-F3 = TopWithinFamPheno(F2,10,100)
+F3 = TopWithinFam(F2,10,100,"pheno")
 F3 = setPheno(F3)
 
 ## select top individuals within F3 families to form F4 
 
-F4 = TopWithinFamPheno(F3,5,50)
+F4 = TopWithinFam(F3,5,50,"pheno")
 F4 = setPheno(F4)
 
 ## select top families from F4 to form F5 
 
-F5 = TopFamilyPheno(F4,4)
+F5 = TopFamily(F4,4,"pheno")
 F5 = setPheno(F5)
 
 ## select top families from F5 for PYTs 
 
-PYT = TopFamilyPheno(F5, 3) 
+PYT = TopFamily(F5, 3,"pheno")
 PYT = setPheno(PYT, reps=2)
 
 gvMat[1,] <- mean(gv(PYT))
@@ -203,4 +202,4 @@ bv_ebv <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
 
 ###Select parents for next cycle
 
-selectNewParentsEBV(F2,5)
+selectNewParents(F2,5,"ebv")
