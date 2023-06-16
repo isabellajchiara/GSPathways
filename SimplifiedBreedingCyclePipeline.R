@@ -30,8 +30,8 @@ defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 Base = newPop(founderPop)
 Base = setPheno(Base)
 
-selectNewParents(Base,10,"pheno")
-F1 = randCross(NewParents, 200, nProgeny=3)
+newParents <- selectNewParents(Base,10,"pheno")
+F1 = randCross(newParents, 200, nProgeny=3)
 
 ## self and bulk F1 to form F2 ##
 
@@ -201,7 +201,7 @@ for (cycle in 1:nCycles){
 
     ###Select parents for next cycle
 
-    selectNewParents(F2,5,"ebv")
+    newParents <- selectNewParents(F2,5,"ebv")
 
     geneticvalues[[cycle]][,rep] <- gvMat
     correlations[[cycle]][,rep] <- corMat

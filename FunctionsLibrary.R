@@ -14,7 +14,7 @@ defineTraitA <- function(nQtl,mean,h2) {
 
 # Selecting parents for the next cycle (pheno)
 selectNewParents <- function(gen,nInd,criterion){
-  NewParents <<- selectInd(gen, nInd, use=criterion)
+  selectInd(gen, nInd, use=criterion)
 }
 
 # Within Family Selections (pheno/ebv)
