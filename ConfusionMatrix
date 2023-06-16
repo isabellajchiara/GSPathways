@@ -1,6 +1,11 @@
 library(caret)
+library(writexl)
 
 genList <- c("F2","F3","F4","F5","PYT","AYT")
+ConfusionMatrixC1 = vector("list", length = 6)
+ConfusionMatrixC2 = vector("list", length = 6)
+ConfusionMatrixC3 = vector("list", length = 6)
+
 
 for (gen in genList) {
   
@@ -64,8 +69,14 @@ for (gen in genList) {
   df <-cbind(Accuracy, Sensitivity, Specificity)
   assign(paste0("C1",gen), df)
   
+  for (i in 1:6){
+    ConfusionMatrixC1[[i]] <- df
+  }
   
-  
+
+
+C1 <- do.call(rbind, ConfusionMatrixC1)
+
   ###
   
   library(caret)
@@ -125,6 +136,14 @@ for (gen in genList) {
   df <-cbind(Accuracy, Sensitivity, Specificity)
   assign(paste0("C2",gen), df)
   
+  
+  for (i in 1:6){
+    ConfusionMatrixC2[[i]] <- df
+  }
+  
+  
+  C2 <- do.call(rbind, ConfusionMatrixC2)
+  
   ###################
   
   data <- readRDS("8C3rrblup_rd_bvebv_snp_yield.rds")
@@ -183,6 +202,18 @@ for (gen in genList) {
   assign(paste0("C3",gen), df)
   
   
+  for (i in 1:6){
+    ConfusionMatrixC3[[i]] <- df
+  }
+  
+  
+  C3 <- do.call(rbind, ConfusionMatrixC3)
   
 }
+
+####
+
+results <- as.data.frame(cbind(C1,C2,C3))
+write_xlsx(results,"confusionMatrix.xlsx")
+
 
