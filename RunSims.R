@@ -2,7 +2,7 @@
 ## define variables ##
 
 nModels = 7
-nReps = 15
+nReps = 1
 nGen = 10
 nVar = 9
 
@@ -32,28 +32,28 @@ bv_ebvC3 <- vector("list", length = nReps)
 
 ## Run repeat loop to run reps ##
 
-for (i in 1:nReps){
+for (rep in 1:nReps){
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
   
-  geneticvaluesC1[,i] <- gvMat
-  # geneticvaluesC2[,i] <- gvMatC2
-  # geneticvaluesC3[,i] <- gvMatC3
+  geneticvaluesC1[,rep] <- gvMat
+  # geneticvaluesC2[,rep] <- gvMatC2
+  # geneticvaluesC3[,rep] <- gvMatC3
   
-  correlationsC1[,i] <- corMat
-  # correlationsC2[,i] <- corMatC2
-  # correlationsC3[,i] <- corMatC3
+  correlationsC1[,rep] <- corMat
+  # correlationsC2[,rep] <- corMatC2
+  # correlationsC3[,rep] <- corMatC3
   
-  variancesC1[,i] <- varMat
-  # variancesC2[,i] <- varMatC2
-  # variancesC3[,i] <- varMatC3
+  variancesC1[,rep] <- varMat
+  # variancesC2[,rep] <- varMatC2
+  # variancesC3[,rep] <- varMatC3
   
-  allelesC1[[i]] <- allelesMat
-  # allelesC2[[i]] <- allelesMatC2
-  # allelesC3[[i]] <- allelesMatC3
+  allelesC1[[rep]] <- allelesMat
+  # allelesC2[[rep]] <- allelesMatC2
+  # allelesC3[[rep]] <- allelesMatC3
   
-  bv_ebvC1[[i]] <- bv_ebv
-  # bv_ebvC2[[i]] <- bv_ebvC2
-  # bv_ebvC3[[i]] <- bv_ebvC3
+  bv_ebvC1[[rep]] <- bv_ebv
+  # bv_ebvC2[[rep]] <- bv_ebvC2
+  # bv_ebvC3[[rep]] <- bv_ebvC3
   
 }
 

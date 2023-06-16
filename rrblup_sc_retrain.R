@@ -39,22 +39,18 @@ clusterData <- clusterData[order(clusterData$cluster),]
 
 nclusters <- as.numeric(clusterData[as.numeric(nrow(clusterData)),as.numeric(ncol(clusterData))])
 
-i = 1
+cl_id = 1
 datalist = vector("list", length = nclusters)
-for (i in 1:nclusters) {
-  clustername <- paste0("cluster",i)
-  clustername <- clusterData[clusterData$cluster==i,] 
+for (cl_id in 1:nclusters) {
+  clustername <- paste0("cluster",cl_id)
+  clustername <- clusterData[clusterData$cluster==cl_id,] 
   
-  assign(paste0("cluster",i), clustername)
+  assign(paste0("cluster",cl_id), clustername)
   
-  trnname <- paste0("trn",i)
+  trnname <- paste0("trn",cl_id)
   trnname <- clustername[sample(0.75*nrow(clustername)),]
-  datalist[[i]] <- trnname
-  
-  i = i + 1
-  if (i > nclusters){ 
-    break
-  }
+  datalist[[cl_id]] <- trnname
+
 }
 
 TRN <- do.call(rbind, datalist)
