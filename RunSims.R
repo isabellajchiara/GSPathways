@@ -6,7 +6,7 @@ nReps = 1
 nGen = 10
 nVar = 9
 
-nCycles = 1
+nCycles = 3
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
