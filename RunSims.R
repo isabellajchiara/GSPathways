@@ -16,7 +16,7 @@ variances <- list()
 alleles <- list()
 bv_ebv <- list()
 
-for (cycle in paste("C", 1:nCycles)){
+for (cycle in paste("C", 1:nCycles, sep="")){
   geneticvalues[[cycle]] <- matrix(nrow=nGen, ncol=nReps)
   correlations[[cycle]] <- matrix(nrow=nModels, ncol=nReps)
   variances[[cycle]] <- matrix(nrow=nVar,ncol=nReps)
@@ -33,7 +33,7 @@ for (rep in 1:nReps){
 ##create data frames and label##
 Allgeneticvalues <- list()
 
-for (cycle in paste("C", 1:nCycles)){
+for (cycle in paste("C", 1:nCycles, sep="")){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
   correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
   variances[[cycle]] <- getVariances(variances[[cycle]])
