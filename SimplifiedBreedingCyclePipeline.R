@@ -1,27 +1,30 @@
-#Pedigree Breeding Method using GEBV Selections
-
-#Create Results Matrices
+## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
+library(AlphaSimR)
+library(rrBLUP)
+# Create Results Matrices
 
 gvMat <- matrix(nrow=10, ncol=1)
 corMat <- matrix(nrow=7, ncol=1)
 varMat <- matrix(nrow=9, ncol=1)
 
-#establish simulation parameters
-genMap <- readRDS("genMapSNPs.RData")
-haplotypes <- readRDS("haplotypesSNPs.RData")
+# establish simulation parameters
+
+genMap <- readRDS("genMapSNPs.RData") # can load other genMaps 
+haplotypes <- readRDS("haplotypesSNPs.RData") # can load other genotype data, must match genMap
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
                        inbred = FALSE, 
                        ploidy = 2L)
 
-defineTraitAEG(10,8.8,0.25) 
+defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 #yield = (10,8.8,0.25)
-#flowering = (5,35,0.8)
+#flowering = (5,35,0.8) and use defineTraitA
 
-#FIRST CYCLE TO BUILD INITIAL TRAINING POP
+### FIRST CYCLE TO BUILD INITIAL TRAINING POP
 
-## randomly cross 200 parents 
+## create base pop randomly cross 200 parents 
+
 Base = newPop(founderPop)
 Base = setPheno(Base)
 
@@ -34,20 +37,21 @@ F2 = self(F1, nProgeny = 30)
 F2 = setPheno(F2)
 
 ## select top individuals from each family to form F2. Bulk and self to form F3
+
 F3 = TopWithinFamPheno(F2,10,100)
 F3 = setPheno(F3)
 
-##select top individuals within F3 families to form F4 ##
+## select top individuals within F3 families to form F4 
 
 F4 = TopWithinFamPheno(F3,5,50)
 F4 = setPheno(F4)
 
-## select top families from F4 to form F5 ##
+## select top families from F4 to form F5 
 
 F5 = TopFamilyPheno(F4,4)
 F5 = setPheno(F5)
 
-## select top families from F5 for PYTs ##
+## select top families from F5 for PYTs 
 
 PYT = TopFamilyPheno(F5, 3) 
 PYT = setPheno(PYT, reps=2)
@@ -60,20 +64,23 @@ varMat[1,] <- varG(PYT)
 TrainingGeno <- pullSegSiteGeno(PYT)
 TrainingPheno <- pheno(PYT)
 
-#source GS Prediction Model
+# source GS Prediction Model
 source("rrblup_sc.R")
 
-#calculate EBVs
-GetEBVrrblup(PYT)
-PYT@ebv = EBV
-corMat[1,] = cor(bv(PYT), ebv(PYT))
+# calculate EBVs of PYTs
+GetEBVrrblup(PYT) #get EBVs
+PYT@ebv = EBV #set EBVs
+corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
-#NEW CYCLE
+# NEW CYCLE
+
+## select new parents from previous cycle PYTs
 newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
-varMat[2,] = varG(newParents)
-gvMat[2,] <- mean(gv(newParents))
 
-allelesMatNP <- getAllelesMat(newParents, "NP"
+
+varMat[2,] = varG(newParents) #collect variance
+gvMat[2,] <- mean(gv(newParents)) #collect genetic values 
+allelesMatNP <- getAllelesMat(newParents, "NP") #collect genotypes
 
 ## 200 random crosses of new parents
 
@@ -91,34 +98,29 @@ varMat[4,] = varG(F2)
 gvMat[4,] <- mean(gv(F2))
 allelesMatF2 <- getAllelesMat(F2, "F2")
 
-##set EBV using RRBLUP model##
+## set EBV using RRBLUP model
+
 GetEBVrrblup(F2)
 F2@ebv = EBV
 corMat[2] = as.numeric(cor(bv(F2), ebv(F2)))
 
-## select top individuals from F2 bulk  to form F3 ##
+## select top individuals from F2 bulk to form F3 
 
-TopFamF2 = selectFam(F2, 10, use="pheno", top=TRUE) 
-SelectionsF2 = selectWithinFam(TopFamF2, 100, use="ebv", top=TRUE)
-
-F3 = self(SelectionsF2)
+F3 = TopWithinFamEBV(F2, 10, 100)
 F3 = setPheno(F3)
                               
 varMat[5,] = varG(F3)
 gvMat[5,] <- mean(gv(F3))
 allelesMatF3 <- getAllelesMat(F3, "F3")
 
-##set EBV using BLUP model##
+## set EBV using BLUP model
+
 GetEBVrrblup(F3)
 F3@ebv = EBV
 corMat[3,] = cor(bv(F3),ebv(F3))
 
-##select top within familiy from F3 to form F4 ##
-
-TopFamF3 = selectFam(F3,5,use="pheno", top=TRUE) 
-SelectionsF3 = selectWithinFam(TopFamF3, 50, use="pheno", top=TRUE)
-
-F4 = self(SelectionsF3)
+## select top within familiy from F3 to form F4 
+F4 = TopWithinFamEBV(F3, 5, 50)
 F4 = setPheno(F4)
                               
 varMat[6,] = varG(F4)
@@ -132,8 +134,8 @@ corMat[4,] = cor(bv(F4),ebv(F4))
 
 ## select top families from F4 to form F5 ##
 
-SelectionsF4 = selectFam(F4, 4, use="ebv")
-F5 = self(SelectionsF4)
+F5 = TopFamilyEBV(F4,4)
+F5 = setPheno(F5)
                               
 varMat[7,]= varG(F5)
 gvMat[7,] <- mean(gv(F5))
@@ -143,18 +145,15 @@ allelesMatF5 <- getAllelesMat(F5, "F5")
 
 source("rrblup_sc_retrain.R")
 
-
 ##set EBV using RRBLUP model##
 GetEBVrrblup(F5)
 F5@ebv = EBV
 corMat[5,] = cor(bv(F5),ebv(F5))
 
 ## select top F5 families for preliminary yield trial ##
-
-SelectionsF5 = selectFam(F5, 3, use="ebv") 
-                              
-PYT = self(SelectionsF5)
-                              
+PYT = TopFamilyEBV(F5,3)
+PYT = setPheno(PYT, reps=2)
+                                                      
 varMat[8,] = varG(PYT)
 gvMat[8,] <- mean(gv(PYT))
 allelesMatPYT <- getAllelesMat(PYT, "PYT")
@@ -166,8 +165,8 @@ corMat[6,] = cor(bv(PYT),ebv(PYT))
 
 ## select top families from PYT for AYT ##
 
-SelectionsPYT = selectFam(PYT,  1, use="ebv", reps=5, top=TRUE) 
-AYT = self(SelectionsPYT)
+AYT = TopFamilyEBV(PYT, 1)
+AYT = setPheno(AYT, reps=5)
                               
 varMat[9,] = varG(AYT)
 gvMat[9,] <- mean(gv(AYT))
