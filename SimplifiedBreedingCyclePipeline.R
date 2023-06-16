@@ -135,7 +135,7 @@ corMat[4,] = cor(bv(F4),ebv(F4))
 
 ## select top families from F4 to form F5 ##
 
-F5 = TopFamilyEBV(F4,4)
+F5 = TopFamily(F4,4,"ebv")
 F5 = setPheno(F5)
                               
 varMat[7,]= varG(F5)
@@ -152,7 +152,7 @@ F5@ebv = EBV
 corMat[5,] = cor(bv(F5),ebv(F5))
 
 ## select top F5 families for preliminary yield trial ##
-PYT = TopFamilyEBV(F5,3)
+PYT = TopFamily(F5,3,"ebv")
 PYT = setPheno(PYT, reps=2)
                                                       
 varMat[8,] = varG(PYT)
@@ -166,7 +166,7 @@ corMat[6,] = cor(bv(PYT),ebv(PYT))
 
 ## select top families from PYT for AYT ##
 
-AYT = TopFamilyEBV(PYT, 1)
+AYT = TopFamily(PYT, 1, "ebv")
 AYT = setPheno(AYT, reps=5)
                               
 varMat[9,] = varG(AYT)
