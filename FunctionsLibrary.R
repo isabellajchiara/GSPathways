@@ -1,4 +1,3 @@
-# P: suggestion: return the new object instead of setting inside function
 # Defining trait parameters (AEG)
 defineTraitAEG <- function(nQtl,mean,h2) {
   SP <<- SimParam$new(founderPop)
@@ -6,7 +5,6 @@ defineTraitAEG <- function(nQtl,mean,h2) {
   SP$setVarE(h2=h2)
 }
 
-# P: suggestion: return the new object instead of setting inside function
 # Defining trait parameters (A)
 defineTraitA <- function(nQtl,mean,h2) {
   SP <<- SimParam$new(founderPop)
@@ -14,7 +12,6 @@ defineTraitA <- function(nQtl,mean,h2) {
   SP$setVarE(h2=h2)
 }
 
-# P: suggestion: return the new object instead of setting inside function
 # Selecting parents for the next cycle (pheno)
 selectNewParents <- function(gen,nInd,criterion){
   NewParents <<- selectInd(gen, nInd, use=criterion)
