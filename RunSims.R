@@ -2,7 +2,7 @@
 ## define variables ##
 
 nModels = 7
-nReps = 1
+nReps = 15
 nGen = 10
 nVar = 9
 
@@ -35,61 +35,61 @@ bv_ebvC3 <- vector("list", length = nReps)
 for (i in 1:nReps){
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
   
-  geneticvaluesC1[,i] <- gvMatC1
-  geneticvaluesC2[,i] <- gvMatC2
-  geneticvaluesC3[,i] <- gvMatC3
+  geneticvaluesC1[,i] <- gvMat
+  # geneticvaluesC2[,i] <- gvMatC2
+  # geneticvaluesC3[,i] <- gvMatC3
   
-  correlationsC1[,i] <- corMatC1
-  correlationsC2[,i] <- corMatC2
-  correlationsC3[,i] <- corMatC3
+  correlationsC1[,i] <- corMat
+  # correlationsC2[,i] <- corMatC2
+  # correlationsC3[,i] <- corMatC3
   
-  variancesC1[,i] <- varMatC1
-  variancesC2[,i] <- varMatC2
-  variancesC3[,i] <- varMatC3
+  variancesC1[,i] <- varMat
+  # variancesC2[,i] <- varMatC2
+  # variancesC3[,i] <- varMatC3
   
-  allelesC1[[i]] <- allelesMatC1
-  allelesC2[[i]] <- allelesMatC2
-  allelesC3[[i]] <- allelesMatC3
+  allelesC1[[i]] <- allelesMat
+  # allelesC2[[i]] <- allelesMatC2
+  # allelesC3[[i]] <- allelesMatC3
   
-  bv_ebvC1[[i]] <- bv_ebvC1
-  bv_ebvC2[[i]] <- bv_ebvC2
-  bv_ebvC3[[i]] <- bv_ebvC3
+  bv_ebvC1[[i]] <- bv_ebv
+  # bv_ebvC2[[i]] <- bv_ebvC2
+  # bv_ebvC3[[i]] <- bv_ebvC3
   
 }
 
 ##create data frames and label##
 
-AllGeneticValuesC1 <- getAllGeneticValues(geneticvaluesC1, 10, 2)
-AllGeneticValuesC2 <- getAllGeneticValues(geneticvaluesC2, 10, 3)
-AllGeneticValuesC3 <- getAllGeneticValues(geneticvaluesC3, 10, 3)
+AllgeneticValuesC1 <- getAllGeneticValues(geneticvaluesC1, 10, 2)
+# AllGeneticValuesC2 <- getAllGeneticValues(geneticvaluesC2, 10, 3)
+# AllGeneticValuesC3 <- getAllGeneticValues(geneticvaluesC3, 10, 3)
 
 correlationsC1 <- getCorrelations(correlationsC1)
-correlationsC2 <- getCorrelations(correlationsC2)
-correlationsC3 <- getCorrelations(correlationsC3)
+# correlationsC2 <- getCorrelations(correlationsC2)
+# correlationsC3 <- getCorrelations(correlationsC3)
 
 variancesC1 <- getVariances(variancesC1)
-variancesC2 <- getVariances(variancesC2)
-variancesC3 <- getVariances(variancesC3)
+# variancesC2 <- getVariances(variancesC2)
+# variancesC3 <- getVariances(variancesC3)
 
 
 ##write files
 write.csv(AllgeneticvaluesC1, "1C1_rrblup_rd_gvs_snp_yield.csv")
-write.csv(AllgeneticvaluesC2, "1C2_rrblup_rd_gvs_snp_yield.csv")
-write.csv(AllgeneticvaluesC3, "1C3_rrblup_rd_gvs_snp_yield.csv")
+# write.csv(AllgeneticvaluesC2, "1C2_rrblup_rd_gvs_snp_yield.csv")
+# write.csv(AllgeneticvaluesC3, "1C3_rrblup_rd_gvs_snp_yield.csv")
 
 write.csv(correlationsC1, "1C1_rrblup_rd_cors_snp_yield.csv")
-write.csv(correlationsC2, "1C2_rrblup_rd_cors_snp_yield.csv")
-write.csv(correlationsC3, "1C3_rrblup_rd_cors_snp_yield.csv")
+# write.csv(correlationsC2, "1C2_rrblup_rd_cors_snp_yield.csv")
+# write.csv(correlationsC3, "1C3_rrblup_rd_cors_snp_yield.csv")
 
 write.csv(variancesC1, "1C1_rrblup_rd_vars_snp_yield.csv")
-write.csv(variancesC2, "1C2_rrblup_rd_vars_snp_yield.csv")
-write.csv(variancesC3, "1C3_rrblup_rd_vars_snp_yield.csv")
+# write.csv(variancesC2, "1C2_rrblup_rd_vars_snp_yield.csv")
+# write.csv(variancesC3, "1C3_rrblup_rd_vars_snp_yield.csv")
 
 saveRDS(allelesC1, file="1C1rrblup_rd_alleles_snp_yield.rds")
-saveRDS(allelesC2, file="1C2rrblup_rd_alleles_snp_yield.rds")
-saveRDS(allelesC3, file="1C3rrblup_rd_alleles_snp_yield.rds")
+# saveRDS(allelesC2, file="1C2rrblup_rd_alleles_snp_yield.rds")
+# saveRDS(allelesC3, file="1C3rrblup_rd_alleles_snp_yield.rds")
 
 saveRDS(bv_ebvC1, file="1C1rrblup_rd_bvebv_snp_yield.rds")
-saveRDS(bv_ebvC2, file="1C2rrblup_rd_bvebv_snp_yield.rds")
-saveRDS(bv_ebvC3, file="1C3rrblup_rd_bvebv_snp_yield.rds")
+# saveRDS(bv_ebvC2, file="1C2rrblup_rd_bvebv_snp_yield.rds")
+# saveRDS(bv_ebvC3, file="1C3rrblup_rd_bvebv_snp_yield.rds")
   
