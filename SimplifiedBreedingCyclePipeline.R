@@ -102,7 +102,7 @@ allelesMatF2 <- getAllelesMat(F2, "F2")
 
 GetEBVrrblup(F2)
 F2@ebv = EBV
-corMat[2] = as.numeric(cor(bv(F2), ebv(F2)))
+corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
 ## select top individuals from F2 bulk to form F3 
 
