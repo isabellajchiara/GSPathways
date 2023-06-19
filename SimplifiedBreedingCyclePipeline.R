@@ -76,8 +76,13 @@ corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 # NEW CYCLE
 for (cycle in 1:nCycles){
     ## select new parents from previous cycle PYTs
-    newParents = selectInd(PYT, 10, use="ebv", top=TRUE)
-
+    
+    if (cycle = 1) {
+      newParents <- selectNewParents(PYT,5,"ebv")
+      } else }
+      newParents <- selectNewParents)F2, 5, "ebv")
+      }
+  
     varMat[2,] = varG(newParents) #collect variance
     gvMat[2,] <- mean(gv(newParents)) #collect genetic values 
     allelesMatNP <- getAllelesMat(newParents, "NP") #collect genotypes
@@ -198,10 +203,6 @@ for (cycle in 1:nCycles){
     bvebv6 <- getBvEbv(AYT, "AYT")
 
     bv_ebv_df <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
-
-    ###Select parents for next cycle
-
-    newParents <- selectNewParents(F2,5,"ebv")
 
     geneticvalues[[cycle]][,rep] <- gvMat
     correlations[[cycle]][,rep] <- corMat
