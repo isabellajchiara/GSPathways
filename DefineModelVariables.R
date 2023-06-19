@@ -1,3 +1,9 @@
+# Defines some variables and functions based on what is set 
+# in the model chosen
+
+# - rf: Random Forest
+# - rrblup: RRBLUP
+
 if (model == "rf"){
     print("Model chosen: Random Forest")
     fileTrain <- "RF_RD.R"
