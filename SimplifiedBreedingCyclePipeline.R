@@ -1,6 +1,11 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
 library(AlphaSimR)
 library(rrBLUP)
+library(caret)
+library(ranger)
+library(tidyverse)
+library(e1071)
+library(randomForest)
 source("FunctionsLibrary.R")
 
 #Create Results Matrices
@@ -66,10 +71,10 @@ TrainingGeno <- pullSegSiteGeno(PYT)
 TrainingPheno <- pheno(PYT)
 
 # source GS Prediction Model
-source("rrblup_sc.R")
+source(fileTrain)
 
 # calculate EBVs of PYTs
-GetEBVrrblup(PYT) #get EBVs
+EBV <- getEBV(PYT) #get EBVs
 PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
@@ -105,7 +110,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using RRBLUP model
 
-    GetEBVrrblup(F2)
+    EBV <- getEBV(F2)
     F2@ebv = EBV
     corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
@@ -120,7 +125,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using BLUP model
 
-    GetEBVrrblup(F3)
+    EBV <- getEBV(F3)
     F3@ebv = EBV
     corMat[3,] = cor(bv(F3),ebv(F3))
 
@@ -133,7 +138,7 @@ for (cycle in 1:nCycles){
     allelesMatF4 <- getAllelesMat(F4, "F4")
 
     ##set EBV using BLUP model##
-    GetEBVrrblup(F4)
+    EBV <- getEBV(F4)
     F4@ebv = EBV
     corMat[4,] = cor(bv(F4),ebv(F4))
 
@@ -148,10 +153,10 @@ for (cycle in 1:nCycles){
 
     #use F5 to retrain the model
 
-    source("rrblup_sc_retrain.R")
+    source(fileTrain)
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(F5)
+    EBV <- getEBV(F5)
     F5@ebv = EBV
     corMat[5,] = cor(bv(F5),ebv(F5))
 
@@ -164,7 +169,7 @@ for (cycle in 1:nCycles){
     allelesMatPYT <- getAllelesMat(PYT, "PYT")
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(PYT)
+    EBV <- getEBV(PYT)
     PYT@ebv = EBV
     corMat[6,] = cor(bv(PYT),ebv(PYT))
 
@@ -178,7 +183,7 @@ for (cycle in 1:nCycles){
     allelesMatAYT <- getAllelesMat(AYT, "AYT")
 
     ##set EBV using RRBLUP model##
-    GetEBVrrblup(AYT)
+    EBV <- getEBV(AYT)
     AYT@ebv = EBV
     corMat[7,] = cor(bv(AYT),ebv(AYT))
 

@@ -83,11 +83,19 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
   
 }
 
+# ADD NEW MODELS HERE
 # RRBLUP estimate ebvs
 GetEBVrrblup <- function(gen){
   genMat <- pullSegSiteGeno(gen) 
   genMat <- genMat-1
-  EBV <<- genMat %*% markerEffects
+  genMat %*% markerEffects
+}
+
+GetEBVrf <- function(gen){
+  M = as.data.frame(pullSegSiteGeno(gen))
+  colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
+  EBV <- as.numeric(predict(rf_fit, M))
+  as.matrix(EBV)
 }
 
 # gets alleles matrix of genObj
@@ -134,3 +142,6 @@ getVariances <- function(variances){
   rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
   variances
 }
+
+## Create model definitions
+source("DefineModelVariables.R")
