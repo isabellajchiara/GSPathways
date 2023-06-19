@@ -77,7 +77,7 @@ corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 for (cycle in 1:nCycles){
     ## select new parents from previous cycle PYTs
     
-    if (cycle = 1) {
+    if (cycle=1) {
       newParents <- selectNewParents(PYT,5,"ebv")
       } else }
       newParents <- selectNewParents)F2, 5, "ebv")
