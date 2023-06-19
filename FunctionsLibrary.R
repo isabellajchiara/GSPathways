@@ -143,4 +143,4 @@ getVariances <- function(variances){
 }
 
 ## Create model definitions
-source("DefineMethods.R")
+source("DefineModelVariables.R")
