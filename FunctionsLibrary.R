@@ -141,3 +141,6 @@ getVariances <- function(variances){
   rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
   variances
 }
+
+## Create model definitions
+source("DefineMethods.R")

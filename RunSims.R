@@ -6,6 +6,10 @@ nReps = 1
 nGen = 10
 nVar = 9
 
+# Available Models:
+## rrblup
+## rf (random forest)
+model = "rf"
 nCycles = 3
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##

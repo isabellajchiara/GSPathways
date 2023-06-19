@@ -71,10 +71,10 @@ TrainingGeno <- pullSegSiteGeno(PYT)
 TrainingPheno <- pheno(PYT)
 
 # source GS Prediction Model
-source("RF_RD.R")
+source(methods[[model]]$fileTrain)
 
 # calculate EBVs of PYTs
-EBV <- GetEBVrf(PYT) #get EBVs
+EBV <- methods[[model]]$GetEBV(PYT) #get EBVs
 PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
@@ -105,7 +105,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using RRBLUP model
 
-    EBV <- GetEBVrf(F2)
+    EBV <- methods[[model]]$GetEBV(F2)
     F2@ebv = EBV
     corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
@@ -120,7 +120,7 @@ for (cycle in 1:nCycles){
 
     ## set EBV using BLUP model
 
-    EBV <- GetEBVrf(F3)
+    EBV <- methods[[model]]$GetEBV(F3)
     F3@ebv = EBV
     corMat[3,] = cor(bv(F3),ebv(F3))
 
@@ -133,7 +133,7 @@ for (cycle in 1:nCycles){
     allelesMatF4 <- getAllelesMat(F4, "F4")
 
     ##set EBV using BLUP model##
-    EBV <- GetEBVrf(F4)
+    EBV <- methods[[model]]$GetEBV(F4)
     F4@ebv = EBV
     corMat[4,] = cor(bv(F4),ebv(F4))
 
@@ -148,10 +148,10 @@ for (cycle in 1:nCycles){
 
     #use F5 to retrain the model
 
-    source("RF_RD.R")
+    source(methods[[model]]$fileTrain)
 
     ##set EBV using RRBLUP model##
-    EBV <- GetEBVrf(F5)
+    EBV <- methods[[model]]$GetEBV(F5)
     F5@ebv = EBV
     corMat[5,] = cor(bv(F5),ebv(F5))
 
@@ -164,7 +164,7 @@ for (cycle in 1:nCycles){
     allelesMatPYT <- getAllelesMat(PYT, "PYT")
 
     ##set EBV using RRBLUP model##
-    EBV <- GetEBVrf(PYT)
+    EBV <- methods[[model]]$GetEBV(PYT)
     PYT@ebv = EBV
     corMat[6,] = cor(bv(PYT),ebv(PYT))
 
@@ -178,7 +178,7 @@ for (cycle in 1:nCycles){
     allelesMatAYT <- getAllelesMat(AYT, "AYT")
 
     ##set EBV using RRBLUP model##
-    EBV <- GetEBVrf(AYT)
+    EBV <- methods[[model]]$GetEBV(AYT)
     AYT@ebv = EBV
     corMat[7,] = cor(bv(AYT),ebv(AYT))
 
