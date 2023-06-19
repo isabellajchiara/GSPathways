@@ -70,11 +70,16 @@ varMat[1,] <- varG(PYT)
 TrainingGeno <- pullSegSiteGeno(PYT)
 TrainingPheno <- pheno(PYT)
 
+print("methods")
+print(methods)
+
 # source GS Prediction Model
 source(methods[[model]]$fileTrain)
 
+print("sourced")
 # calculate EBVs of PYTs
 EBV <- methods[[model]]$GetEBV(PYT) #get EBVs
+print("called getebv")
 PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
