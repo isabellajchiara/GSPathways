@@ -83,6 +83,7 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
   
 }
 
+# ADD NEW MODELS HERE
 # RRBLUP estimate ebvs
 GetEBVrrblup <- function(gen){
   genMat <- pullSegSiteGeno(gen) 

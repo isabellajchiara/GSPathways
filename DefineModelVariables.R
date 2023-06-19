@@ -4,6 +4,7 @@
 # - rf: Random Forest
 # - rrblup: RRBLUP
 
+# ADD NEW MODELS HERE
 if (model == "rf"){
     print("Model chosen: Random Forest")
     fileTrain <- "RF_RD.R"
