@@ -8,6 +8,8 @@ library(e1071)
 library(randomForest)
 source("FunctionsLibrary.R")
 
+stages <- list()
+
 #Create Results Matrices
 
 gvMat <- matrix(nrow=10, ncol=1)
@@ -36,56 +38,56 @@ Base = newPop(founderPop)
 Base = setPheno(Base)
 
 newParents <- selectNewParents(Base,10,"pheno")
-F1 = randCross(newParents, 200, nProgeny=3)
+stages$F1 = randCross(newParents, 200, nProgeny=3)
 
-## self and bulk F1 to form F2 ##
+## self and bulk stages$F1 to form stages$F2 ##
 
-F2 = self(F1, nProgeny = 30)
-F2 = setPheno(F2)
+stages$F2 = self(stages$F1, nProgeny = 30)
+stages$F2 = setPheno(stages$F2)
 
-## select top individuals from each family to form F2. Bulk and self to form F3
-F3 = TopWithinFam(F2,10,100,"pheno")
-F3 = setPheno(F3)
+## select top individuals from each family to form stages$F2. Bulk and self to form stages$F3
+stages$F3 = TopWithinFam(stages$F2,10,100,"pheno")
+stages$F3 = setPheno(stages$F3)
 
-## select top individuals within F3 families to form F4 
+## select top individuals within stages$F3 families to form stages$F4 
 
-F4 = TopWithinFam(F3,5,50,"pheno")
-F4 = setPheno(F4)
+stages$F4 = TopWithinFam(stages$F3,5,50,"pheno")
+stages$F4 = setPheno(stages$F4)
 
-## select top families from F4 to form F5 
+## select top families from stages$F4 to form stages$F5 
 
-F5 = TopFamily(F4,4,"pheno")
-F5 = setPheno(F5)
+stages$F5 = TopFamily(stages$F4,4,"pheno")
+stages$F5 = setPheno(stages$F5)
 
-## select top families from F5 for PYTs 
+## select top families from stages$F5 for PYTs 
 
-PYT = TopFamily(F5, 3,"pheno")
-PYT = setPheno(PYT, reps=2)
+stages$PYT = TopFamily(stages$F5, 3,"pheno")
+stages$PYT = setPheno(stages$PYT, reps=2)
 
-gvMat[1,] <- mean(gv(PYT))
-varMat[1,] <- varG(PYT)
+gvMat[1,] <- mean(gv(stages$PYT))
+varMat[1,] <- varG(stages$PYT)
 
 ## use PYTs as training data
 
-TrainingGeno <- pullSegSiteGeno(PYT)
-TrainingPheno <- pheno(PYT)
+TrainingGeno <- pullSegSiteGeno(stages$PYT)
+TrainingPheno <- pheno(stages$PYT)
 
 # source GS Prediction Model
 source(fileTrain)
 
 # calculate EBVs of PYTs
-EBV <- getEBV(PYT) #get EBVs
-PYT@ebv = EBV #set EBVs
-corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
+EBV <- getEBV(stages$PYT) #get EBVs
+stages$PYT@ebv = EBV #set EBVs
+corMat[1,] = cor(bv(stages$PYT), ebv(stages$PYT)) #determine model performance
 
 # NEW CYCLE
 for (cycle in 1:nCycles){
     ## select new parents from previous cycle PYTs
     
     if (cycle == 1) {
-      newParents <- selectNewParents(PYT, 5, "ebv")
+      newParents <- selectNewParents(stages$PYT, 5, "ebv")
     } else {
-      newParents <- selectNewParents(F2, 5, "ebv")
+      newParents <- selectNewParents(stages$F2, 5, "ebv")
     }
   
     varMat[2,] = varG(newParents) #collect variance
@@ -94,101 +96,101 @@ for (cycle in 1:nCycles){
 
     ## 200 random crosses of new parents
 
-    F1 = randCross(newParents, 200)
+    stages$F1 = randCross(newParents, 200)
                                 
-    varMat[3,] = varG(F1)
-    gvMat[3,] <- mean(gv(F1))
-    allelesMatF1 <- getAllelesMat(F1, "F1")
+    varMat[3,] = varG(stages$F1)
+    gvMat[3,] <- mean(gv(stages$F1))
+    allelesMatF1 <- getAllelesMat(stages$F1, "F1")
 
-    ## self and bulk F1 to form F2 ##
+    ## self and bulk stages$F1 to form stages$F2 ##
 
-    F2 = self(F1, nProgeny = 30) 
-                                
-    varMat[4,] = varG(F2)
-    gvMat[4,] <- mean(gv(F2))
-    allelesMatF2 <- getAllelesMat(F2, "F2")
+    stages$F2 = self(stages$F1, nProgeny = 30) 
+    
+    varMat[4,] = varG(stages$F2)
+    gvMat[4,] <- mean(gv(stages$F2))
+    allelesMatF2 <- getAllelesMat(stages$F2, "F2")
 
     ## set EBV using RRBLUP model
 
-    EBV <- getEBV(F2)
-    F2@ebv = EBV
-    corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
+    EBV <- getEBV(stages$F2)
+    stages$F2@ebv = EBV
+    corMat[2,] = as.numeric(cor(bv(stages$F2), ebv(stages$F2)))
 
-    ## select top individuals from F2 bulk to form F3 
+    ## select top individuals from stages$F2 bulk to form stages$F3 
 
-    F3 = TopWithinFam(F2, 10, 100, "ebv")
-    F3 = setPheno(F3)
+    stages$F3 = TopWithinFam(stages$F2, 10, 100, "ebv")
+    stages$F3 = setPheno(stages$F3)
                                 
-    varMat[5,] = varG(F3)
-    gvMat[5,] <- mean(gv(F3))
-    allelesMatF3 <- getAllelesMat(F3, "F3")
+    varMat[5,] = varG(stages$F3)
+    gvMat[5,] <- mean(gv(stages$F3))
+    allelesMatF3 <- getAllelesMat(stages$F3, "F3")
 
     ## set EBV using BLUP model
 
-    EBV <- getEBV(F3)
-    F3@ebv = EBV
-    corMat[3,] = cor(bv(F3),ebv(F3))
+    EBV <- getEBV(stages$F3)
+    stages$F3@ebv = EBV
+    corMat[3,] = cor(bv(stages$F3),ebv(stages$F3))
 
-    ## select top within familiy from F3 to form F4 
-    F4 = TopWithinFam(F3, 5, 50, "ebv")
-    F4 = setPheno(F4)
+    ## select top within familiy from stages$F3 to form stages$F4 
+    stages$F4 = TopWithinFam(stages$F3, 5, 50, "ebv")
+    stages$F4 = setPheno(stages$F4)
                                 
-    varMat[6,] = varG(F4)
-    gvMat[6,] <- mean(gv(F4))                            
-    allelesMatF4 <- getAllelesMat(F4, "F4")
+    varMat[6,] = varG(stages$F4)
+    gvMat[6,] <- mean(gv(stages$F4))                            
+    allelesMatF4 <- getAllelesMat(stages$F4, "F4")
 
     ##set EBV using BLUP model##
-    EBV <- getEBV(F4)
-    F4@ebv = EBV
-    corMat[4,] = cor(bv(F4),ebv(F4))
+    EBV <- getEBV(stages$F4)
+    stages$F4@ebv = EBV
+    corMat[4,] = cor(bv(stages$F4),ebv(stages$F4))
 
-    ## select top families from F4 to form F5 ##
+    ## select top families from stages$F4 to form stages$F5 ##
 
-    F5 = TopFamily(F4,4,"ebv")
-    F5 = setPheno(F5)
-                                
-    varMat[7,]= varG(F5)
-    gvMat[7,] <- mean(gv(F5))
-    allelesMatF5 <- getAllelesMat(F5, "F5")
+    stages$F5 = TopFamily(stages$F4,4,"ebv")
+    stages$F5 = setPheno(stages$F5)
 
-    #use F5 to retrain the model
+    varMat[7,]= varG(stages$F5)
+    gvMat[7,] <- mean(gv(stages$F5))
+    allelesMatF5 <- getAllelesMat(stages$F5, "F5")
 
-    source(fileTrain)
+    #use stages$F5 to retrain the model
+    if (trainStage == "F5")
+        source(fileTrain)
 
     ##set EBV using RRBLUP model##
-    EBV <- getEBV(F5)
-    F5@ebv = EBV
-    corMat[5,] = cor(bv(F5),ebv(F5))
+    EBV <- getEBV(stages$F5)
+    stages$F5@ebv = EBV
+    corMat[5,] = cor(bv(stages$F5),ebv(stages$F5))
 
-    ## select top F5 families for preliminary yield trial ##
-    PYT = TopFamily(F5,3,"ebv")
-    PYT = setPheno(PYT, reps=2)
+    ## select top stages$F5 families for preliminary yield trial ##
+    stages$PYT = TopFamily(stages$F5,3,"ebv")
+    stages$PYT = setPheno(stages$PYT, reps=2)
                                                         
-    varMat[8,] = varG(PYT)
-    gvMat[8,] <- mean(gv(PYT))
-    allelesMatPYT <- getAllelesMat(PYT, "PYT")
+    varMat[8,] = varG(stages$PYT)
+    gvMat[8,] <- mean(gv(stages$PYT))
+    allelesMatPYT <- getAllelesMat(stages$PYT, "PYT")
 
     ##set EBV using RRBLUP model##
-    EBV <- getEBV(PYT)
-    PYT@ebv = EBV
-    corMat[6,] = cor(bv(PYT),ebv(PYT))
+    EBV <- getEBV(stages$PYT)
+    stages$PYT@ebv = EBV
+    corMat[6,] = cor(bv(stages$PYT),ebv(stages$PYT))
 
-    ## select top families from PYT for AYT ##
+    ## select top families from stages$PYT for stages$stages$AYT ##
 
-    AYT = TopFamily(PYT, 1, "ebv")
-    AYT = setPheno(AYT, reps=5)
+    stages$AYT = TopFamily(stages$PYT, 1, "ebv")
+    stages$AYT = setPheno(stages$AYT, reps=5)
                                 
-    varMat[9,] = varG(AYT)
-    gvMat[9,] <- mean(gv(AYT))
-    allelesMatAYT <- getAllelesMat(AYT, "AYT")
+    varMat[9,] = varG(stages$AYT)
+    gvMat[9,] <- mean(gv(stages$AYT))
+    allelesMatAYT <- getAllelesMat(stages$AYT, "AYT")
 
     ##set EBV using RRBLUP model##
-    EBV <- getEBV(AYT)
-    AYT@ebv = EBV
-    corMat[7,] = cor(bv(AYT),ebv(AYT))
+    EBV <- getEBV(stages$AYT)
+    stages$AYT@ebv = EBV
+    corMat[7,] = cor(bv(stages$AYT),ebv(stages$AYT))
 
     ## select top plants to form variety ##
-    VarietySel = selectInd(AYT, 1, use="ebv")
+    VarietySel = selectInd(stages$AYT, 1, use="ebv")
     Variety = self(VarietySel)
     gvMat[10,] <- mean(gv(Variety))
 
@@ -200,12 +202,12 @@ for (cycle in 1:nCycles){
     ###collect bvs and ebvs###
 
     bvebv0 <- getBvEbv(newParents, "NP")
-    bvebv1 <- getBvEbv(F2, "F2")
-    bvebv2 <- getBvEbv(F3, "F3")
-    bvebv3 <- getBvEbv(F4, "F4")
-    bvebv4 <- getBvEbv(F5, "F5")
-    bvebv5 <- getBvEbv(PYT, "PYT")
-    bvebv6 <- getBvEbv(AYT, "AYT")
+    bvebv1 <- getBvEbv(stages$F2, "F2")
+    bvebv2 <- getBvEbv(stages$F3, "F3")
+    bvebv3 <- getBvEbv(stages$F4, "F4")
+    bvebv4 <- getBvEbv(stages$F5, "F5")
+    bvebv5 <- getBvEbv(stages$PYT, "PYT")
+    bvebv6 <- getBvEbv(stages$AYT, "AYT")
 
     bv_ebv_df <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
 

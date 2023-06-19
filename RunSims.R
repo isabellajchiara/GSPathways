@@ -11,6 +11,7 @@ nVar = 9
 ## rf (random forest)
 model = "rf"
 nCycles = 3
+trainStage = "F5"
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
