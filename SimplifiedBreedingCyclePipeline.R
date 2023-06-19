@@ -148,7 +148,7 @@ for (cycle in 1:nCycles){
 
     #use F5 to retrain the model
 
-    source("RF_RD_retrain.R")
+    source("RF_RD.R")
 
     ##set EBV using RRBLUP model##
     EBV <- GetEBVrf(F5, rf_fit)
