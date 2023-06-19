@@ -90,10 +90,10 @@ GetEBVrrblup <- function(gen){
   genMat %*% markerEffects
 }
 
-GetEBVrf <- function(gen){
+GetEBVrf <- function(gen, tr_model){
   M = as.data.frame(pullSegSiteGeno(gen))
   colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-  as.numeric(predict(rf_fit, M))
+  as.numeric(predict(tr_model, M))
 }
 
 # gets alleles matrix of genObj
