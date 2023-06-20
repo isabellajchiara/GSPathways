@@ -110,6 +110,9 @@ for (cycle in 1:nCycles){
     gvMat[4,] <- mean(gv(stages$F2))
     allelesMatF2 <- getAllelesMat(stages$F2, "F2")
 
+    if (trainStage == "F2")
+      retrain()
+      
     ## set EBV using RRBLUP model
 
     EBV <- getEBV(stages$F2)
@@ -125,6 +128,9 @@ for (cycle in 1:nCycles){
     gvMat[5,] <- mean(gv(stages$F3))
     allelesMatF3 <- getAllelesMat(stages$F3, "F3")
 
+    if (trainStage == "F3")
+      retrain()
+
     ## set EBV using BLUP model
 
     EBV <- getEBV(stages$F3)
@@ -138,6 +144,9 @@ for (cycle in 1:nCycles){
     varMat[6,] = varG(stages$F4)
     gvMat[6,] <- mean(gv(stages$F4))                            
     allelesMatF4 <- getAllelesMat(stages$F4, "F4")
+
+    if (trainStage == "F4")
+        retrain()
 
     ##set EBV using BLUP model##
     EBV <- getEBV(stages$F4)
@@ -153,9 +162,8 @@ for (cycle in 1:nCycles){
     gvMat[7,] <- mean(gv(stages$F5))
     allelesMatF5 <- getAllelesMat(stages$F5, "F5")
 
-    #use stages$F5 to retrain the model
     if (trainStage == "F5")
-        source(fileTrain)
+      retrain()
 
     ##set EBV using RRBLUP model##
     EBV <- getEBV(stages$F5)
