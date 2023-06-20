@@ -144,9 +144,9 @@ getVariances <- function(variances){
 }
 
 # use trainStage to retrain the model
-retrain <- function(){
-  TrainingGeno <<- pullSegSiteGeno(stages[[trainStage]])
-  TrainingPheno <<- pheno(stages[[trainStage]])
+trainModel <- function(stage){
+  TrainingGeno <<- pullSegSiteGeno(stages[[stage]])
+  TrainingPheno <<- pheno(stages[[stage]])
   source(fileTrain)
 }
 

@@ -67,13 +67,8 @@ stages$PYT = setPheno(stages$PYT, reps=2)
 gvMat[1,] <- mean(gv(stages$PYT))
 varMat[1,] <- varG(stages$PYT)
 
-## use PYTs as training data
-
-TrainingGeno <- pullSegSiteGeno(stages$PYT)
-TrainingPheno <- pheno(stages$PYT)
-
-# source GS Prediction Model
-source(fileTrain)
+## use PYTs as training data and GS Prediction Model
+trainModel("PYT")
 
 # calculate EBVs of PYTs
 EBV <- getEBV(stages$PYT) #get EBVs
@@ -111,7 +106,7 @@ for (cycle in 1:nCycles){
     allelesMatF2 <- getAllelesMat(stages$F2, "F2")
 
     if (trainStage == "F2")
-      retrain()
+      trainModel(trainStage)
       
     ## set EBV using RRBLUP model
 
@@ -129,7 +124,7 @@ for (cycle in 1:nCycles){
     allelesMatF3 <- getAllelesMat(stages$F3, "F3")
 
     if (trainStage == "F3")
-      retrain()
+      trainModel(trainStage)
 
     ## set EBV using BLUP model
 
@@ -146,7 +141,7 @@ for (cycle in 1:nCycles){
     allelesMatF4 <- getAllelesMat(stages$F4, "F4")
 
     if (trainStage == "F4")
-        retrain()
+      trainModel(trainStage)
 
     ##set EBV using BLUP model##
     EBV <- getEBV(stages$F4)
@@ -163,7 +158,7 @@ for (cycle in 1:nCycles){
     allelesMatF5 <- getAllelesMat(stages$F5, "F5")
 
     if (trainStage == "F5")
-      retrain()
+      trainModel(trainStage)
 
     ##set EBV using RRBLUP model##
     EBV <- getEBV(stages$F5)
