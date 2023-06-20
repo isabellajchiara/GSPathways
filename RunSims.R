@@ -1,14 +1,19 @@
+#! Rscript
+
+library(argparse)
+
+args <- parseArgs()
 
 ## define variables ##
 
 nModels = 7
-nReps = 1
+nReps = args$trainGen
 nGen = 10
 nVar = 9
 
-model = "rf"
-nCycles = 3
-trainStage = "F5"
+model = args$model
+nCycles = args$cycles
+trainGen = args$trainGen
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 

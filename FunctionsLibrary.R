@@ -1,3 +1,34 @@
+# Create argument parser for command line options
+
+parseArgs <- function(){
+  parser <- ArgumentParser()
+
+  # specify our desired options 
+  # by default ArgumentParser will add an help option 
+  parser$add_argument("-nc", "--nCycles", 
+    type="integer", 
+    default=3,
+    help="Number of breeding cycles")
+
+  parser$add_argument("-nr", "--nReps", 
+    type="integer", 
+    default=15,
+    help="Number of repetitions of the simultation")
+
+  parser$add_argument("-m", "--model", 
+    type="character", 
+    default="rrblup",
+    help="Model used to select next generations")
+
+  parser$add_argument("-tg", "--trainGen", 
+    type="character", 
+    default="F2",
+    help="Generation to train the model each cycle")
+
+  parser$parse_args() # Returns arguments
+}
+
+
 # Defining trait parameters (AEG)
 defineTraitAEG <- function(nQtl,mean,h2) {
   SP <<- SimParam$new(founderPop)
@@ -143,7 +174,7 @@ getVariances <- function(variances){
   variances
 }
 
-# use trainStage to retrain the model
+# use trainGen to retrain the model
 trainModel <- function(gen){
   TrainingGeno <<- pullSegSiteGeno(gens[[gen]])
   TrainingPheno <<- pheno(gens[[gen]])
