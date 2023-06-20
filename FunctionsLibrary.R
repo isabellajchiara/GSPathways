@@ -150,6 +150,18 @@ trainModel <- function(stage){
   source(fileTrain)
 }
 
+# Create directory name based on date and time
+# Example: rrblup_2023Jun20_104607
+getDirName <- function(model){
+  date <- format(Sys.time(), "%Y%b%d_%X")
+  date <- gsub(':','', date )
+  dirName <- paste(model, date, sep="_")
+
+  # Adds trailing '_' if directory already exists (highly unlikely)
+  while(file.exists(dirName))
+    dirName <- paste(dirName, "_", sep="")
+  dirName
+}
 
 ## Create model definitions
 source("DefineModelVariables.R")

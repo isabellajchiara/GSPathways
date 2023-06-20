@@ -6,9 +6,6 @@ nReps = 1
 nGen = 10
 nVar = 9
 
-# Available Models:
-## rrblup
-## rf (random forest)
 model = "rf"
 nCycles = 3
 trainStage = "F5"
@@ -38,15 +35,22 @@ for (rep in 1:nReps){
 ##create data frames and label##
 Allgeneticvalues <- list()
 
+##create results directory and enter it##
+dirName <- getDirName(model)
+dir.create(file.path(dirName))
+setwd(file.path(dirName))
+
+##create all output files##
 for (cycle in paste("C", 1:nCycles, sep="")){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
   correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
   variances[[cycle]] <- getVariances(variances[[cycle]])
 
-  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_rrblup_rd_gvs_snp_yield.csv", sep=""))
-  write.csv(correlations[[cycle]], paste("1", cycle, "_rrblup_rd_cors_snp_yield.csv", sep=""))
-  write.csv(variances[[cycle]], paste("1", cycle, "_rrblup_rd_vars_snp_yield.csv", sep=""))
-  saveRDS(alleles[[cycle]], file=paste("1", cycle, "rrblup_rd_alleles_snp_yield.rds", sep=""))
-  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "rrblup_rd_bvebv_snp_yield.rds", sep=""))
+  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_", model, "_rd_gvs_snp_yield.csv", sep=""))
+  write.csv(correlations[[cycle]], paste("1", cycle, "_", model,"_rd_cors_snp_yield.csv", sep=""))
+  write.csv(variances[[cycle]], paste("1", cycle, "_", model,"_rd_vars_snp_yield.csv", sep=""))
+  saveRDS(alleles[[cycle]], file=paste("1", cycle, "_", model,"_rd_alleles_snp_yield.rds", sep=""))
+  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
+setwd("..")
