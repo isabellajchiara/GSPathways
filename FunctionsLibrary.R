@@ -194,5 +194,3 @@ getDirName <- function(model){
   dirName
 }
 
-## Create model definitions
-source("DefineModelVariables.R")
