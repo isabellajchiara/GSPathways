@@ -8,7 +8,7 @@ library(e1071)
 library(randomForest)
 source("FunctionsLibrary.R")
 
-stages <- list()
+gens <- list()
 
 #Create Results Matrices
 
