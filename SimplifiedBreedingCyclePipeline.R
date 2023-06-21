@@ -6,6 +6,9 @@ library(ranger)
 library(tidyverse)
 library(e1071)
 library(randomForest)
+library(foreach)
+library(import)
+library(doParallel)
 
 
 gens <- list()
