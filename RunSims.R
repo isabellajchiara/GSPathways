@@ -45,7 +45,10 @@ for (rep in 1:nReps){
 Allgeneticvalues <- list()
 
 ##create results directory and enter it##
-dirName <- getDirName(model)
+if (is.null(args$outputDir))
+  dirName <- getDirName(model)
+else
+  dirName <- args$outputDir
 dir.create(file.path(dirName))
 setwd(file.path(dirName))
 

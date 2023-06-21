@@ -1,5 +1,6 @@
 # Create argument parser for command line options
 
+
 parseArgs <- function(){
   parser <- ArgumentParser()
 
@@ -24,6 +25,10 @@ parseArgs <- function(){
     type="character", 
     default="F2",
     help="Generation to train the model each cycle")
+
+  parser$add_argument("-od", "--outputDir",
+    type="character",
+    help="Directory to write simulation outputs. Default is created based on training model name and date/time")
 
   parser$parse_args() # Returns arguments
 }
