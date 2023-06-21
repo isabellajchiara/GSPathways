@@ -6,7 +6,7 @@ library(ranger)
 library(tidyverse)
 library(e1071)
 library(randomForest)
-source("FunctionsLibrary.R")
+
 
 gens <- list()
 
@@ -105,8 +105,8 @@ for (cycle in 1:nCycles){
     gvMat[4,] <- mean(gv(gens$F2))
     allelesMatF2 <- getAllelesMat(gens$F2, "F2")
 
-    if (trainStage == "F2")
-      trainModel(trainStage)
+    if (trainGen == "F2")
+      trainModel(trainGen)
       
     ## set EBV using RRBLUP model
 
@@ -123,8 +123,8 @@ for (cycle in 1:nCycles){
     gvMat[5,] <- mean(gv(gens$F3))
     allelesMatF3 <- getAllelesMat(gens$F3, "F3")
 
-    if (trainStage == "F3")
-      trainModel(trainStage)
+    if (trainGen == "F3")
+      trainModel(trainGen)
 
     ## set EBV using BLUP model
 
@@ -140,8 +140,8 @@ for (cycle in 1:nCycles){
     gvMat[6,] <- mean(gv(gens$F4))                            
     allelesMatF4 <- getAllelesMat(gens$F4, "F4")
 
-    if (trainStage == "F4")
-      trainModel(trainStage)
+    if (trainGen == "F4")
+      trainModel(trainGen)
 
     ##set EBV using BLUP model##
     EBV <- getEBV(gens$F4)
@@ -157,8 +157,8 @@ for (cycle in 1:nCycles){
     gvMat[7,] <- mean(gv(gens$F5))
     allelesMatF5 <- getAllelesMat(gens$F5, "F5")
 
-    if (trainStage == "F5")
-      trainModel(trainStage)
+    if (trainGen == "F5")
+      trainModel(trainGen)
 
     ##set EBV using RRBLUP model##
     EBV <- getEBV(gens$F5)

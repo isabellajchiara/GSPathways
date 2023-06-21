@@ -1,17 +1,21 @@
+library(argparse)
+source("FunctionsLibrary.R")
+
+args <- parseArgs()
 
 ## define variables ##
 
 nModels = 7
-nReps = 1
+nReps = args$nReps
 nGen = 10
 nVar = 9
 
-# Available Models:
-## rrblup
-## rf (random forest)
-model = "rf"
-nCycles = 3
-trainStage = "F5"
+model = args$model
+nCycles = args$nCycles
+trainGen = args$trainGen
+
+## Create model definitions
+source("DefineModelVariables.R")
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
@@ -35,18 +39,27 @@ for (rep in 1:nReps){
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
 }
 
-##create data frames and label##
-Allgeneticvalues <- list()
+##create results directory and enter it##
+dirName <- args$outputDir
+if (is.null(args$outputDir))
+  dirName <- getDirName(model)
+dir.create(file.path(dirName))
 
+workingDir <- getwd()
+setwd(file.path(dirName))
+
+##create all output files##
+Allgeneticvalues <- list()
 for (cycle in paste("C", 1:nCycles, sep="")){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
   correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
   variances[[cycle]] <- getVariances(variances[[cycle]])
 
-  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_rrblup_rd_gvs_snp_yield.csv", sep=""))
-  write.csv(correlations[[cycle]], paste("1", cycle, "_rrblup_rd_cors_snp_yield.csv", sep=""))
-  write.csv(variances[[cycle]], paste("1", cycle, "_rrblup_rd_vars_snp_yield.csv", sep=""))
-  saveRDS(alleles[[cycle]], file=paste("1", cycle, "rrblup_rd_alleles_snp_yield.rds", sep=""))
-  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "rrblup_rd_bvebv_snp_yield.rds", sep=""))
+  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_", model, "_rd_gvs_snp_yield.csv", sep=""))
+  write.csv(correlations[[cycle]], paste("1", cycle, "_", model,"_rd_cors_snp_yield.csv", sep=""))
+  write.csv(variances[[cycle]], paste("1", cycle, "_", model,"_rd_vars_snp_yield.csv", sep=""))
+  saveRDS(alleles[[cycle]], file=paste("1", cycle, "_", model,"_rd_alleles_snp_yield.rds", sep=""))
+  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
+setwd(workingDir) # Go back to previous directory
