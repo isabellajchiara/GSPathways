@@ -78,6 +78,16 @@ EBV <- getEBV(gens$PYT) #get EBVs
 gens$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gens$PYT), ebv(gens$PYT)) #determine model performance
 
+if (model == "rf"){
+  trainMethod = "rf"
+  if (nCores > 1){
+      print(paste("Creating cluster with", nCores-1, "cores..."))
+      cl <- makeForkCluster(nCores - 1)
+      registerDoParallel(cl)
+      trainMethod = "parRF"
+  }
+}
+
 # NEW CYCLE
 for (cycle in 1:nCycles){
     ## select new parents from previous cycle PYTs
@@ -223,3 +233,7 @@ for (cycle in 1:nCycles){
     alleles[[cycle]][[rep]] <- allelesMat
     bv_ebv[[cycle]][[rep]] <- bv_ebv_df
 }
+
+# deactivate cluster
+if (nCores > 1)
+    stopCluster(cl)

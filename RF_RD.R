@@ -16,16 +16,9 @@ control <- trainControl(method='repeatedcv',
                         repeats=1,
                         search = "random")  
 
-trainMethod = "rf"
-if (nCores > 1){
-    print(paste("Creating cluster with", nCores-1, "cores..."))
-    cl <- makeForkCluster(nCores - 1)
-    registerDoParallel(cl)
-    trainMethod = "parRF"
-    print("Training in parallel...")
-}
-
 ##build model##
+
+print("Training...")
 
 rf_fit = train(ID1 ~ ., 
                data = trainingset, 
@@ -33,9 +26,6 @@ rf_fit = train(ID1 ~ .,
                tuneLength = 10,
                trControl=control) ## search a random tuning grid ##
 
-if (nCores > 1){
-    print("Training finished.")
-    stopCluster(cl)
-}
+print("Training finished.")
 
 ### This command takes about 90 minutes in an compute canada interactive session ###
