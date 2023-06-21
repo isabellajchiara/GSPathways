@@ -41,18 +41,17 @@ for (rep in 1:nReps){
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
 }
 
-##create data frames and label##
-Allgeneticvalues <- list()
-
 ##create results directory and enter it##
+dirName <- args$outputDir
 if (is.null(args$outputDir))
   dirName <- getDirName(model)
-else
-  dirName <- args$outputDir
 dir.create(file.path(dirName))
+
+workingDir <- getwd()
 setwd(file.path(dirName))
 
 ##create all output files##
+Allgeneticvalues <- list()
 for (cycle in paste("C", 1:nCycles, sep="")){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
   correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
@@ -65,4 +64,4 @@ for (cycle in paste("C", 1:nCycles, sep="")){
   saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
-setwd("..")
+setwd(workingDir) # Go back to previous directory
