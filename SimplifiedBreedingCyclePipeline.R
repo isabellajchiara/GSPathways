@@ -14,7 +14,10 @@ if (model == "rf"){
   trainMethod <- "rf"
   if (nCores > 1){
       print(paste("Creating cluster with", nCores-1, "cores..."))
-      cl <- makeForkCluster(nCores - 1)
+      if (clusterType == "fork")
+        cl <- makeForkCluster(nCores - 1)
+      else
+        cl <- makePSOCKcluster(nCores - 1)
       registerDoParallel(cl)
       trainMethod <- "parRF"
   }

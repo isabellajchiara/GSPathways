@@ -35,10 +35,15 @@ parseArgs <- function(){
     type="character",
     help="Directory to write simulation outputs. Default is created based on training model name and date/time")
 
-  parser$add_argument("-vt", "--verboseTime", 
+  parser$add_argument("-v", "--verbose", 
     default=FALSE,
     action="store_true",
     help="Print training times in the output")
+
+  parser$add_argument("-ct", "--clusterType",
+    type="character",
+    default="fork",
+    help="Set type of cluster (psock or fork)")
 
   parser$parse_args() # Returns arguments
 }
@@ -193,12 +198,12 @@ getVariances <- function(variances){
 trainModel <- function(gen){
   TrainingGeno <<- pullSegSiteGeno(gens[[gen]])
   TrainingPheno <<- pheno(gens[[gen]])
-  if (args$verboseTime) {
-    print("training model...")
-    tic()
-  }
+  
+  if (args$verbose) tic()
   source(fileTrain)
-  if (args$verboseTime) toc()
+  if (args$verbose) {
+    cat("Training finished. "); toc()
+  }
 }
 
 # Create directory name based on date and time
