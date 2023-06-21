@@ -10,6 +10,15 @@ library(foreach)
 library(import)
 library(doParallel)
 
+if (model == "rf"){
+  trainMethod <- "rf"
+  if (nCores > 1){
+      print(paste("Creating cluster with", nCores-1, "cores..."))
+      cl <- makeForkCluster(nCores - 1)
+      registerDoParallel(cl)
+      trainMethod <- "parRF"
+  }
+}
 
 gens <- list()
 
@@ -77,16 +86,6 @@ trainModel("PYT")
 EBV <- getEBV(gens$PYT) #get EBVs
 gens$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gens$PYT), ebv(gens$PYT)) #determine model performance
-
-if (model == "rf"){
-  trainMethod = "rf"
-  if (nCores > 1){
-      print(paste("Creating cluster with", nCores-1, "cores..."))
-      cl <- makeForkCluster(nCores - 1)
-      registerDoParallel(cl)
-      trainMethod = "parRF"
-  }
-}
 
 # NEW CYCLE
 for (cycle in 1:nCycles){
