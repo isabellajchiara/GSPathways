@@ -11,6 +11,11 @@ parseArgs <- function(){
     default=3,
     help="Number of breeding cycles")
 
+  parser$add_argument("-nC", "--nCores",
+    type="integer", 
+    default=1,
+    help="Number of cores to run the simulation (2 or higher activates parallelism)")
+
   parser$add_argument("-nr", "--nReps", 
     type="integer", 
     default=15,

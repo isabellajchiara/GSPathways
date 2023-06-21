@@ -10,7 +10,7 @@ nModels = 7
 nReps = args$nReps
 nGen = 10
 nVar = 9
-nCores = 1
+nCores = args$nCores
 
 model = args$model
 nCycles = args$nCycles
