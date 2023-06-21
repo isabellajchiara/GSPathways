@@ -1,4 +1,5 @@
 library(argparse)
+library(tictoc)
 source("FunctionsLibrary.R")
 
 args <- parseArgs()
@@ -9,6 +10,7 @@ nModels = 7
 nReps = args$nReps
 nGen = 10
 nVar = 9
+nCores = 1
 
 model = args$model
 nCycles = args$nCycles

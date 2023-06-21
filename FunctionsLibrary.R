@@ -30,6 +30,11 @@ parseArgs <- function(){
     type="character",
     help="Directory to write simulation outputs. Default is created based on training model name and date/time")
 
+  parser$add_argument("-vt", "--verboseTime", 
+    default=FALSE,
+    action="store_true",
+    help="Print training times in the output")
+
   parser$parse_args() # Returns arguments
 }
 
@@ -183,7 +188,12 @@ getVariances <- function(variances){
 trainModel <- function(gen){
   TrainingGeno <<- pullSegSiteGeno(gens[[gen]])
   TrainingPheno <<- pheno(gens[[gen]])
+  if (args$verboseTime) {
+    print("training model...")
+    tic()
+  }
   source(fileTrain)
+  if (args$verboseTime) toc()
 }
 
 # Create directory name based on date and time
