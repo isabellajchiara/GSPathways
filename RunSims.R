@@ -1,5 +1,3 @@
-#! Rscript
-
 library(argparse)
 source("FunctionsLibrary.R")
 
