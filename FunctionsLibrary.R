@@ -196,9 +196,6 @@ getVariances <- function(variances){
 
 # use trainGen to retrain the model
 trainModel <- function(gen){
-  TrainingGeno <<- pullSegSiteGeno(gens[[gen]])
-  TrainingPheno <<- pheno(gens[[gen]])
-  
   if (args$verbose) tic()
   source(fileTrain)
   if (args$verbose) {
