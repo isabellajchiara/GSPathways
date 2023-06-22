@@ -11,6 +11,11 @@ parseArgs <- function(){
     default=3,
     help="Number of breeding cycles")
 
+  parser$add_argument("-nC", "--nCores",
+    type="integer", 
+    default=1,
+    help="Number of cores to run the simulation (2 or higher activates parallelism)")
+
   parser$add_argument("-nr", "--nReps", 
     type="integer", 
     default=15,
@@ -29,6 +34,11 @@ parseArgs <- function(){
   parser$add_argument("-od", "--outputDir",
     type="character",
     help="Directory to write simulation outputs. Default is created based on training model name and date/time")
+
+  parser$add_argument("-v", "--verbose", 
+    default=FALSE,
+    action="store_true",
+    help="Print training times in the output")
 
   parser$parse_args() # Returns arguments
 }
@@ -181,9 +191,11 @@ getVariances <- function(variances){
 
 # use trainGen to retrain the model
 trainModel <- function(gen){
-  TrainingGeno <<- pullSegSiteGeno(gens[[gen]])
-  TrainingPheno <<- pheno(gens[[gen]])
+  if (args$verbose) tic()
   source(fileTrain)
+  if (args$verbose) {
+    cat("Training finished. "); toc()
+  }
 }
 
 # Create directory name based on date and time

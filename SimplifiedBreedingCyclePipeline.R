@@ -6,7 +6,9 @@ library(ranger)
 library(tidyverse)
 library(e1071)
 library(randomForest)
-
+library(foreach)
+library(import)
+library(doParallel)
 
 gens <- list()
 
@@ -68,6 +70,8 @@ gvMat[1,] <- mean(gv(gens$PYT))
 varMat[1,] <- varG(gens$PYT)
 
 ## use PYTs as training data and GS Prediction Model
+TrainingGeno <- pullSegSiteGeno(gens$PYT)
+TrainingPheno <- pheno(gens$PYT)
 trainModel("PYT")
 
 # calculate EBVs of PYTs
