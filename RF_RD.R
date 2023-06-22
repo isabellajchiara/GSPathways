@@ -18,23 +18,21 @@ control <- trainControl(method='repeatedcv',
 
 trainMethod <- "rf"
 if (nCores > 1){
-    print(paste("Creating cluster with", nCores, "cores..."))
+    if (args$verbose) 
+        print(paste("Creating cluster with", nCores, "cores..."))
     cl <- makePSOCKcluster(nCores)
     registerDoParallel(cl)
     trainMethod <- "parRF"
 }
 
 ##build model##
-
-print("Training...")
+if (args$verbose) cat ("Training...\n")
 
 rf_fit = train(ID1 ~ ., 
                data = trainingset, 
                method = trainMethod,
                tuneLength = 10,
                trControl=control) ## search a random tuning grid ##
-
-print("Training finished.")
 
 # deactivate cluster
 if (nCores > 1)
