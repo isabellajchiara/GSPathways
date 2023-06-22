@@ -10,19 +10,6 @@ library(foreach)
 library(import)
 library(doParallel)
 
-if (model == "rf"){
-  trainMethod <- "rf"
-  if (nCores > 1){
-      print(paste("Creating cluster with", nCores-1, "cores..."))
-      if (clusterType == "fork")
-        cl <- makeForkCluster(nCores - 1)
-      else
-        cl <- makePSOCKcluster(nCores - 1)
-      registerDoParallel(cl)
-      trainMethod <- "parRF"
-  }
-}
-
 gens <- list()
 
 #Create Results Matrices
@@ -235,7 +222,3 @@ for (cycle in 1:nCycles){
     alleles[[cycle]][[rep]] <- allelesMat
     bv_ebv[[cycle]][[rep]] <- bv_ebv_df
 }
-
-# deactivate cluster
-if (nCores > 1)
-    stopCluster(cl)

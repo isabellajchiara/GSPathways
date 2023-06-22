@@ -16,6 +16,17 @@ control <- trainControl(method='repeatedcv',
                         repeats=1,
                         search = "random")  
 
+trainMethod <- "rf"
+if (nCores > 1){
+    print(paste("Creating", clusterType, "cluster with", nCores-1, "cores..."))
+    if (clusterType == "fork")
+        cl <- makeForkCluster(nnodes = (nCores-1), outfile = "./clusterOutput.log")
+    else
+        cl <- makePSOCKcluster(nCores - 1)
+    registerDoParallel(cl)
+    trainMethod <- "parRF"
+}
+
 ##build model##
 
 print("Training...")
@@ -27,5 +38,9 @@ rf_fit = train(ID1 ~ .,
                trControl=control) ## search a random tuning grid ##
 
 print("Training finished.")
+
+# deactivate cluster
+if (nCores > 1)
+    stopCluster(cl)
 
 ### This command takes about 90 minutes in an compute canada interactive session ###
