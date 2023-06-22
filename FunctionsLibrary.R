@@ -40,11 +40,6 @@ parseArgs <- function(){
     action="store_true",
     help="Print training times in the output")
 
-  parser$add_argument("-ct", "--clusterType",
-    type="character",
-    default="fork",
-    help="Set type of cluster (psock or fork)")
-
   parser$parse_args() # Returns arguments
 }
 

@@ -16,8 +16,6 @@ model = args$model
 nCycles = args$nCycles
 trainGen = args$trainGen
 
-clusterType = args$clusterType
-
 ## Create model definitions
 source("DefineModelVariables.R")
 

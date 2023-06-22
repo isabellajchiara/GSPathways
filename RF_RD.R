@@ -18,11 +18,8 @@ control <- trainControl(method='repeatedcv',
 
 trainMethod <- "rf"
 if (nCores > 1){
-    print(paste("Creating", clusterType, "cluster with", nCores-1, "cores..."))
-    if (clusterType == "fork")
-        cl <- makeForkCluster(nnodes = (nCores-1), outfile = "./clusterOutput.log")
-    else
-        cl <- makePSOCKcluster(nCores - 1)
+    print(paste("Creating", clusterType, "cluster with", nCores, "cores..."))
+    cl <- makePSOCKcluster(nCores)
     registerDoParallel(cl)
     trainMethod <- "parRF"
 }
