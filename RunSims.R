@@ -2,6 +2,9 @@ library(argparse)
 library(tictoc)
 source("FunctionsLibrary.R")
 
+DATA_DIR <- "data"
+MODEL_DIR <- "models"
+
 args <- parseArgs()
 
 ## define variables ##

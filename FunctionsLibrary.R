@@ -129,21 +129,6 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
   
 }
 
-# ADD NEW MODELS HERE
-# RRBLUP estimate ebvs
-GetEBVrrblup <- function(gen){
-  genMat <- pullSegSiteGeno(gen) 
-  genMat <- genMat-1
-  genMat %*% markerEffects
-}
-
-GetEBVrf <- function(gen){
-  M = as.data.frame(pullSegSiteGeno(gen))
-  colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
-  EBV <- as.numeric(predict(rf_fit, M))
-  as.matrix(EBV)
-}
-
 # gets alleles matrix of genObj
 getAllelesMat <- function(genObj, genName){
     allelesMat <- pullSegSiteHaplo(genObj)
@@ -192,7 +177,7 @@ getVariances <- function(variances){
 # use trainGen to retrain the model
 trainModel <- function(gen){
   if (args$verbose) tic()
-  source(fileTrain)
+  source(file.path(MODEL_DIR, fileTrain))
   if (args$verbose) {
     cat("Training finished. "); toc()
   }
