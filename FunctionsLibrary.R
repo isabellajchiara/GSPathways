@@ -192,7 +192,7 @@ getVariances <- function(variances){
 # use trainGen to retrain the model
 trainModel <- function(gen){
   if (args$verbose) tic()
-  source(fileTrain)
+  source(file.path(MODEL_DIR, fileTrain))
   if (args$verbose) {
     cat("Training finished. "); toc()
   }

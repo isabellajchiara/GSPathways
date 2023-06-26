@@ -20,8 +20,8 @@ varMat <- matrix(nrow=9, ncol=1)
 
 # establish simulation parameters
 
-genMap <- readRDS("genMapSNPs.RData") # can load other genMaps 
-haplotypes <- readRDS("haplotypesSNPs.RData") # can load other genotype data, must match genMap
+genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
+haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
