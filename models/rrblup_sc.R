@@ -1,3 +1,10 @@
+library(devtools)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(cluster)
+library(factoextra)
+
 y <- as.data.frame(TrainingPheno)
 M <- as.data.frame(TrainingGeno)
 

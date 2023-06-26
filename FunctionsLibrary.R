@@ -44,7 +44,7 @@ parseArgs <- function(){
 }
 
 loadModelLibs <- function(){
-  lapply(modelLibs, library)
+  lapply(modelLibs, library, character.only=TRUE)
 }
 
 # Defining trait parameters (AEG)
