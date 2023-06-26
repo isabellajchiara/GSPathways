@@ -1,14 +1,11 @@
-# Defines some variables and functions based on what is set 
-# in the model chosen
-
-# - rf: Random Forest
-# - rrblup: RRBLUP
+# Defines some variables and functions based on what model was chosen
 
 # ADD NEW MODELS HERE
 if (model == "rf"){
     print("Model chosen: Random Forest")
     fileTrain <- "RF_RD.R"
     fileRetrain <- "RF_RD_retrain.R"
+    modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
 
     getEBV <- function(gen){
         M = as.data.frame(pullSegSiteGeno(gen))
@@ -22,6 +19,7 @@ if (model == "rrblup") {
     print("Model chosen: RRBLUP")
     fileTrain <- "rrblup_sc.R"
     fileRetrain <- "rrblup_sc_retrain.R"
+    modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
 
     getEBV <- function(gen){
         genMat <- pullSegSiteGeno(gen) 

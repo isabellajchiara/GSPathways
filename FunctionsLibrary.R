@@ -43,6 +43,9 @@ parseArgs <- function(){
   parser$parse_args() # Returns arguments
 }
 
+loadModelLibs <- function(){
+  lapply(modelLibs, library, character.only=TRUE)
+}
 
 # Defining trait parameters (AEG)
 defineTraitAEG <- function(nQtl,mean,h2) {
