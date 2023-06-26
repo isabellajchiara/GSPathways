@@ -129,9 +129,6 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
   
 }
 
-# ADD NEW MODELS HERE
-
-
 # gets alleles matrix of genObj
 getAllelesMat <- function(genObj, genName){
     allelesMat <- pullSegSiteHaplo(genObj)
