@@ -1,6 +1,7 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
 library(AlphaSimR)
 library(doParallel)
+loadModelLibs()
 
 gens <- list()
 
