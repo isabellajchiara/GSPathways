@@ -6,6 +6,7 @@ DATA_DIR <- "data"
 MODEL_DIR <- "models"
 
 args <- parseArgs()
+validateArgs(args)
 
 ## define variables ##
 
