@@ -1,3 +1,11 @@
+library(caret)
+library(ranger)
+library(tidyverse)
+library(e1071)
+library(randomForest)
+library(foreach)
+library(import)
+
 pheno <- as.data.frame(TrainingPheno)
 geno <- as.data.frame(TrainingGeno)
 trainingdata <- cbind(pheno, geno)
