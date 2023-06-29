@@ -1,45 +1,9 @@
 # Create argument parser for command line options
-
-
+# `parameters` variable needs to have list of all parameters for the parser
 parseArgs <- function(){
   parser <- ArgumentParser()
-
-  # specify our desired options 
-  # by default ArgumentParser will add an help option 
-  parser$add_argument("-nc", "--nCycles", 
-    type="integer", 
-    default=3,
-    help="Number of breeding cycles")
-
-  parser$add_argument("-nC", "--nCores",
-    type="integer", 
-    default=1,
-    help="Number of cores to run the simulation (2 or higher activates parallelism)")
-
-  parser$add_argument("-nr", "--nReps", 
-    type="integer", 
-    default=15,
-    help="Number of repetitions of the simultation")
-
-  parser$add_argument("-m", "--model", 
-    type="character", 
-    default="rrblup",
-    help="Model used to select next generations")
-
-  parser$add_argument("-tg", "--trainGen", 
-    type="character", 
-    default="F2",
-    help="Generation to train the model each cycle")
-
-  parser$add_argument("-od", "--outputDir",
-    type="character",
-    help="Directory to write simulation outputs. Default is created based on training model name and date/time")
-
-  parser$add_argument("-v", "--verbose", 
-    default=FALSE,
-    action="store_true",
-    help="Print training times in the output")
-
+  for (par in parameters)
+    do.call(parser$add_argument, par)
   parser$parse_args() # Returns arguments
 }
 
@@ -195,16 +159,5 @@ trainModel <- function(gen){
   }
 }
 
-# Create directory name based on date and time
-# Example: rrblup_2023Jun20_104607
-getDirName <- function(model){
-  date <- format(Sys.time(), "%Y%b%d_%X")
-  date <- gsub(':','', date )
-  dirName <- paste(model, date, sep="_")
 
-  # Adds trailing '_' if directory already exists (highly unlikely)
-  while(file.exists(dirName))
-    dirName <- paste(dirName, "_", sep="")
-  dirName
-}
 

@@ -1,11 +1,16 @@
 library(argparse)
 library(tictoc)
+source("ParameterSettings.R")
+source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
 
 DATA_DIR <- "data"
 MODEL_DIR <- "models"
 
 args <- parseArgs()
+if (!args$noInteraction)
+  interactive_menu()
+
 validateArgs(args)
 
 ## define variables ##
