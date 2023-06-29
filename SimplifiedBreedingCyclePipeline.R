@@ -3,6 +3,7 @@ suppressMessages(library(AlphaSimR))
 suppressMessages(library(doParallel))
 loadModelLibs()
 
+cli_text("Starting rep {rep}/{nReps}")
 cli_alert_info("Generating parent population for rep {rep}/{nReps}")
 
 #Create Results Matrices
@@ -219,3 +220,6 @@ for (cycle in 1:nCycles){
     alleles[[cycle]][[rep]] <- allelesMat
     bv_ebv[[cycle]][[rep]] <- bv_ebv_df
 }
+
+cli_alert_success("Rep {rep}/{nReps} finished.")
+cli_text()
