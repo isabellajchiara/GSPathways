@@ -6,6 +6,7 @@ if (model == "rf"){
     fileTrain <- "RF_RD.R"
     fileRetrain <- "RF_RD_retrain.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
+    isParallel <- TRUE
 
     getEBV <- function(gen){
         M = as.data.frame(pullSegSiteGeno(gen))
@@ -20,6 +21,7 @@ if (model == "rrblup") {
     fileTrain <- "rrblup_sc.R"
     fileRetrain <- "rrblup_sc_retrain.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
+    isParallel <- FALSE
 
     getEBV <- function(gen){
         genMat <- pullSegSiteGeno(gen) 

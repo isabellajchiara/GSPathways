@@ -44,9 +44,10 @@ for (cycle in paste("C", 1:nCycles, sep="")){
   bv_ebv[[cycle]] <- vector("list", length = nReps)
 }
 
-## Run repeat loop to run reps ##
 cli_alert_info("Importing simulation libraries...")
 cli_text()
+
+## Run repeat loop to run reps ##
 for (rep in 1:nReps){
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
 }
