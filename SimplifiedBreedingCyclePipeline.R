@@ -3,7 +3,8 @@ suppressMessages(library(AlphaSimR))
 suppressMessages(library(doParallel))
 loadModelLibs()
 
-cli_alert_info("Generating parent population for rep {rep}/{nReps}")
+cli_alert_info("Starting rep {rep}/{nReps}")
+cli_text("Generating parent population...")
 
 #Create Results Matrices
 
@@ -74,7 +75,7 @@ corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
 # NEW CYCLE
 for (cycle in 1:nCycles){
-    cli_alert_info("Running cycle {cycle}/{nCycles} for rep {rep}/{nReps}")
+    cli_text("Running cycle {cycle}/{nCycles}...")
 
     ## select new parents from previous cycle PYTs
     
@@ -219,3 +220,6 @@ for (cycle in 1:nCycles){
     alleles[[cycle]][[rep]] <- allelesMat
     bv_ebv[[cycle]][[rep]] <- bv_ebv_df
 }
+
+cli_alert_success("Rep {rep}/{nReps} finished.")
+cli_text()

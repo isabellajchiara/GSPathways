@@ -45,11 +45,10 @@ for (cycle in paste("C", 1:nCycles, sep="")){
 }
 
 ## Run repeat loop to run reps ##
-
+cli_alert_info("Importing simulation libraries...")
+cli_text()
 for (rep in 1:nReps){
-  cli_text("Starting rep {rep}/{nReps}")
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
-  cli_alert_success("Rep {rep}/{nReps} finished.")
 }
 
 ##create results directory and enter it##
@@ -64,6 +63,7 @@ setwd(file.path(dirName))
 ##create all output files##
 Allgeneticvalues <- list()
 for (cycle in paste("C", 1:nCycles, sep="")){
+  cli_alert_info("Writing output files for cycle {cycle}...")
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
   correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
   variances[[cycle]] <- getVariances(variances[[cycle]])
@@ -75,4 +75,6 @@ for (cycle in paste("C", 1:nCycles, sep="")){
   saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
+cli_text()
+cli_alert_success("Simulation finished!")
 setwd(workingDir) # Go back to previous directory
