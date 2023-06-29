@@ -1,5 +1,5 @@
-library(argparse)
-library(tictoc)
+suppressMessages(library(argparse))
+suppressMessages(library(tictoc))
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
@@ -47,7 +47,9 @@ for (cycle in paste("C", 1:nCycles, sep="")){
 ## Run repeat loop to run reps ##
 
 for (rep in 1:nReps){
+  cli_text("Starting rep {rep}/{nReps}")
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+  cli_alert_success("Rep {rep}/{nReps} finished.")
 }
 
 ##create results directory and enter it##

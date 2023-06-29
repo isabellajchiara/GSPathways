@@ -1,7 +1,9 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
-library(AlphaSimR)
-library(doParallel)
+suppressMessages(library(AlphaSimR))
+suppressMessages(library(doParallel))
 loadModelLibs()
+
+cli_alert_info("Generating parent population for rep {rep}/{nReps}")
 
 #Create Results Matrices
 
@@ -72,6 +74,8 @@ corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
 # NEW CYCLE
 for (cycle in 1:nCycles){
+    cli_alert_info("Running cycle {cycle}/{nCycles} for rep {rep}/{nReps}")
+
     ## select new parents from previous cycle PYTs
     
     if (cycle == 1) {

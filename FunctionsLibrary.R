@@ -17,7 +17,10 @@ validateArgs <- function(args){
 }
 
 loadModelLibs <- function(){
-  lapply(modelLibs, library, character.only=TRUE)
+  loadLib <- function(libname) 
+      suppressMessages(library(libname, character.only=TRUE))
+
+  lapply(modelLibs, loadLib)
 }
 
 # Defining trait parameters (AEG)
@@ -152,11 +155,10 @@ getVariances <- function(variances){
 
 # use trainGen to retrain the model
 trainModel <- function(gen){
-  if (args$verbose) tic()
+  tic()
   source(file.path(MODEL_DIR, fileTrain))
-  if (args$verbose) {
-    cat("Training finished. "); toc()
-  }
+  cat("Training finished. ")
+  toc()
 }
 
 

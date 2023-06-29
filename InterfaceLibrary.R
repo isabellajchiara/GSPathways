@@ -1,5 +1,5 @@
-library(cli)
-library(argparse)
+suppressMessages(library(cli))
+suppressMessages(library(argparse))
 
 # Print list of parameters and their current values
 print_params <- function(options, args){

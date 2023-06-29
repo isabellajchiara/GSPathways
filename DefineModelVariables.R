@@ -2,7 +2,7 @@
 
 # ADD NEW MODELS HERE
 if (model == "rf"){
-    print("Model chosen: Random Forest")
+    cli_alert_info("Model chosen: Random Forest")
     fileTrain <- "RF_RD.R"
     fileRetrain <- "RF_RD_retrain.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
@@ -16,7 +16,7 @@ if (model == "rf"){
 }
 
 if (model == "rrblup") {
-    print("Model chosen: RRBLUP")
+    cli_alert_info("Model chosen: Ridge Regression")
     fileTrain <- "rrblup_sc.R"
     fileRetrain <- "rrblup_sc_retrain.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
