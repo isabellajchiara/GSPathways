@@ -1,5 +1,7 @@
+# Defines every available parameter of the simulation.
+
 # Create directory name based on date and time
-# Example: 2023Jun20_104607
+# Example: sim_2023Jun20_104607
 getDirName <- function(){
   date <- format(Sys.time(), "%Y%b%d_%X")
   date <- gsub(':','', date )
