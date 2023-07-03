@@ -8,7 +8,7 @@ DATA_DIR <- "data"
 MODEL_DIR <- "models"
 
 args <- parseArgs()
-if (!args$noInteraction)
+if (args$noInteraction == FALSE)
   interactive_menu()
 
 validateArgs(args)
