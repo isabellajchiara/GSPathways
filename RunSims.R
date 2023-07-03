@@ -31,25 +31,25 @@ source("DefineModelVariables.R")
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
-cli_alert_info("Importing simulation libraries...")
-cli_text()
-
 ## Run repeat loop to run reps ##
+if (args$nCores > 1){
+  cli_alert_info("Running {args$nReps} reps in {args$nCores} cores...")
 
-cl <- makeCluster(args$nCores)
-clusterExport(cl, c("args", "loadModelLibs", "DATA_DIR", "MODEL_DIR"))
+  cl <- makeCluster(args$nCores)
+  clusterExport(cl, c("args", "loadModelLibs", "DATA_DIR", "MODEL_DIR"))
 
-res <- parLapply(cl, 1:args$nReps, function(rep){
-  suppressMessages(library(cli))
-  cli_alert_info("Starting rep {rep}/{args$nReps}")
-
-  source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
-  
-  cli_alert_success("Rep {rep}/{args$nReps} finished.")
-  cli_text()
-
-  ret
-})
+  res <- parLapply(cl, 1:args$nReps, function(rep){
+    suppressMessages(library(cli))
+    source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+    ret
+  })
+} else {
+  cli_alert_info("Importing simulation libraries...")
+  res <- lapply(1:args$nReps, function(rep){
+    source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+    ret
+  })
+}
 
 res <- bindSimResults(res)
 
