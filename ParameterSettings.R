@@ -28,7 +28,7 @@ sim_params <- list(
     nReps = list("-nr", "--nReps", 
         type="integer", 
         default=15,
-        help="Number of repetitions of the simultation"),
+        help="Number of replicas"),
 
     trainGen = list("-tg", "--trainGen",
         choices=c("F2", "F3", "F4", "F5"),
