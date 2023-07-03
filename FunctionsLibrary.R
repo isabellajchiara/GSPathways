@@ -165,14 +165,14 @@ bindSimResults <- function(reps){
 
     # Create list to store final results. First stores NULL values
     res <- lapply(1:mat_num, function(i) {
-        vector("list", length=nCycles)
+        vector("list", length=args$nCycles)
     })
     names(res) <- mat_names
 
     # Binds / appends column results and and stores in res
     for (rep in reps)
         for (mat in mat_names)
-            for (cycle in 1:nCycles){
+            for (cycle in 1:args$nCycles){
                 curMat <- rep[[mat]][[cycle]]
                 if(ncol(curMat) == 1)
                     res[[mat]][[cycle]] <- cbind(res[[mat]][[cycle]], curMat)

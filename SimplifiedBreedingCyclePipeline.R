@@ -6,8 +6,7 @@ source("FunctionsLibrary.R")
 source("DefineModelVariables.R")
 loadModelLibs()
 
-# if (args$nCores == 1)
-  cli_text("Generating parent population...")
+cli_text("Generating parent population...")
 
 # Data to be returned
 ret <- list( 
@@ -87,8 +86,7 @@ corMat[1,] = cor(bv(PYT), ebv(PYT)) #determine model performance
 
 # NEW CYCLE
 for (cycle in 1:args$nCycles){
-  # if (args$nCores == 1)
-    cli_text("Running cycle {cycle}/{args$nCycles}...")
+  cli_text("Running cycle {cycle}/{args$nCycles}...")
 
   ## select new parents from previous cycle PYTs
   
