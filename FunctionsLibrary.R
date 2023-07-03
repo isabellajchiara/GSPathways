@@ -17,10 +17,8 @@ validateArgs <- function(args){
 }
 
 loadModelLibs <- function(){
-  loadLib <- function(libname) 
-      suppressMessages(library(libname, character.only=TRUE))
-
-  lapply(modelLibs, loadLib)
+  for (libname in modelLibs)
+    suppressMessages(library(libname, character.only=TRUE))
 }
 
 # Defining trait parameters (AEG)
@@ -158,5 +156,37 @@ trainModel <- function(gen){
   source(file.path(MODEL_DIR, fileTrain))
 }
 
+# The simulation returns is a list of reps. Each rep has a series of variables.
+# This function unifies all the reps into one variable.
+bindSimResults <- function(reps){
+    # Gets names and amount of matrices to be bound
+    mat_names <- names(reps[[1]])
+    mat_num <- length(mat_names)
 
+    # Create list to store final results. First stores NULL values
+    res <- lapply(1:mat_num, function(i) {
+        vector("list", length=nCycles)
+    })
+    names(res) <- mat_names
+
+    # Binds / appends column results and and stores in res
+    for (rep in reps)
+        for (mat in mat_names)
+            for (cycle in 1:nCycles){
+                curMat <- rep[[mat]][[cycle]]
+                if(ncol(curMat) == 1)
+                    res[[mat]][[cycle]] <- cbind(res[[mat]][[cycle]], curMat)
+                else
+                    res[[mat]][[cycle]] <- appendMat(res[[mat]][[cycle]], curMat)
+            }
+    res
+}
+
+# Appends matrix to list
+appendMat <- function(lis, mat){
+    if (is.null(lis)) 
+        lis <- list()
+    lis[[ length(lis)+1 ]] <- mat
+    lis
+}
 

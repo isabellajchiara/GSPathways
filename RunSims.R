@@ -30,32 +30,23 @@ source("DefineModelVariables.R")
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
-geneticvalues <- list()
-correlations <- list()
-variances <- list()
-alleles <- list()
-bv_ebv <- list()
-
-for (cycle in paste("C", 1:nCycles, sep="")){
-  geneticvalues[[cycle]] <- matrix(nrow=nGen, ncol=nReps)
-  correlations[[cycle]] <- matrix(nrow=nModels, ncol=nReps)
-  variances[[cycle]] <- matrix(nrow=nVar,ncol=nReps)
-  alleles[[cycle]] <- vector("list", length = nReps)
-  bv_ebv[[cycle]] <- vector("list", length = nReps)
-}
-
 cli_alert_info("Importing simulation libraries...")
 cli_text()
 
 ## Run repeat loop to run reps ##
-for (rep in 1:nReps){
+res <- lapply(1:nReps, function(rep){
+  cli_alert_info("Starting rep {rep}/{nReps}")
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
-}
+  cli_alert_success("Rep {rep}/{nReps} finished.")
+  cli_text()
+
+  ret
+})
+
+res <- bindSimResults(res)
 
 ##create results directory and enter it##
 dirName <- args$outputDir
-if (is.null(args$outputDir))
-  dirName <- getDirName(model)
 dir.create(file.path(dirName))
 
 workingDir <- getwd()
@@ -63,17 +54,17 @@ setwd(file.path(dirName))
 
 ##create all output files##
 Allgeneticvalues <- list()
-for (cycle in paste("C", 1:nCycles, sep="")){
+for (cycle in 1:nCycles){
   cli_alert_info("Writing output files for cycle {cycle}...")
-  Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
-  correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
-  variances[[cycle]] <- getVariances(variances[[cycle]])
+  Allgeneticvalues[[cycle]] <- getAllGeneticValues(res$geneticvalues[[cycle]], 10, 2)
+  res$correlations[[cycle]] <- getCorrelations(res$correlations[[cycle]])
+  res$variances[[cycle]] <- getVariances(res$variances[[cycle]])
 
-  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_", model, "_rd_gvs_snp_yield.csv", sep=""))
-  write.csv(correlations[[cycle]], paste("1", cycle, "_", model,"_rd_cors_snp_yield.csv", sep=""))
-  write.csv(variances[[cycle]], paste("1", cycle, "_", model,"_rd_vars_snp_yield.csv", sep=""))
-  saveRDS(alleles[[cycle]], file=paste("1", cycle, "_", model,"_rd_alleles_snp_yield.rds", sep=""))
-  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
+  write.csv(Allgeneticvalues[[cycle]], paste("1C", cycle, "_", model, "_rd_gvs_snp_yield.csv", sep=""))
+  write.csv(res$correlations[[cycle]], paste("1C", cycle, "_", model,"_rd_cors_snp_yield.csv", sep=""))
+  write.csv(res$variances[[cycle]], paste("1C", cycle, "_", model,"_rd_vars_snp_yield.csv", sep=""))
+  saveRDS(res$alleles[[cycle]], file=paste("1C", cycle, "_", model,"_rd_alleles_snp_yield.rds", sep=""))
+  saveRDS(res$bv_ebv[[cycle]], file=paste("1C", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
 cli_text()

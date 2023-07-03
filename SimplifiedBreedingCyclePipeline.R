@@ -3,8 +3,15 @@ suppressMessages(library(AlphaSimR))
 suppressMessages(library(doParallel))
 loadModelLibs()
 
-cli_alert_info("Starting rep {rep}/{nReps}")
 cli_text("Generating parent population...")
+
+ret <- list(
+  geneticvalues = list(),
+  correlations = list(),
+  variances = list(),
+  alleles = list(),
+  bv_ebv = list()
+)
 
 #Create Results Matrices
 
@@ -214,12 +221,10 @@ for (cycle in 1:nCycles){
 
     bv_ebv_df <- as.data.frame(rbind(bvebv0,bvebv1,bvebv2,bvebv3,bvebv4,bvebv5,bvebv6))
 
-    geneticvalues[[cycle]][,rep] <- gvMat
-    correlations[[cycle]][,rep] <- corMat
-    variances[[cycle]][,rep] <- varMat
-    alleles[[cycle]][[rep]] <- allelesMat
-    bv_ebv[[cycle]][[rep]] <- bv_ebv_df
+    ret$geneticvalues[[cycle]] <- gvMat
+    ret$correlations[[cycle]] <- corMat
+    ret$variances[[cycle]] <- varMat
+    ret$alleles[[cycle]] <- allelesMat
+    ret$bv_ebv[[cycle]] <- bv_ebv_df
 }
 
-cli_alert_success("Rep {rep}/{nReps} finished.")
-cli_text()
