@@ -35,12 +35,16 @@ cli_alert_info("Importing simulation libraries...")
 cli_text()
 
 ## Run repeat loop to run reps ##
+
 cl <- makeCluster(args$nCores)
 clusterExport(cl, c("args", "loadModelLibs", "DATA_DIR", "MODEL_DIR"))
+
 res <- parLapply(cl, 1:args$nReps, function(rep){
   suppressMessages(library(cli))
   cli_alert_info("Starting rep {rep}/{args$nReps}")
+
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+  
   cli_alert_success("Rep {rep}/{args$nReps} finished.")
   cli_text()
 
