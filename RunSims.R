@@ -1,5 +1,6 @@
 suppressMessages(library(argparse))
 suppressMessages(library(tictoc))
+suppressMessages(library(doParallel))
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
@@ -11,7 +12,7 @@ args <- parseArgs()
 if (args$noInteraction == FALSE)
   interactive_menu()
 
-validateArgs(args)
+# validateArgs(args)
 
 ## define variables ##
 
@@ -34,7 +35,8 @@ cli_alert_info("Importing simulation libraries...")
 cli_text()
 
 ## Run repeat loop to run reps ##
-res <- lapply(1:nReps, function(rep){
+cl <- makeCluster(args$nCores)
+res <- parLapply(cl, 1:nReps, function(rep){
   cli_alert_info("Starting rep {rep}/{nReps}")
   source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
   cli_alert_success("Rep {rep}/{nReps} finished.")

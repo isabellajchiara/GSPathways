@@ -1,11 +1,11 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
 suppressMessages(library(AlphaSimR))
-suppressMessages(library(doParallel))
 loadModelLibs()
 
 cli_text("Generating parent population...")
 
-ret <- list(
+# Data to be returned
+ret <- list( 
   geneticvalues = list(),
   correlations = list(),
   variances = list(),
