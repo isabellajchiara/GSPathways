@@ -128,25 +128,25 @@ getBvEbv <- function(genObj, genName){
 
 getAllGeneticValues <- function(geneticValues, lin1, lin2){
   geneticValues <- as.data.frame(geneticValues)
-  colnames(geneticValues) <- 1:nReps
+  colnames(geneticValues) <- 1:args$nReps
   gain <- as.data.frame(geneticValues[lin1,] - geneticValues[lin2,])
-  colnames(gain) <- 1:nReps
+  colnames(gain) <- 1:args$nReps
   AllgeneticValues <- as.data.frame(rbind(geneticValues, gain))
   rownames(AllgeneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
-  colnames(AllgeneticValues) <- c(1:nReps)
+  colnames(AllgeneticValues) <- c(1:args$nReps)
   AllgeneticValues
 }
 
 getCorrelations <- function(correlations){
   correlations <- as.data.frame(correlations)
   rownames(correlations) <- c("NewParents","F2","F3","F4","F5","PYT","AYT")
-  colnames(correlations) <- c(1:nReps)  
+  colnames(correlations) <- c(1:args$nReps)  
   correlations
 }
 
 getVariances <- function(variances){
   variances <- as.data.frame(variances)
-  colnames(variances) <- c(1:nReps)
+  colnames(variances) <- c(1:args$nReps)
   rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
   variances
 }
