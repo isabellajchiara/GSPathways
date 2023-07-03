@@ -32,13 +32,13 @@ source("DefineModelVariables.R")
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
 ## Run repeat loop to run reps ##
-if (args$nCores == 1) {
+if (args$nCores == 1 || hasParallelVersion) { # Run each rep serially
   cli_alert_info("Importing simulation libraries...")
   res <- lapply(1:args$nReps, function(rep){
     source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
     ret
   })
-} else {
+} else { # Run reps in parallel
   cli_alert_info("Running {args$nReps} reps in {args$nCores} cores...")
 
   cl <- makeCluster(args$nCores)

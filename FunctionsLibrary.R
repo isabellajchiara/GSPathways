@@ -7,15 +7,6 @@ parseArgs <- function(){
   parser$parse_args() # Returns arguments
 }
 
-validateArgs <- function(args){
-  parallelModels <- c("rf")
-
-  if (args$nCores > 1 && !(args$model %in% parallelModels)) { ## unsupported parallel processing
-    cat(paste("Error: The", args$model, "model does not support parallel processing. Please select another model or run the program sequentially.\n"))
-    quit()
-  }
-}
-
 loadModelLibs <- function(){
   for (libname in modelLibs)
     suppressMessages(library(libname, character.only=TRUE))
