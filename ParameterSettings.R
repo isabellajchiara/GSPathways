@@ -46,12 +46,7 @@ run_params <- list(
     outputDir = list("-od", "--outputDir",
         default=getDirName(),
         type="character",
-        help="Directory to write simulation outputs"),
-
-    verbose = list("-v", "--verbose", 
-        default=FALSE,
-        action="store_true",
-        help="Print execution information in the output")
+        help="Directory to write simulation outputs")
 )
 
 ignored_params <- list(
