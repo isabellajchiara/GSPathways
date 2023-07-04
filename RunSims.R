@@ -28,7 +28,10 @@ if (args$nCores == 1 || hasParallelVersion) { # Run reps serially
   cli_alert_info("Importing simulation libraries...")
 
   res <- lapply(1:args$nReps, function(rep){
+    cli_alert_info("Simulating rep {rep}/{args$nReps}...")
     source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+    cli_text("Rep {rep} finished.")
+
     ret
   })
 } else { # Run reps in parallel
