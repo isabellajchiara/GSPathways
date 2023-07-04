@@ -160,7 +160,7 @@ bindSimResults <- function(reps){
     })
     names(res) <- mat_names
 
-    # Binds / appends column results and and stores in res
+    # Binds / appends column results and stores in res
     for (rep in reps)
         for (mat in mat_names)
             for (cycle in 1:args$nCycles){

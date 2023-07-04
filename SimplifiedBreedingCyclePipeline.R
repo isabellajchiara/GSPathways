@@ -6,7 +6,7 @@ source("FunctionsLibrary.R")
 source("DefineModelVariables.R")
 loadModelLibs()
 
-# Log only if reps are being serially
+# Log only if reps are being run serially
 activeLog <- args$nCores == 1 || hasParallelVersion
 
 if (activeLog)

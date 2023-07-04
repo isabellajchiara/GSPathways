@@ -12,19 +12,11 @@ args <- parseArgs()
 if (args$noInteraction == FALSE)
   interactive_menu()
 
-# validateArgs(args)
-
 ## define variables ##
 
 nModels = 7
-# nReps = args$nReps
 nGen = 10
 nVar = 9
-# nCores = args$nCores
-
-# model = args$model
-# nCycles = args$nCycles
-# trainGen = args$trainGen
 
 ## Create model definitions
 source("DefineModelVariables.R")
