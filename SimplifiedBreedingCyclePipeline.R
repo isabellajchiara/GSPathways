@@ -79,9 +79,7 @@ gvMat[1,] <- mean(gv(PYT))
 varMat[1,] <- varG(PYT)
 
 ## use PYTs as training data and GS Prediction Model
-TrainingGeno <- pullSegSiteGeno(PYT)
-TrainingPheno <- pheno(PYT)
-trainModel("PYT")
+trainModel("PYT", PYT)
 
 # calculate EBVs of PYTs
 EBV <- getEBV(PYT) #get EBVs
@@ -122,7 +120,7 @@ for (cycle in 1:args$nCycles){
   allelesMatF2 <- getAllelesMat(F2, "F2")
 
   if (args$trainGen == "F2")
-    trainModel(args$trainGen)
+    trainModel("F2", F2)
     
   ## set EBV using RRBLUP model
 
@@ -140,7 +138,7 @@ for (cycle in 1:args$nCycles){
   allelesMatF3 <- getAllelesMat(F3, "F3")
 
   if (args$trainGen == "F3")
-    trainModel(args$trainGen)
+    trainModel("F3", F3)
 
   ## set EBV using BLUP model
 
@@ -157,7 +155,7 @@ for (cycle in 1:args$nCycles){
   allelesMatF4 <- getAllelesMat(F4, "F4")
 
   if (args$trainGen == "F4")
-    trainModel(args$trainGen)
+    trainModel("F4", F4)
 
   ##set EBV using BLUP model##
   EBV <- getEBV(F4)
@@ -174,7 +172,7 @@ for (cycle in 1:args$nCycles){
   allelesMatF5 <- getAllelesMat(F5, "F5")
 
   if (args$trainGen == "F5")
-    trainModel(args$trainGen)
+    trainModel("F5", F5)
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(F5)

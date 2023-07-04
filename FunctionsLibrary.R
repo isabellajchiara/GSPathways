@@ -143,7 +143,9 @@ getVariances <- function(variances){
 }
 
 # use trainGen to retrain the model
-trainModel <- function(gen){
+trainModel <- function(gen, genObj){
+  TrainingGeno <- pullSegSiteGeno(genObj)
+  TrainingPheno <- pheno(genObj)
   source(file.path(MODEL_DIR, fileTrain))
 }
 
