@@ -17,14 +17,14 @@ if (args$noInteraction == FALSE)
 ## define variables ##
 
 nModels = 7
-nReps = args$nReps
+# nReps = args$nReps
 nGen = 10
 nVar = 9
-nCores = args$nCores
+# nCores = args$nCores
 
-model = args$model
-nCycles = args$nCycles
-trainGen = args$trainGen
+# model = args$model
+# nCycles = args$nCycles
+# trainGen = args$trainGen
 
 ## Create model definitions
 source("DefineModelVariables.R")
@@ -32,8 +32,9 @@ source("DefineModelVariables.R")
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
 ## Run repeat loop to run reps ##
-if (args$nCores == 1 || hasParallelVersion) { # Run each rep serially
+if (args$nCores == 1 || hasParallelVersion) { # Run reps serially
   cli_alert_info("Importing simulation libraries...")
+
   res <- lapply(1:args$nReps, function(rep){
     source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
     ret
@@ -41,19 +42,23 @@ if (args$nCores == 1 || hasParallelVersion) { # Run each rep serially
 } else { # Run reps in parallel
   cli_alert_info("Running {args$nReps} reps in {args$nCores} cores...")
 
+  # Create parallel cluster and export variables
   cl <- makeCluster(args$nCores)
   clusterExport(cl, c("args", "loadModelLibs", "DATA_DIR", "MODEL_DIR"))
 
   res <- parLapply(cl, 1:args$nReps, function(rep){
-    suppressMessages(library(cli))
     source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
     ret
   })
 
+  # Stop parallel cluster
   stopCluster(cl)
 }
-
 res <- bindSimResults(res)
+
+cli_alert_success("Simulation finished!")
+cli_text()
+
 
 ##create results directory and enter it##
 dirName <- args$outputDir
@@ -78,5 +83,5 @@ for (cycle in 1:args$nCycles){
 }
 
 cli_text()
-cli_alert_success("Simulation finished!")
+cli_alert_success("Results saved!")
 setwd(workingDir) # Go back to previous directory
