@@ -10,19 +10,31 @@ train_index <- sample(1:nrow(trainingdata), 0.75 * nrow(trainingdata))
 trainingset <- trainingdata[train_index, ]
 testingset <- trainingdata[-train_index, ]
 
-
 ## create cross validation strategy ##
 control <- trainControl(method='repeatedcv', 
-                        number=5, ##will test 10 different values for mtry (number of variables for splitting) ##
-                        repeats=1,
+                        number=10, ##will test 10 different values for mtry (number of variables for splitting) ##
+                        repeats=3,
                         search = "random")  
 
+trainMethod <- "rf"
+if (args$nCores > 1){
+    cli_alert_info("Creating cluster with {args$nCores} cores...")
+    cl <- makePSOCKcluster(args$nCores)
+    registerDoParallel(cl)
+    trainMethod <- "parRF"
+}
+
 ##build model##
+cat ("Training...\n")
 
 rf_fit = train(ID1 ~ ., 
                data = trainingset, 
-               method = "rf",
+               method = trainMethod,
                tuneLength = 10,
                trControl=control) ## search a random tuning grid ##
+
+# deactivate cluster
+if (args$nCores > 1)
+    stopCluster(cl)
 
 ### This command takes about 90 minutes in an compute canada interactive session ###

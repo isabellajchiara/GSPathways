@@ -1,48 +1,62 @@
-library(argparse)
+suppressMessages(library(argparse))
+suppressMessages(library(tictoc))
+suppressMessages(library(doParallel))
+source("ParameterSettings.R")
+source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
 
+DATA_DIR <- "data"
+MODEL_DIR <- "models"
+
 args <- parseArgs()
+if (args$noInteraction == FALSE)
+  interactive_menu()
 
 ## define variables ##
 
 nModels = 7
-nReps = args$nReps
 nGen = 10
 nVar = 9
-
-model = args$model
-nCycles = args$nCycles
-trainGen = args$trainGen
 
 ## Create model definitions
 source("DefineModelVariables.R")
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
-geneticvalues <- list()
-correlations <- list()
-variances <- list()
-alleles <- list()
-bv_ebv <- list()
-
-for (cycle in paste("C", 1:nCycles, sep="")){
-  geneticvalues[[cycle]] <- matrix(nrow=nGen, ncol=nReps)
-  correlations[[cycle]] <- matrix(nrow=nModels, ncol=nReps)
-  variances[[cycle]] <- matrix(nrow=nVar,ncol=nReps)
-  alleles[[cycle]] <- vector("list", length = nReps)
-  bv_ebv[[cycle]] <- vector("list", length = nReps)
-}
-
 ## Run repeat loop to run reps ##
+if (args$nCores == 1 || hasParallelVersion) { # Run reps serially
+  cli_alert_info("Importing simulation libraries...")
 
-for (rep in 1:nReps){
-  source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+  res <- lapply(1:args$nReps, function(rep){
+    cli_alert_info("Simulating rep {rep}/{args$nReps}...")
+    source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+    cli_text("Rep {rep} finished.")
+
+    ret
+  })
+} else { # Run reps in parallel
+  cli_alert_info("Running {args$nReps} reps in {args$nCores} cores...")
+
+  # Create parallel cluster and export variables
+  cl <- makeCluster(args$nCores)
+  clusterExport(cl, c("args", "loadModelLibs", "DATA_DIR", "MODEL_DIR"))
+
+  res <- parLapply(cl, 1:args$nReps, function(rep){
+    source("SimplifiedBreedingCyclePipeline.R") ##Source the SCript for the SCenario you would like to run##
+    ret
+  })
+
+  # Stop parallel cluster
+  stopCluster(cl)
 }
+res <- bindSimResults(res)
+
+cli_alert_success("Simulation finished!")
+cli_text()
+
 
 ##create results directory and enter it##
 dirName <- args$outputDir
-if (is.null(args$outputDir))
-  dirName <- getDirName(model)
 dir.create(file.path(dirName))
 
 workingDir <- getwd()
@@ -50,16 +64,19 @@ setwd(file.path(dirName))
 
 ##create all output files##
 Allgeneticvalues <- list()
-for (cycle in paste("C", 1:nCycles, sep="")){
-  Allgeneticvalues[[cycle]] <- getAllGeneticValues(geneticvalues[[cycle]], 10, 2)
-  correlations[[cycle]] <- getCorrelations(correlations[[cycle]])
-  variances[[cycle]] <- getVariances(variances[[cycle]])
+for (cycle in 1:args$nCycles){
+  cli_alert_info("Writing output files for cycle {cycle}...")
+  Allgeneticvalues[[cycle]] <- getAllGeneticValues(res$geneticvalues[[cycle]], 10, 2)
+  res$correlations[[cycle]] <- getCorrelations(res$correlations[[cycle]])
+  res$variances[[cycle]] <- getVariances(res$variances[[cycle]])
 
-  write.csv(Allgeneticvalues[[cycle]], paste("1", cycle, "_", model, "_rd_gvs_snp_yield.csv", sep=""))
-  write.csv(correlations[[cycle]], paste("1", cycle, "_", model,"_rd_cors_snp_yield.csv", sep=""))
-  write.csv(variances[[cycle]], paste("1", cycle, "_", model,"_rd_vars_snp_yield.csv", sep=""))
-  saveRDS(alleles[[cycle]], file=paste("1", cycle, "_", model,"_rd_alleles_snp_yield.rds", sep=""))
-  saveRDS(bv_ebv[[cycle]], file=paste("1", cycle, "_", model,"_rd_bvebv_snp_yield.rds", sep=""))
+  write.csv(Allgeneticvalues[[cycle]], paste("1C", cycle, "_", args$model, "_rd_gvs_snp_yield.csv", sep=""))
+  write.csv(res$correlations[[cycle]], paste("1C", cycle, "_", args$model,"_rd_cors_snp_yield.csv", sep=""))
+  write.csv(res$variances[[cycle]], paste("1C", cycle, "_", args$model,"_rd_vars_snp_yield.csv", sep=""))
+  saveRDS(res$alleles[[cycle]], file=paste("1C", cycle, "_", args$model,"_rd_alleles_snp_yield.rds", sep=""))
+  saveRDS(res$bv_ebv[[cycle]], file=paste("1C", cycle, "_", args$model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
+cli_text()
+cli_alert_success("Results saved!")
 setwd(workingDir) # Go back to previous directory
