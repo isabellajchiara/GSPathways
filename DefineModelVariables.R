@@ -28,7 +28,7 @@ if (args$model == "rrblup") {
 
 if (args$model == "svm"){
     fileTrain <- "SVM_RD.R"
-    modelLibs <- c()
+    modelLibs <- c("e1071")
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
