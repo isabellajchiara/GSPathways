@@ -15,7 +15,7 @@ getDirName <- function(){
 
 sim_params <- list(
     model = list("-m", "--model",
-        choices=c("rrblup", "rf"),
+        choices=c("rrblup", "rf", "svm"),
         type="character", 
         default="rrblup",
         help="Model to be trained"),
