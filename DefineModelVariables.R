@@ -3,7 +3,6 @@
 # ADD NEW MODELS HERE
 if (args$model == "rf"){
     fileTrain <- "RF_RD.R"
-    fileRetrain <- "RF_RD_retrain.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
     hasParallelVersion <- TRUE
 
@@ -17,7 +16,6 @@ if (args$model == "rf"){
 
 if (args$model == "rrblup") {
     fileTrain <- "rrblup_sc.R"
-    fileRetrain <- "rrblup_sc_retrain.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
     hasParallelVersion <- FALSE
 
@@ -25,5 +23,18 @@ if (args$model == "rrblup") {
         genMat <- pullSegSiteGeno(gen) 
         genMat <- genMat-1
         genMat %*% markerEffects
+    }
+}
+
+if (args$model == "svm"){
+    fileTrain <- "SVM_RD.R"
+    modelLibs <- c()
+    hasParallelVersion <- FALSE
+
+    getEBV <- function(gen){
+        M = as.data.frame(pullSegSiteGeno(gen))
+        colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
+        EBV <- as.numeric(predict(SVMfit, M))
+        as.matrix(EBV)
     }
 }
