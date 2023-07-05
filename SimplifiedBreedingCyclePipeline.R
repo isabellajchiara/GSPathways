@@ -26,6 +26,7 @@ ret <- list(
 gvMat <- matrix(nrow=10, ncol=1)
 corMat <- matrix(nrow=7, ncol=1)
 varMat <- matrix(nrow=9, ncol=1)
+allelesMat <- NULL
 
 # establish simulation parameters
 
@@ -99,77 +100,56 @@ for (cycle in 1:args$nCycles){
     newParents <- selectNewParents(F2, 5, "ebv")
   }
 
-  varMat[2,] = varG(newParents) #collect variance
-  gvMat[2,] <- mean(gv(newParents)) #collect genetic values 
-  allelesMatNP <- getAllelesMat(newParents, "NP") #collect genotypes
-
+  updateResults(2, newParents, "NP")
   ## 200 random crosses of new parents
 
   F1 = randCross(newParents, 200)
+  updateResults(3, F1, "F1")
                               
-  varMat[3,] = varG(F1)
-  gvMat[3,] <- mean(gv(F1))
-  allelesMatF1 <- getAllelesMat(F1, "F1")
-
   ## self and bulk F1 to form F2 ##
 
   F2 = self(F1, nProgeny = 30) 
+  updateResults(4, F2, "F2")
   
-  varMat[4,] = varG(F2)
-  gvMat[4,] <- mean(gv(F2))
-  allelesMatF2 <- getAllelesMat(F2, "F2")
-
   if (args$trainGen == "F2")
     trainModel("F2", F2)
     
   ## set EBV using RRBLUP model
 
-  EBV <- getEBV(F2)
-  F2@ebv = EBV
+  F2@ebv = getEBV(F2)
   corMat[2,] = as.numeric(cor(bv(F2), ebv(F2)))
 
   ## select top individuals from F2 bulk to form F3 
 
   F3 = TopWithinFam(F2, 10, 100, "ebv")
   F3 = setPheno(F3)
-                              
-  varMat[5,] = varG(F3)
-  gvMat[5,] <- mean(gv(F3))
-  allelesMatF3 <- getAllelesMat(F3, "F3")
+  updateResults(5, F3, "F3")
 
   if (args$trainGen == "F3")
     trainModel("F3", F3)
 
   ## set EBV using BLUP model
 
-  EBV <- getEBV(F3)
-  F3@ebv = EBV
+  F3@ebv = getEBV(F3)
   corMat[3,] = cor(bv(F3),ebv(F3))
 
   ## select top within familiy from F3 to form F4 
   F4 = TopWithinFam(F3, 5, 50, "ebv")
   F4 = setPheno(F4)
-                              
-  varMat[6,] = varG(F4)
-  gvMat[6,] <- mean(gv(F4))                            
-  allelesMatF4 <- getAllelesMat(F4, "F4")
+  updateResults(6, F4, "F4")
 
   if (args$trainGen == "F4")
     trainModel("F4", F4)
 
   ##set EBV using BLUP model##
-  EBV <- getEBV(F4)
-  F4@ebv = EBV
+  F4@ebv = getEBV(F4)
   corMat[4,] = cor(bv(F4),ebv(F4))
 
   ## select top families from F4 to form F5 ##
 
   F5 = TopFamily(F4,4,"ebv")
   F5 = setPheno(F5)
-
-  varMat[7,]= varG(F5)
-  gvMat[7,] <- mean(gv(F5))
-  allelesMatF5 <- getAllelesMat(F5, "F5")
+  updateResults(7, F5, "F5")
 
   if (args$trainGen == "F5")
     trainModel("F5", F5)
@@ -182,10 +162,7 @@ for (cycle in 1:args$nCycles){
   ## select top F5 families for preliminary yield trial ##
   PYT = TopFamily(F5,3,"ebv")
   PYT = setPheno(PYT, reps=2)
-                                                      
-  varMat[8,] = varG(PYT)
-  gvMat[8,] <- mean(gv(PYT))
-  allelesMatPYT <- getAllelesMat(PYT, "PYT")
+  updateResults(8, PYT, "PYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(PYT)
@@ -196,10 +173,7 @@ for (cycle in 1:args$nCycles){
 
   AYT = TopFamily(PYT, 1, "ebv")
   AYT = setPheno(AYT, reps=5)
-                              
-  varMat[9,] = varG(AYT)
-  gvMat[9,] <- mean(gv(AYT))
-  allelesMatAYT <- getAllelesMat(AYT, "AYT")
+  updateResults(9, AYT, "AYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(AYT)
@@ -212,9 +186,7 @@ for (cycle in 1:args$nCycles){
   gvMat[10,] <- mean(gv(Variety))
 
   allelesMatVar <- getAllelesMat(Variety, "Variety")
-
-  allelesMat <- rbind(allelesMatNP, allelesMatF1, allelesMatF2, allelesMatF3, allelesMatF4, allelesMatF5, allelesMatPYT, allelesMatAYT, allelesMatVar)
-
+  allelesMat <- rbind(allelesMat, allelesMatVar)
 
   ###collect bvs and ebvs###
 
