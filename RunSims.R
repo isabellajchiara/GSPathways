@@ -62,6 +62,7 @@ dir.create(file.path(dirName))
 workingDir <- getwd()
 setwd(file.path(dirName))
 
+tic()
 ##create all output files##
 Allgeneticvalues <- list()
 for (cycle in 1:args$nCycles){
@@ -77,6 +78,8 @@ for (cycle in 1:args$nCycles){
   saveRDS(res$bv_ebv[[cycle]], file=paste("1C", cycle, "_", args$model,"_rd_bvebv_snp_yield.rds", sep=""))
 }
 
+cli_text("Time taken to write results:")
+toc()
 cli_text()
 cli_alert_success("Results saved!")
 setwd(workingDir) # Go back to previous directory
