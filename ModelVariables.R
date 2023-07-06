@@ -79,7 +79,7 @@ if (args$model == "svm_stratifiedclusters"){
 
 if (args$model == "ann"){
     fileTrain <- "ANN_RD.R"
-    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools","BNSP")
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
