@@ -1,7 +1,6 @@
 library(tidyverse)
 library(keras)
 library(readr)
-library(BMTME)
 
 #BUILD ANN using PYT TP ##
 
