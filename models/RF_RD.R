@@ -6,7 +6,7 @@ colnames(trainingdata) <- paste("ID",1:ncol(trainingdata), sep="") ##1-605 becau
 
 
 ## create TRN TST split ###
-train_index <- sample(1:nrow(trainingdata), 0.75 * nrow(trainingdata))
+train_index <- sample(1:nrow(trainingdata), min(1000, 0.75 * nrow(trainingdata)))
 trainingset <- trainingdata[train_index, ]
 testingset <- trainingdata[-train_index, ]
 
