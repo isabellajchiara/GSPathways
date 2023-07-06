@@ -41,7 +41,7 @@ if (args$model == "svm"){
 
 if (args$model == "ann"){
     fileTrain <- "ANN_RD.R"
-    modelLibs <- c("tidyverse","keras","tensorflow","readr","BMTME","devtools")
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
