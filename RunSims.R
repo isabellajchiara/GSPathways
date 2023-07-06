@@ -5,6 +5,8 @@ source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
 
+use_virtualenv(Sys.getenv("VIRTUAL_ENV"))
+
 DATA_DIR <- "data"
 MODEL_DIR <- "models"
 
