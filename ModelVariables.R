@@ -76,3 +76,14 @@ if (args$model == "svm_stratifiedclusters"){
         as.matrix(EBV)
     }
 }
+
+if (args$model == "ann"){
+    fileTrain <- "ANN_RD.R"
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","BMTME")
+    hasParallelVersion <- FALSE
+
+    getEBV <- function(gen){
+        PYTgeno <- as.matrix(pullSegSiteGeno(PYT))
+        model_Final  %>% predict(PYTgeno)
+    }
+}
