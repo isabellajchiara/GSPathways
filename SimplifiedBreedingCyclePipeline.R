@@ -3,7 +3,7 @@ suppressMessages(library(AlphaSimR))
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
-source("DefineModelVariables.R")
+source("ModelVariables.R")
 loadModelLibs()
 
 # Log only if reps are being run serially
