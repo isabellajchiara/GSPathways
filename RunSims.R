@@ -19,7 +19,7 @@ nGen = 10
 nVar = 9
 
 ## Create model definitions
-source("DefineModelVariables.R")
+source("ModelVariables.R")
 
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
