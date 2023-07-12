@@ -9,10 +9,11 @@ library(factoextra)
 set.seed(23489)
 y <- as.data.frame(TrainingPheno)
 x <- as.data.frame(TrainingGeno)
+
 Training = as.data.frame(cbind(y,x))
 colnames(Training) <- paste("ID",1:ncol(Training), sep="")
 
-StratClusTRN(y,X)
+StratClusTRN(y,X) #calls function for stratified clustering algorithm
 
 Optim_train <- cbind(OptimPheno, OptimGeno)
 dim(Optim_train)
