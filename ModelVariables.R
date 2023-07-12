@@ -45,7 +45,7 @@ if (args$model == "ann"){
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
-        PYTgeno <- as.matrix(pullSegSiteGeno(PYT))
-        model_Final %>% predict(PYTgeno)
+        geno <- as.matrix(pullSegSiteGeno(gen))
+        model_Final %>% predict(geno)
     }
 }
