@@ -9,7 +9,7 @@ library(readr)
 ## create GRM ##
 geno <- as.matrix(TrainingGeno)
 GM <- tcrossprod(geno)/dim(geno)
-LG <- chol(GM)
+LG <- GM
 
 Y <- as.matrix(TrainingPheno)
 X = LG
