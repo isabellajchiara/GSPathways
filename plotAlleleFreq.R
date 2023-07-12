@@ -57,31 +57,31 @@ for (cycle in 1:ncycles) {
     genMeans <- as.matrix(rowMeans(genDF1))
     MeanFreq[,gen] = genMeans
   }
-AllData[[gen]] <- MeanFreq
-assign(paste0("meanFreqsC",cycle),MeanFreq) 
+  assign(paste0("meanFreqsC",cycle),MeanFreq) 
+  saveRDS(MeanFreq,paste("MeanFreqC",cycle,".rds"))
+} 
 
-}  
-      
-    #bind 1-n column of each rep
-    #calculate rowmeans
-    #bind into one DF with means
-    
+FinalAlleleFreq =list()
 
+for (x in 1:ncycles){
+  data = as.data.frame(readRDS(paste("MeanFreqC",cycle,".rds")))
+  FinalAlleleFreq[[x]] = data
+  }
+
+Alldata = do.call("cbind",FinalAlleleFreq)
+colnames(Alldata) = c(rep(genList, times=ncycles)
+  
 
 ###
-
-AllFreq <- as.data.frame(cbind(C1MAF,C2MAF,C3MAF))
-
-###
-BOC <- as.data.frame(AllFreq[,1])
+BOC <- as.data.frame(AllData[,1])
 BOC$base <- rep(c("C1"), times = nrow(BOC))
 colnames(BOC) <- c("freq","stage")
 
-MOC <- as.data.frame(AllFreq[,14])
+MOC <- as.data.frame(AllData[,14])
 MOC$base <- rep(c("C2"), times = nrow(MOC))
 colnames(MOC) <- c("freq","stage")
 
-EOC <- as.data.frame(AllFreq[,27])
+EOC <- as.data.frame(AllData[,27])
 EOC$base <- rep(c("C3"), times = nrow(EOC))
 colnames(EOC) <- c("freq","stage")
 
