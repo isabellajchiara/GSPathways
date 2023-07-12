@@ -1,7 +1,7 @@
 # Defines some variables and functions based on what model was chosen
 
 # ADD NEW MODELS HERE
-if (args$model == "rf with randomly sampled training set"){
+if (args$model == "rf_random"){
     fileTrain <- "RF_RD.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
     hasParallelVersion <- TRUE
@@ -14,7 +14,7 @@ if (args$model == "rf with randomly sampled training set"){
     }
 }
 
-if (args$model == "rf with stratified clustering training set"){
+if (args$model == "rf_stratifiedclusters"){
     fileTrain <- "RF_SC.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
     hasParallelVersion <- TRUE
@@ -27,7 +27,7 @@ if (args$model == "rf with stratified clustering training set"){
     }
 }
 
-if (args$model == "rrblup with randomly sampled set") {
+if (args$model == "rrblup_random") {
     fileTrain <- "RRBLUP_RD.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
     hasParallelVersion <- FALSE
@@ -39,7 +39,7 @@ if (args$model == "rrblup with randomly sampled set") {
     }
 }
 
-if (args$model == "rrblup with stratified clustering training set") {
+if (args$model == "rrblup_stratifiedclusters") {
     fileTrain <- "RRBLUP_SC.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
     hasParallelVersion <- FALSE
@@ -51,7 +51,7 @@ if (args$model == "rrblup with stratified clustering training set") {
     }
 }
 
-if (args$model == "svm with randomly sampled training set"){
+if (args$model == "svm_random"){
     fileTrain <- "SVM_RD.R"
     modelLibs <- c("e1071")
     hasParallelVersion <- FALSE
@@ -64,7 +64,7 @@ if (args$model == "svm with randomly sampled training set"){
     }
 }
 
-if (args$model == "svm with stratified clustering training set"){
+if (args$model == "svm_stratifiedclusters"){
     fileTrain <- "SVM_SC.R"
     modelLibs <- c("e1071")
     hasParallelVersion <- FALSE
