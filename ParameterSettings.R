@@ -17,7 +17,7 @@ sim_params <- list(
     model = list("-m", "--model",
         choices=c("rrblup_random","rrblup_stratifiedclusters", "rf_random","rf_stratifiedclusters", "svm_random","svm_stratifiedclusters"),
         type="character", 
-        default="rrblup with randomly sampled training set",
+        default="rrblup_random",
         help="Model to be trained"),
 
     nCycles = list("-nc", "--nCycles", 
