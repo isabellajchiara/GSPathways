@@ -15,7 +15,7 @@ getDirName <- function(){
 
 sim_params <- list(
     model = list("-m", "--model",
-        choices=c("rrblup with randomly sampled training set","rrblup with stratified clustering training set", "rf with randomly sampled training set","rf with stratified clustering training set", "svm with randomly sampled training set","svm with stratified clustering training set"),
+        choices=c("rrblup_random","rrblup_stratifiedclusters", "rf_random","rf_stratifiedclusters", "svm_random","svm_stratifiedclusters"),
         type="character", 
         default="rrblup with randomly sampled training set",
         help="Model to be trained"),
