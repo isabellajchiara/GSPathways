@@ -9,7 +9,7 @@ library(factoextra)
 y <- as.data.frame(TrainingPheno)
 M <- as.data.frame(TrainingGeno)
 
-StratClusTRN(y,M) 
+StratClusTRN(y,M) #calls function for stratified clustering algorithm
 
 BV <- OptimPheno
 
