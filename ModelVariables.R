@@ -40,7 +40,7 @@ if (args$model == "rrblup with randomly sampled set") {
 }
 
 if (args$model == "rrblup with stratified clustering training set") {
-    fileTrain <- "rrblup_sc.R"
+    fileTrain <- "RRBLUP_SC.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
     hasParallelVersion <- FALSE
 
