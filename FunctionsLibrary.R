@@ -149,6 +149,14 @@ trainModel <- function(gen, genObj){
   source(file.path(MODEL_DIR, fileTrain))
 }
 
+updateResults <- function(ind, genObj, genName){
+  varMat[ind,] <<- varG(genObj) 
+  gvMat[ind,] <<- mean(gv(genObj)) 
+  
+  curAllelesMat <- getAllelesMat(genObj, genName) 
+  allelesMat <<- rbind(allelesMat, curAllelesMat)
+}
+
 # The simulation returns is a list of reps. Each rep has a series of variables.
 # This function unifies all the reps into one variable.
 bindSimResults <- function(reps){
