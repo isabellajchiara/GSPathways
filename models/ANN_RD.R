@@ -17,7 +17,7 @@ X = LG
 X <- as.matrix(TrainingGeno)
 Y <- as.matrix(TrainingPheno)
 
-train_index <- sample(1:nrow(Y), 0.75 * nrow(Y))
+train_index <- sample(1:nrow(Y), min(1000, 0.75 * nrow(Y)))
 X_train <- X[train_index, ]
 Y_train <- Y[train_index,]
 
