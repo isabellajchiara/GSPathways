@@ -13,22 +13,15 @@ for (cycle in 1:ncycles){
       filename = paste("1C", cycle, "_svm_random_alleles_snp_yield.rds", sep="")
       genotypes <- readRDS(filename) #read in each cycle's SNP data
       
-      repMat <- genotypes[[i]]
-      genMat1 <- repMat[repMat$Gen==gen,]
-      genMat2 <- genMat1[,-1]
-      alleleSum <- as.matrix(colSums(genMat2))
-      alleleFreq <- as.data.frame(alleleSum/nrow(genMat2))
+      repMat <- genotypes[[i]] #pull out one rep
+      genMat1 <- repMat[repMat$Gen==gen,] # pull out one generation
+      genMat2 <- genMat1[,-1] # remove label column
+      alleleSum <- as.matrix(colSums(genMat2)) # sum copy of alleles coded 1
+      alleleFreq <- as.data.frame(alleleSum/nrow(genMat2)) # divide by number of alleles total
       
-      MAJMIN <- alleleSum
-      MAJMIN[MAJMIN < (nrow(genMat2)/2)] <- 0
-      MAJMIN[MAJMIN > (nrow(genMat2)/2)] <- 1
+      Major <- as.matrix(ifelse(x<=0.5, 1-x, x*1)) #if the frequency is less than half, then the other allele is major and that is the Freq we want
       
-      majAllele <- cbind(MAJMIN, alleleFreq)
-      x <- majAllele[,2]
-      
-      MajAlleleFreq <- as.matrix(ifelse(x<=0.5, x+1,x*(1)))
-      
-      freqList[[gen]] <- MajAlleleFreq
+      freqList[[gen]] <- Major
     }
     freqDF <- do.call(cbind, freqList)
     freqDF <- freqDF[,-1]
@@ -37,6 +30,7 @@ for (cycle in 1:ncycles){
   datalistDF = as.data.frame(do.call("rbind",datalist))
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep=""))
 }
+
 
 # datalist is a list of data frames
 # each data frame represents one rep
