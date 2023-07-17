@@ -1,15 +1,18 @@
-# These scripts simulate three breeding cycles. They are used to investigate when to select parents for the next cycle in a GS scenario, and which generation(s) to include in model training. 
+These scripts simulate any number of breeding cycles under a genomic selection framework using the pedigree breeding method.
 
-To run replications of the simultion, use the "RunReplicationsMC.R" Script. This script will collect genetic values, model performance, and variance data.
+You can choose between three prediction models, RRBLUP, RF or SVM. For each model, you may choose which generation to train at, and whether or not you would like a randomly sampled training population or a training population sampled via stratified clustering. 
 
-Start with "CycleOne". This script calls CycleTwo and CycleTwo calls CycleThree.
+Here's how to use this tool:
 
-Try different models by sourcing: random forest(RF), neural net(ANN), support vector machine(SVM) or ridge regression(RRBLUP)
-
-Models can use random(RD) or stratified clusters(SC) training set. 
-
-Parent selections can be made at F2 or F5 by sourcing "ParentSelectionsF2" or "ParentSelectionsF5".
-Relocate the parent selection script to select parents at a different generation
-
-You may replace genetic maps and haplotype data with your own genetic map and SNP data.
+1) Load your SNP data into your WD, or generate genotype data using AlphaSimR. For us the genotype file is called "haplotypesSNPS.RData".
+2) Load your genetic map into your WD. For us, the map file is called "genMapSNPs.RData" and contains the location of each SNP in Morgans.
+(view these files if you need an example for formatting your own data)
+4) Source the file RunSims.R and follow the prompts
+5) Usethe DataVisualization files to read the simulation outputs
+   - Genetic values at each generation
+   - Model performance (Accuracy) at each generation when the model is implemented
+   - Genetic variance at each generation
+   - BV and EBV at each generation when the model is implemented
+   - Genotype (alleles coded 1 or 0) at each generation
+     
 
