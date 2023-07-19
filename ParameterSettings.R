@@ -44,10 +44,9 @@ sim_params <- list(
   
   parentSelections = list("-ps", "--parentSel",
         choices=c("F2","F3","F4","F5","PYT"),
-        type = "character"
-        default = "F2"
-        help = "Generation select parents for the next cycle"
-)
+        type = "character",
+        default = "F2",
+        help = "Generation select parents for the next cycle")
 
 run_params <- list(
     nCores = list("-nC", "--nCores",
@@ -58,8 +57,7 @@ run_params <- list(
     outputDir = list("-od", "--outputDir",
         default=getDirName(),
         type="character",
-        help="Directory to write simulation outputs")
-)
+        help="Directory to write simulation outputs"))
 
 ignored_params <- list(
     noInteraction = list("-ni", "--noInteraction",
