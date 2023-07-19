@@ -14,7 +14,7 @@ if (args$trainingData == "F2_and_F5")
     M = rbind(F2M,F5M)
     y = rbind(F2y,F5y)
 
-trainIndex <- as.matrix(sample(1:nrow(M)), 0.75*(nrow(M)))) 
+trainIndex <- as.matrix(sample(1:nrow(M)), 0.75*(nrow(M)))
 
 phenoTrain <- y[trainIndex,]
 genoTrain <- M[trainIndex,]
