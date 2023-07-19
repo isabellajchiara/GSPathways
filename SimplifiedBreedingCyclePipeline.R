@@ -60,22 +60,22 @@ gen$F2 = self(gen$F1, nProgeny = 30)
 gen$F2 = setPheno(gen$F2)
 
 ## select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
-gen$F3 = TopWithinFam(gen$F2,10,100,"pheno")
+gen$F3 = TopWithinFam(gen$F2,10,100,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
 gen$F3 = setPheno(gen$F3)
 
 ## select top individuals within gen$F3 families to form gen$F4 
 
-gen$F4 = TopWithinFam(gen$F3,5,50,"pheno")
+gen$F4 = TopWithinFam(gen$F3,5,50,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
 gen$F4 = setPheno(gen$F4)
 
 ## select top families from gen$F4 to form gen$F5 
 
-gen$F5 = TopFamily(gen$F4,4,"pheno")
+gen$F5 = TopFamily(gen$F4,4,"pheno") #select top 4 F4 families 
 gen$F5 = setPheno(gen$F5)
 
 ## select top families from gen$F5 for PYTs 
 
-gen$PYT = TopFamily(gen$F5, 3,"pheno")
+gen$PYT = TopFamily(gen$F5, 3,"pheno") #select top 3 F5 families
 gen$PYT = setPheno(gen$PYT, reps=2)
 
 gvMat[1,] <- mean(gv(gen$PYT))
@@ -89,7 +89,7 @@ EBV <- getEBV(gen$PYT) #get EBVs
 gen$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
 
-# NEW CYCLE
+# INITAL TRAINING POP IS BUILT, START NEW CYCLE. WE WILL CALL THIS CYCLE 1 
 for (cycle in 1:args$nCycles){
   if (activeLog)
     cli_text("Running cycle {cycle}/{args$nCycles}...")
