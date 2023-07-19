@@ -46,7 +46,7 @@ sim_params <- list(
         choices=c("F2","F3","F4","F5","PYT"),
         type = "character",
         default = "F2",
-        help = "Generation select parents for the next cycle")
+        help = "Generation select parents for the next cycle"),
 
 run_params <- list(
     nCores = list("-nC", "--nCores",
