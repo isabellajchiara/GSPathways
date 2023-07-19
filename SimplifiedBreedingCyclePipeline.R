@@ -99,6 +99,7 @@ for (cycle in 1:args$nCycles){
   if (cycle == 1) {
     newParents <- selectNewParents(gen$PYT, 5, "ebv")
   } else {
+    
     newParents <- selectNewParents(args$parentSelections, 5, "ebv")
   }
 
