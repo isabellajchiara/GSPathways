@@ -99,7 +99,7 @@ for (cycle in 1:args$nCycles){
   if (cycle == 1) {
     newParents <- selectNewParents(gen$PYT, 5, "ebv")
   } else {
-    newParents <- selectNewParents(gen[[args$trainGen]], 5, "ebv")
+    newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
   }
 
   updateResults(2, newParents, "NP")

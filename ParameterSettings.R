@@ -37,7 +37,7 @@ sim_params <- list(
         help="Generation to train the model each cycle")
   
   parentSelections = list("-ps", "--parentSel",
-        choices=c("F2","F3","F4","F5","PYT","AYT"),
+        choices=c("F2","F3","F4","F5","PYT"),
         type = "character"
         default = "F2"
         help = "Generation select parents for the next cycle"
