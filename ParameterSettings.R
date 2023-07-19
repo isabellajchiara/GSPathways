@@ -42,7 +42,7 @@ sim_params <- list(
         default = "F2",
         help="Which generational data will be used to train the model"),
   
-  parentSelections = list("-ps", "--parentSel",
+  parentSelections = list("-ps", "--parentSelections",
         choices=c("F2","F3","F4","F5","PYT"),
         type = "character",
         default = "F2",
