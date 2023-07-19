@@ -1,7 +1,21 @@
-M <- as.data.frame(TrainingGeno)
-y <- as.data.frame(TrainingPheno)
+if (args$trainingData == "F2")
+    M = as.data.frame(pullSegSiteGeno(F2)
+    y = as.data.frame(pheno(F2)))
 
-trainIndex <- as.matrix(sample(1:nInd(TP), 0.75*(nrow(M)))) 
+if (args$trainingData == "F5")
+    M = as.data.frame(pullSegSiteGenoF5)
+    y = as.data.frame(pheno(F5))
+
+if (args$trainingData == "F2_and_F5")
+    F2M = as.data.frame(pullSegSiteGeno(F2))
+    F2y = as.data.frame(pheno(F2))
+    F5M = as.data.frame(pullSegSiteGeno(F5))
+    F5y = as.data.frame(pheno(F5))
+
+    M = rbind(F2M,F5M)
+    y = rbind(F2y,F5y)
+
+trainIndex <- as.matrix(sample(1:nrow(M)), 0.75*(nrow(M)))) 
 
 phenoTrain <- y[trainIndex,]
 genoTrain <- M[trainIndex,]

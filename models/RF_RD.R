@@ -1,6 +1,21 @@
-pheno <- as.data.frame(TrainingPheno)
-geno <- as.data.frame(TrainingGeno)
-trainingdata <- cbind(pheno, geno)
+if (args$trainingData == "F2")
+    M = as.data.frame(pullSegSiteGeno(F2)
+    y = as.data.frame(pheno(F2)))
+
+if (args$trainingData == "F5")
+    M = as.data.frame(pullSegSiteGenoF5)
+    y = as.data.frame(pheno(F5))
+
+if (args$trainingData == "F2_and_F5")
+    F2M = as.data.frame(pullSegSiteGeno(F2))
+    F2y = as.data.frame(pheno(F2))
+    F5M = as.data.frame(pullSegSiteGeno(F5))
+    F5y = as.data.frame(pheno(F5))
+
+    M = rbind(F2M,F5M)
+    y = rbind(F2y,F5y)
+
+trainingdata <- cbind(y, M)
 colnames(trainingdata) <- paste("ID",1:ncol(trainingdata), sep="") ##1-605 because the SNP chip has 605 SNPs + phenotypes may have to change if you have a different num. SNPS###
 ##note ID1 will be the phenotype, IDs 2-606 are genotypes##
 
