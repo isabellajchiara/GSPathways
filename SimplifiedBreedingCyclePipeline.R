@@ -7,7 +7,7 @@ source("ModelVariables.R")
 loadModelLibs()
 
 # Log only if reps are being run serially
-activeLog <- args$nCores == 1 || hasParallelVersion
+activeLog <- args$nCores == 1 || modelParallelism
 
 if (activeLog)
   cli_text("Generating parent population...")

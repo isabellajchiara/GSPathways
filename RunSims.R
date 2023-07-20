@@ -29,7 +29,7 @@ source("ModelVariables.R")
 ## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
 ## Run repeat loop to run reps ##
-if (args$nCores == 1 || hasParallelVersion) { # Run reps serially
+if (args$nCores == 1 || modelParallelism) { # Run reps serially
   cli_alert_info("Importing simulation libraries...")
 
   res <- lapply(1:args$nReps, function(rep){

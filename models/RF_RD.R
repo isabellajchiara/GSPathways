@@ -17,7 +17,7 @@ control <- trainControl(method='repeatedcv',
                         search = "random")  
 
 trainMethod <- "rf"
-if (args$nCores > 1){
+if (args$nCores > 1 && modelParallelism){
     cli_alert_info("Creating cluster with {args$nCores} cores...")
     cl <- makePSOCKcluster(args$nCores)
     registerDoParallel(cl)
@@ -34,7 +34,7 @@ rf_fit = train(ID1 ~ .,
                trControl=control) ## search a random tuning grid ##
 
 # deactivate cluster
-if (args$nCores > 1)
+if (args$nCores > 1 && modelParallelism)
     stopCluster(cl)
 
 ### This command takes about 90 minutes in an compute canada interactive session ###
