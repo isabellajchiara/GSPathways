@@ -110,12 +110,13 @@ for (cycle in 1:args$nCycles){
   updateResults(3, gen$F1, "F1")
                               
   ## self and bulk gen$F1 to form gen$F2 ##
-
-  gen$F2 = self(gen$F1, nProgeny = 30) 
-  updateResults(4, gen$F2, "F2")
   
   if (args$trainGen == "F2")
     trainModel()
+  
+  gen$F2 = self(gen$F1, nProgeny = 30) 
+  updateResults(4, gen$F2, "F2")
+  
     
   ## set EBV using RRBLUP model
 
@@ -123,13 +124,14 @@ for (cycle in 1:args$nCycles){
   corMat[2,] = as.numeric(cor(bv(gen$F2), ebv(gen$F2)))
 
   ## select top individuals from gen$F2 bulk to form gen$F3 
-
+  if (args$trainGen == "F3")
+    trainModel()
+  
   gen$F3 = TopWithinFam(gen$F2, 10, 100, "ebv")
   gen$F3 = setPheno(gen$F3)
   updateResults(5, gen$F3, "F3")
 
-  if (args$trainGen == "F3")
-    trainModel()
+  
 
   ## set EBV using BLUP model
 
@@ -137,25 +139,27 @@ for (cycle in 1:args$nCycles){
   corMat[3,] = cor(bv(gen$F3),ebv(gen$F3))
 
   ## select top within familiy from gen$F3 to form gen$F4 
+  
+  if (args$trainGen == "F4")
+    trainModel("F4", gen$F4)
+  
   gen$F4 = TopWithinFam(gen$F3, 5, 50, "ebv")
   gen$F4 = setPheno(gen$F4)
   updateResults(6, gen$F4, "F4")
 
-  if (args$trainGen == "F4")
-    trainModel("F4", gen$F4)
 
   ##set EBV using BLUP model##
   gen$F4@ebv = getEBV(gen$F4)
   corMat[4,] = cor(bv(gen$F4),ebv(gen$F4))
 
   ## select top families from gen$F4 to form gen$F5 ##
-
+  if (args$trainGen == "F5")
+    trainModel()
+  
   gen$F5 = TopFamily(gen$F4,4,"ebv")
   gen$F5 = setPheno(gen$F5)
   updateResults(7, gen$F5, "F5")
 
-  if (args$trainGen == "F5")
-    trainModel()
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$F5)
