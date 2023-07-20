@@ -100,7 +100,7 @@ for (cycle in 1:args$nCycles){
     newParents <- selectNewParents(gen$PYT, 5, "ebv")
   } else {
     
-    newParents <- selectNewParents(gen[[args$selectParents]], 5, "ebv")
+    newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
   }
 
   updateResults(2, newParents, "NP")
