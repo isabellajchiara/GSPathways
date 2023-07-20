@@ -77,7 +77,7 @@ if (args$model == "svm_stratifiedclusters"){
     }
 }
 
-if (args$model == "ann"){
+if (args$model == "ann_random"){
     fileTrain <- "ANN_RD.R"
     modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
     modelParallelism <- FALSE
