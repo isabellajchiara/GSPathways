@@ -143,7 +143,7 @@ getVariances <- function(variances){
 }
 
 # use trainGen to retrain the model
-trainModel <- function(gen, genObj){
+trainModel <- function(){
 
   if (args$trainingData == "F2") { 
     M = as.data.frame(pullSegSiteGeno(gen$F2))
