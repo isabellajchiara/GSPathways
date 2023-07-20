@@ -36,7 +36,7 @@ sim_params <- list(
         default="F2",
         help="Generation to train the model each cycle"),
 
-    trainingData = list("-td", "--trainSet",
+    trainingData = list("-td", "--trainingData",
         choices = c("F2","F5","F2_and_F5"),
         type = "character",
         default = "F2",
