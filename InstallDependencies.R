@@ -16,7 +16,7 @@ dependencies <- c(
     "randomForest",
     "ranger",
     "readr",
-    "reticulate"
+    "reticulate",
     "rrBLUP",
     "tensorflow",
     "tictoc",
