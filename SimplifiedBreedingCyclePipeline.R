@@ -82,7 +82,7 @@ gvMat[1,] <- mean(gv(gen$PYT))
 varMat[1,] <- varG(gen$PYT)
 
 ## use PYTs as training data and GS Prediction Model
-trainModel("PYT", gen$PYT)
+trainModel()
 
 # calculate EBVs of PYTs
 EBV <- getEBV(gen$PYT) #get EBVs
@@ -115,7 +115,7 @@ for (cycle in 1:args$nCycles){
   updateResults(4, gen$F2, "F2")
   
   if (args$trainGen == "F2")
-    trainModel("F2", gen$F2)
+    trainModel()
     
   ## set EBV using RRBLUP model
 
@@ -129,7 +129,7 @@ for (cycle in 1:args$nCycles){
   updateResults(5, gen$F3, "F3")
 
   if (args$trainGen == "F3")
-    trainModel("F3", gen$F3)
+    trainModel()
 
   ## set EBV using BLUP model
 
@@ -155,7 +155,7 @@ for (cycle in 1:args$nCycles){
   updateResults(7, gen$F5, "F5")
 
   if (args$trainGen == "F5")
-    trainModel("F5", gen$F5)
+    trainModel()
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$F5)
