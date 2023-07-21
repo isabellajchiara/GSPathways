@@ -4,7 +4,7 @@
 if (args$model == "rf_random"){
     fileTrain <- "RF_RD.R"
     modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
-    hasParallelVersion <- TRUE
+    modelParallelism <- TRUE
 
     getEBV <- function(gen){
         M = as.data.frame(pullSegSiteGeno(gen))
@@ -16,7 +16,7 @@ if (args$model == "rf_random"){
 
 if (args$model == "rf_stratifiedclusters"){
     fileTrain <- "RF_SC.R"
-    modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
+    modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import","factoextra")
     hasParallelVersion <- TRUE
 
     getEBV <- function(gen){
@@ -30,7 +30,7 @@ if (args$model == "rf_stratifiedclusters"){
 if (args$model == "rrblup_random") {
     fileTrain <- "RRBLUP_RD.R"
     modelLibs <- c("rrBLUP","devtools","dplyr","tidyverse","ggplot2","cluster","factoextra")
-    hasParallelVersion <- FALSE
+    modelParallelism <- FALSE
 
     getEBV <- function(gen){
         genMat <- pullSegSiteGeno(gen) 
@@ -54,7 +54,7 @@ if (args$model == "rrblup_stratifiedclusters") {
 if (args$model == "svm_random"){
     fileTrain <- "SVM_RD.R"
     modelLibs <- c("e1071")
-    hasParallelVersion <- FALSE
+    modelParallelism <- FALSE
 
     getEBV <- function(gen){
         M = as.data.frame(pullSegSiteGeno(gen))
@@ -66,7 +66,7 @@ if (args$model == "svm_random"){
 
 if (args$model == "svm_stratifiedclusters"){
     fileTrain <- "SVM_SC.R"
-    modelLibs <- c("e1071")
+    modelLibs <- c("e1071", "factoextra")
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
@@ -74,5 +74,27 @@ if (args$model == "svm_stratifiedclusters"){
         colnames(M) <- paste("ID",2:(ncol(M)+1),sep="")
         EBV <- as.numeric(predict(SVMfit, M))
         as.matrix(EBV)
+    }
+}
+
+if (args$model == "ann_random"){
+    fileTrain <- "ANN_RD.R"
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
+    modelParallelism <- FALSE
+
+    getEBV <- function(gen){
+        geno <- as.matrix(pullSegSiteGeno(gen))
+        model_Final %>% predict(geno)
+    }
+}
+
+if (args$model == "ann_stratifiedclusters"){
+    fileTrain <- "ANN_SC.R"
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools","writexl","factoextra")
+    modelParallelism <- FALSE
+
+    getEBV <- function(gen){
+        geno <- as.matrix(pullSegSiteGeno(gen))
+        model_Final %>% predict(geno)
     }
 }

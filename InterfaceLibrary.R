@@ -120,7 +120,7 @@ confirm_settings <- function(header){
     cli_h3("Runtime settings")
     print_params(run_params, args)
     
-    cli_h3("Confirm settings and start simulation?")
+    cli_text("Confirm settings and start simulation?")
     print_list(c("Yes", "No"))
     inp <- read_input_range(2)
 
