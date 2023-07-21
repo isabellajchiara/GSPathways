@@ -16,7 +16,7 @@ if (args$model == "rf_random"){
 
 if (args$model == "rf_stratifiedclusters"){
     fileTrain <- "RF_SC.R"
-    modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import")
+    modelLibs <- c("caret","ranger","tidyverse","e1071","randomForest","foreach","import","factoextra")
     hasParallelVersion <- TRUE
 
     getEBV <- function(gen){
@@ -66,7 +66,7 @@ if (args$model == "svm_random"){
 
 if (args$model == "svm_stratifiedclusters"){
     fileTrain <- "SVM_SC.R"
-    modelLibs <- c("e1071")
+    modelLibs <- c("e1071", "factoextra")
     hasParallelVersion <- FALSE
 
     getEBV <- function(gen){
@@ -90,7 +90,7 @@ if (args$model == "ann_random"){
 
 if (args$model == "ann_stratifiedclusters"){
     fileTrain <- "ANN_SC.R"
-    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools","writexl")
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools","writexl","factoextra")
     modelParallelism <- FALSE
 
     getEBV <- function(gen){

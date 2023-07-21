@@ -5,6 +5,7 @@ library(rrBLUP)
 library(keras)
 library(tensorflow)
 library(readr)
+library(factoextra)
 
 
 ## create GRM ##
