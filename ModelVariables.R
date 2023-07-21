@@ -90,7 +90,7 @@ if (args$model == "ann_random"){
 
 if (args$model == "ann_stratifiedclusters"){
     fileTrain <- "ANN_SC.R"
-    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools","writexl")
     modelParallelism <- FALSE
 
     getEBV <- function(gen){
