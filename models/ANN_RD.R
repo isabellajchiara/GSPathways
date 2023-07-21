@@ -7,17 +7,17 @@ library(readr)
 ## create GRM ##
 
 ## create GRM ##
-geno <- as.matrix(TrainingGeno)
+geno <- as.matrix(M)
 GM <- tcrossprod(geno)/dim(geno)
 LG <- GM
 
-Y <- as.matrix(TrainingPheno)
+Y <- as.matrix(y)
 X = LG
 
-X <- as.matrix(TrainingGeno)
-Y <- as.matrix(TrainingPheno)
+X <- as.matrix(M)
+Y <- as.matrix(y)
 
-train_index <- sample(1:nrow(Y), min(1000, 0.75 * nrow(Y)))
+train_index <- sample(1:nrow(Y), 0.75 * nrow(Y))
 X_train <- X[train_index, ]
 Y_train <- Y[train_index,]
 

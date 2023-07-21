@@ -9,11 +9,11 @@ library(BMTME)
 
 
 ## create GRM ##
-geno <- as.matrix(TrainingGeno)
+geno <- as.matrix(M)
 GM <- tcrossprod(geno)/dim(geno)
-LG <- cholesky(GM)
+LG <- GM
 
-Y <- as.matrix(TrainingPheno)
+Y <- as.matrix(y)
 X = LG
 
 ## create data frame with geno and pheno data ##
@@ -24,8 +24,8 @@ data <-cbind(phenotypes,genotypes)
 
 ## stratified clustering training testing partition##
 
-y <- as.data.frame(TrainingPheno)
-M <- as.data.frame(TrainingGeno)
+y <- as.data.frame(y)
+M <- as.data.frame(M)
 
 StratClusTRN(y.M) #calls function for stratified clustering algorithm
 
