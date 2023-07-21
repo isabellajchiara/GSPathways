@@ -87,3 +87,14 @@ if (args$model == "ann_random"){
         model_Final %>% predict(geno)
     }
 }
+
+if (args$model == "ann_stratifiedclusters"){
+    fileTrain <- "ANN_SC.R"
+    modelLibs <- c("tidyverse","keras","tensorflow","readr","devtools")
+    modelParallelism <- FALSE
+
+    getEBV <- function(gen){
+        geno <- as.matrix(pullSegSiteGeno(gen))
+        model_Final %>% predict(geno)
+    }
+}
