@@ -89,7 +89,7 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
   
   TRN <- TRN[,1]
   
-  M <- as.data.frame(TrainingGeno)
+  M <- as.data.frame(M)
   rownames(M) <- c(1:nrow(M))
   OptimGeno <<- as.matrix(M[TRN,])
   y <- as.data.frame(y)
