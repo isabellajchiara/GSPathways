@@ -5,7 +5,6 @@ library(rrBLUP)
 library(keras)
 library(tensorflow)
 library(readr)
-library(BMTME)
 
 
 ## create GRM ##
@@ -27,7 +26,7 @@ data <-cbind(phenotypes,genotypes)
 y <- as.data.frame(y)
 M <- as.data.frame(M)
 
-StratClusTRN(y.M) #calls function for stratified clustering algorithm
+StratClusTRN(y,M) #calls function for stratified clustering algorithm
 
 BV <- OptimPheno
 
