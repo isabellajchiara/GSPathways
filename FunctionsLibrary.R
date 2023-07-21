@@ -85,9 +85,9 @@ StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix trai
     
   }
   
-  TRN <- do.call(rbind, datalist)
+  TRN <<- do.call(rbind, datalist)
   
-  TRN <- TRN[,1]
+  TRN <<- TRN[,1]
   
   M <- as.data.frame(M)
   rownames(M) <- c(1:nrow(M))
