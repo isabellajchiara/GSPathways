@@ -23,8 +23,9 @@ for (x in 1:(nrow(values)-1)) {
 }
 
 #find the mean cumulative gain across reps 
-gens = as.data.frame(geneticValues[-1,1])
+gens = as.data.frame(geneticValues[-c(1,10,20),1])
 cumulativeGain = as.data.frame(cumulativeGain)
 meanGain = as.data.frame(rowMeans(cumulativeGain))
+meanGain = meanGain[-c(10,20),]
 resultsGVs = cbind(gens, meanGain) #FINAL DF WITH SUCCESSIVE GENERATION AND MEAN CUMULATIVE GAIN ACROSS ALL REPS 
 
