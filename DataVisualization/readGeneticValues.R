@@ -27,5 +27,5 @@ gens = as.data.frame(geneticValues[-c(1,10,20),1])
 cumulativeGain = as.data.frame(cumulativeGain)
 meanGain = as.data.frame(rowMeans(cumulativeGain))
 meanGain = meanGain[-c(10,20),]
-resultsGVs = cbind(gens, meanGain) #FINAL DF WITH SUCCESSIVE GENERATION AND MEAN CUMULATIVE GAIN ACROSS ALL REPS 
+resultsGVs = cbind(gens, meanGain) # this DF has each genetic value in consecutive order from the beginning of C1 to the end of C3
 

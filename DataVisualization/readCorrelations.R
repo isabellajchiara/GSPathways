@@ -14,4 +14,4 @@ correlationValues = correlationValues[ , colSums(is.na(correlationValues))==0] #
 values = as.data.frame(correlationValues[,-1])
 means = rowMeans(values)
 gens = as.data.frame(correlationValues[,1])
-resultsCORs = cbind(gens,means)
+resultsCORs = cbind(gens,means) # this DF has each correlation value in consecutive order from the beginning of C1 to the end of C3

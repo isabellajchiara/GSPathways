@@ -14,4 +14,4 @@ varianceValues = varianceValues[ , colSums(is.na(varianceValues))==0] #remove co
 values = as.data.frame(varianceValues[,-1])
 means = rowMeans(values)
 gens = as.data.frame(varianceValues[,1])
-resultsVARs = cbind(gens,means)
+resultsVARs = cbind(gens,means) # this DF has each correlation value in consecutive order from the beginning of C1 to the end of C3
