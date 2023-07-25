@@ -66,11 +66,20 @@ for (cycle in 1:nCycle) {
 
 cmValues <- do.call(rbind, datalist)
 
-C1 = cmValues[1:90,]
-C2 = cmValues[91:180,]
-C3 = cmValues[181:270,]
+reps = 15
+r = 1
+cmMeans = list()
+while (reps <= nrow(cmValues)) {
+  set = as.matrix(cmValues[(reps-(reps-1)):reps,])
+  repMean = colMeans(set)
+  cmMeans[[r]] = repMean
+  r = r +1
+  reps = 15 * r
+}
 
-confusionMatrix = cbind(C1,C2,C3)
+CMdata = do.call(rbind, cmMeans)
+rownames(CMdata) = rep(genList,3)
+
 
 
 
