@@ -28,7 +28,7 @@ for (cycle in 1:ncycles){
     }
     freqDF <- do.call(cbind, freqList) #turn list into DF
     datalist[[i]] <- freqList #add the freqList for 1 rep to the dataList
-    cat("finished rep", i,'\n')
+    cat("finished rep", i,"cycle", cycle,'\n')
   }
   datalistDF = as.data.frame(do.call("rbind",datalist)) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
