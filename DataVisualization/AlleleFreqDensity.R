@@ -1,3 +1,6 @@
+# depending on ncycles and nreps, this can be a very slow script
+# consider running in the cluster if your machine doesn't have a ton of memory
+
 ncycles = 3
 nreps=15
 nSNP = 3547
@@ -23,16 +26,14 @@ for (cycle in 1:ncycles){
       
       freqList[[gen]] <- Major #add generation frequency to the freqList
       #cycle through all gens for a given rep
-
-      cat("calculated", gen, "frequencies in rep", i,'\n')
     }
     freqDF <- do.call(cbind, freqList) #turn list into DF
     datalist[[i]] <- freqList #add the freqList for 1 rep to the dataList
-    cat("finished rep", i,"cycle", cycle,'\n')
+    cat("finished rep", i,"of", nreps, "for cycle", cycle,'\n')
   }
   datalistDF = as.data.frame(do.call("rbind",datalist)) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
-  cat("finished cycle", cycle,'\n')
+  cat("finished cycle", cycle, "of",ncycles,'\n')
 }
 
 
