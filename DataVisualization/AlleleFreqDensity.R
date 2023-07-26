@@ -1,5 +1,5 @@
 ncycles = 3
-nreps=3
+nreps=15
 nSNP = 3547
 genList=c("NP","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
@@ -23,12 +23,16 @@ for (cycle in 1:ncycles){
       
       freqList[[gen]] <- Major #add generation frequency to the freqList
       #cycle through all gens for a given rep
+
+      cat("calculated", gen, "frequencies in rep", i,'\n')
     }
     freqDF <- do.call(cbind, freqList) #turn list into DF
     datalist[[i]] <- freqList #add the freqList for 1 rep to the dataList
+    cat("finished rep", i,'\n')
   }
   datalistDF = as.data.frame(do.call("rbind",datalist)) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
+  cat("finished cycle", cycle,'\n')
 }
 
 
