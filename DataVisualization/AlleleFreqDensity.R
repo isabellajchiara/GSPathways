@@ -66,7 +66,7 @@ for (cycle in 1:ncycles) {
 FinalAlleleFreq =list()
 
 for (x in 1:ncycles){
-  data = paste0("meanFreqC",cycle, ".rds")
+  data = paste0("MeanFreqC",cycle, ".rds")
   data = as.data.frame(readRDS(data))# read in the mean freqs for each cycle 
   FinalAlleleFreq[[x]] = data # accumulate them in the FinalAlleleFreq list
 }
@@ -87,7 +87,7 @@ EOC <- as.data.frame(Alldata[,ncol(Alldata)]) # take the last gen in the cycle
 EOC$base <- rep(c("C3"), times = nrow(EOC))
 colnames(EOC) <- c("freq","stage")
                       
-alldata <- rbind(BOC,MOC,EOC) # we will look at just these 3 gens for simplicity
+alldata <- cbind(BOC,MOC,EOC) # we will look at just these 3 gens for simplicity
                       
     
 library(ggplot2)
