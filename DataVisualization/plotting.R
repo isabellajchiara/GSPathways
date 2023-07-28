@@ -1,4 +1,5 @@
 library(ggplot2)
+library(reshape2)
 
 nCycle <- 3
 data_cors <- data.frame()
@@ -14,11 +15,12 @@ for (cycle in 1:nCycle) {
         colnames(data_cors)[cycle + 1] <- paste("1C", cycle, sep = "")
     }
 }
-# data_cors <- read.csv("sim_2023Jul18_101500/1C1_svm_random_cors_snp_yield.csv")
-data_cors$X <- factor(data_cors$X, levels = data_cors$X)
-data_cors
 
-# plot_cors <- ggplot(data_cors, aes(x = X, y = X1, group = 1)) +
-#             geom_line() +
-#             geom_point()
-# ggsave("CorrelationLinePlot.pdf", plot = plot_cors)
+data_cors$X <- factor(data_cors$X, levels = data_cors$X)
+data_cors <- melt(data_cors, id.vars = "X", variable.name = "series")
+# data_cors <- read.csv("sim_2023Jul18_101500/1C1_svm_random_cors_snp_yield.csv")
+
+plot_cors <- ggplot(data_cors, aes(X, value, group = series)) +
+            geom_line(aes(colour = series)) +
+            geom_point(aes(colour = series))
+ggsave("CorrelationLinePlot.pdf", plot = plot_cors)
