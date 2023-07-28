@@ -17,10 +17,10 @@ for (cycle in 1:nCycle) {
 }
 
 data_cors$X <- factor(data_cors$X, levels = data_cors$X)
-data_cors <- melt(data_cors, id.vars = "X", variable.name = "series")
-# data_cors <- read.csv("sim_2023Jul18_101500/1C1_svm_random_cors_snp_yield.csv")
+data_cors <- melt(data_cors, id.vars = "X", variable.name = "trials")
 
-plot_cors <- ggplot(data_cors, aes(X, value, group = series)) +
-            geom_line(aes(colour = series)) +
-            geom_point(aes(colour = series))
+plot_cors <- ggplot(data_cors, aes(X, value, group = trials)) +
+            geom_line(aes(colour = trials)) +
+            geom_point(aes(colour = trials)) +
+            labs(title = "Model Performance", x = "Generation", y = "Performance")
 ggsave("CorrelationLinePlot.pdf", plot = plot_cors)
