@@ -76,11 +76,11 @@ for (cycle in 1:args$nCycles){
   res$correlations[[cycle]] <- getCorrelations(res$correlations[[cycle]])
   res$variances[[cycle]] <- getVariances(res$variances[[cycle]])
 
-  write.csv(Allgeneticvalues[[cycle]], paste("C", cycle, "_", args$model,"_",args$trainGen,"_",args$trainingData,"_",args$parentSelections, "_gvs_snp_yield.csv", sep=""))
-  write.csv(res$correlations[[cycle]], paste("C", cycle, "_",args$model,"_",args$trainGen,"_",args$trainingData,"_",args$parentSelections,"_cors_snp_yield.csv", sep=""))
-  write.csv(res$variances[[cycle]], paste("C", cycle, "_",args$model,"_",args$trainGen,"_",args$trainingData,"_",args$parentSelections,"_vars_snp_yield.csv", sep=""))
-  saveRDS(res$alleles[[cycle]], file=paste("C", cycle, "_",args$model,"_",args$trainGen,"_",args$trainingData,"_",args$parentSelections,"_alleles_snp_yield.rds", sep=""))
-  saveRDS(res$bv_ebv[[cycle]], file=paste("C", cycle, "_",args$model,"_",args$trainGen,"_",args$trainingData,"_",args$parentSelections,"_bvebv_snp_yield.rds", sep=""))
+  write.csv(Allgeneticvalues[[cycle]], paste("C", cycle, "_", args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections, "Parents_gvs_snp_yield.csv", sep=""))
+  write.csv(res$correlations[[cycle]], paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_cors_snp_yield.csv", sep=""))
+  write.csv(res$variances[[cycle]], paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_vars_snp_yield.csv", sep=""))
+  saveRDS(res$alleles[[cycle]], file=paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_alleles_snp_yield.rds", sep=""))
+  saveRDS(res$bv_ebv[[cycle]], file=paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_bvebv_snp_yield.rds", sep=""))
 }
 
 cli_text("Time taken to write results:")
