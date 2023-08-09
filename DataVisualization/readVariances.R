@@ -10,8 +10,22 @@ for (cycle in 1:nCycle) {
 varianceValues <- do.call(rbind, datalist)
 varianceValues = varianceValues[ , colSums(is.na(varianceValues))==0] #remove columns(reps) containing an NA
 
-# take the mean across reps 
-values = as.data.frame(varianceValues[,-1])
-means = rowMeans(values)
-gens = as.data.frame(varianceValues[,1])
-resultsVARs = cbind(gens,means) # this DF has each correlation value in consecutive order from the beginning of C1 to the end of C3
+values = as.matrix(varianceValues[,-1])
+cumulativeVar = matrix(nrow = (nrow(values)-1), ncol = (ncol(values)))
+
+#find the cumulative delta variance across each generation from the start of the sim
+for (x in 1:(nrow(values)-1)) {
+  gen1 = as.numeric((values[x+1,]))
+  gen2 = as.numeric((values[1,]))
+  change = gen1 - gen2
+  cumulativeVar[x,] <- change
+}
+
+#find the mean cumulative delta variance across reps 
+gens = as.data.frame(varianceValuesValues[-c(1,10,20),1])
+cumulativeVar = as.data.frame(cumulativeVar)
+meanVar = as.data.frame(rowMeans(cumulativeVar))
+meanVar = meanVar[-c(10,20),]
+resultsVars = cbind(gens, meanVar) # this DF has each variance value in consecutive order from the beginning of C1 to the end of C3
+
+
