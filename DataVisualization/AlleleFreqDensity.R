@@ -34,6 +34,7 @@ for (cycle in 1:ncycles){
   datalistDF = as.data.frame(do.call("rbind",datalist)) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
   cat("finished cycle", cycle, "of",ncycles,'\n')
+  
 }
 
 
