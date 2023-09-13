@@ -32,13 +32,6 @@ gen <- list()
 
 # establish simulation parameters
 
-genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
-haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
-
-founderPop = newMapPop(genMap, 
-                       haplotypes, 
-                       inbred = FALSE, 
-                       ploidy = 2L)
 
 defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 #yield = (10,8.8,0.25)

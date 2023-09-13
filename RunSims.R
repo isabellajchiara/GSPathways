@@ -23,6 +23,16 @@ nModels = 7
 nGen = 10
 nVar = 9
 
+#load data and establish founder pop at outset so we do not reload data with every rep
+
+genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
+haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
+
+founderPop = newMapPop(genMap, 
+                       haplotypes, 
+                       inbred = FALSE, 
+                       ploidy = 2L)
+
 ## Create model definitions
 source("ModelVariables.R")
 
