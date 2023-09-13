@@ -2,6 +2,8 @@ suppressMessages(library(argparse))
 suppressMessages(library(tictoc))
 suppressMessages(library(reticulate))
 suppressMessages(library(doParallel))
+suppressMessages(library(AlphaSimR))
+
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
@@ -28,7 +30,6 @@ nVar = 9
 genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
 haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
-library(AlphaSimR)
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
