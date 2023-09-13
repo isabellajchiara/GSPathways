@@ -28,6 +28,8 @@ nVar = 9
 genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
 haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
+library(AlphaSimR)
+
 founderPop = newMapPop(genMap, 
                        haplotypes, 
                        inbred = FALSE, 
