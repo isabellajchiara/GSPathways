@@ -3,8 +3,7 @@
 # Create directory name based on date and time
 # Example: sim_2023Jun20_104607
 getDirName <- function(){
-  date <- format(Sys.time(), "%Y%b%d_%X")
-  date <- gsub(':','', date )
+  date <- format(Sys.time(), "%Y%b%d_%H%M%S")
   dirName <- paste("sim", date, sep="_")
 
   # Adds trailing '_' if directory already exists (highly unlikely)
