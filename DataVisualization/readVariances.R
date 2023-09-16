@@ -21,6 +21,7 @@ for (x in 1:(nrow(values)-1)) {
   cumulativeVar[x,] <- change
 }
 
+
 #find the mean cumulative delta variance across reps 
 gens = as.data.frame(varianceValuesValues[-c(1,10,20),1])
 cumulativeVar = as.data.frame(cumulativeVar)
@@ -29,3 +30,14 @@ meanVar = meanVar[-c(10,20),]
 resultsVars = cbind(gens, meanVar) # this DF has each variance value in consecutive order from the beginning of C1 to the end of C3
 
 
+#find standard deviation of cumulative mean across reps (columns)
+stdMat = matrix(nrow=nrow(cumulativeVar), ncol=1)
+for (x in 1:nrow(cumulativeVar)) {
+  row = cumulativeVar[x,]
+  sd = sd(row)
+  stdMat[x,1] = sd
+}
+std = as.data.frame(stdMat)
+
+FINAL = cbind(resultsVars, std)
+write_xlsx(FINAL,"resultsVars.xlsx")
