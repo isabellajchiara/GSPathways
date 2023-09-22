@@ -107,7 +107,7 @@ for (cycle in 1:args$nCycles){
   if (args$trainGen == "F2")
     trainModel()
   
-  gen$F2 = self(gen$F1, nProgeny = 15) 
+  gen$F2 = self(gen$F1, nProgeny = 20) 
   updateResults(4, gen$F2, "F2")
   
     
@@ -120,7 +120,7 @@ for (cycle in 1:args$nCycles){
   if (args$trainGen == "F3")
     trainModel()
   
-  gen$F3 = TopWithinFam(gen$F2, 5, 100, "ebv")
+  gen$F3 = TopWithinFam(gen$F2, 5,200 , "ebv")
   gen$F3 = setPheno(gen$F3)
   updateResults(5, gen$F3, "F3")
 
@@ -136,7 +136,7 @@ for (cycle in 1:args$nCycles){
   if (args$trainGen == "F4")
     trainModel("F4", gen$F4)
   
-  gen$F4 = TopWithinFam(gen$F3, 5, 50, "ebv")
+  gen$F4 = TopWithinFam(gen$F3, 5, 30, "ebv")
   gen$F4 = setPheno(gen$F4)
   updateResults(6, gen$F4, "F4")
 
@@ -160,7 +160,7 @@ for (cycle in 1:args$nCycles){
   corMat[5,] = cor(bv(gen$F5),ebv(gen$F5))
 
   ## select top gen$F5 families for preliminary yield trial ##
-  gen$PYT = TopFamily(gen$F5,2,"ebv")
+  gen$PYT = TopFamily(gen$F4,2,"ebv")
   gen$PYT = setPheno(gen$PYT, reps=2)
   updateResults(8, gen$PYT, "PYT")
 
