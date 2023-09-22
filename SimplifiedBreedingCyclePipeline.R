@@ -99,7 +99,7 @@ for (cycle in 1:args$nCycles){
   updateResults(2, newParents, "NP")
   ## 200 random crosses of new parents
 
-  gen$F1 = randCross(newParents, 200)
+  gen$F1 = randCross(newParents, 200,nProgeny=3)
   updateResults(3, gen$F1, "F1")
                               
   ## self and bulk gen$F1 to form gen$F2 ##
@@ -149,7 +149,7 @@ for (cycle in 1:args$nCycles){
   if (args$trainGen == "F5")
     trainModel()
   
-  gen$F5 = TopFamily(gen$F4,3,"ebv")
+  gen$F5 = TopFamily(gen$F4,4,"ebv")
   gen$F5 = setPheno(gen$F5)
   updateResults(7, gen$F5, "F5")
 
@@ -160,7 +160,7 @@ for (cycle in 1:args$nCycles){
   corMat[5,] = cor(bv(gen$F5),ebv(gen$F5))
 
   ## select top gen$F5 families for preliminary yield trial ##
-  gen$PYT = TopFamily(gen$F4,2,"ebv")
+  gen$PYT = TopFamily(gen$F5,2,"ebv")
   gen$PYT = setPheno(gen$PYT, reps=2)
   updateResults(8, gen$PYT, "PYT")
 
