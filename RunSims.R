@@ -2,8 +2,6 @@ suppressMessages(library(argparse))
 suppressMessages(library(tictoc))
 suppressMessages(library(reticulate))
 suppressMessages(library(doParallel))
-suppressMessages(library(AlphaSimR))
-
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
