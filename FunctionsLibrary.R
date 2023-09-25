@@ -145,9 +145,11 @@ getVariances <- function(variances){
 # use trainGen to retrain the model
 trainModel <- function(){
 
-  if (args$trainingData == "F2") { 
-    M <<- as.data.frame(pullSegSiteGeno(gen$F2))
-    y <<- as.data.frame(pheno(gen$F2))}
+  if (args$trainingData == "F2") {
+    M <- as.data.frame(pullSegSiteGeno(gen$F2))
+    M <<- M[1:120]
+    y <- as.data.frame(pheno(gen$F2))
+    y <<- y[1:120,]
 
   if (args$trainingData == "F5") {
     M <<- as.data.frame(pullSegSiteGeno(gen$F5))
@@ -155,7 +157,9 @@ trainModel <- function(){
 
   if (args$trainingData == "F2_and_F5") {
     F2M = as.data.frame(pullSegSiteGeno(gen$F2))
+    F2M <<- M[1:120]
     F2y = as.data.frame(pheno(gen$F2))
+    F2y <<- y[1:120,]
     F5M = as.data.frame(pullSegSiteGeno(gen$F5))
     F5y = as.data.frame(pheno(gen$F5))
     M <<- rbind(F2M,F5M)
