@@ -30,7 +30,7 @@ valSplit = 0.2
 # add layers
 predictions <- inputs %>% 
   layer_dense(units = ncol(X_train), activation = 'relu') %>% 
-  layer_dropout(rate = 0.2) %>%
+  layer_dropout(rate = 0.5) %>%
   layer_dense(units = 1)
 
 # create and compile model 
