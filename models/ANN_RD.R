@@ -37,7 +37,7 @@ predictions <- inputs %>%
 model <- keras_model(inputs = inputs, outputs = predictions) 
 model %>% compile( 
   optimizer = 'rmsprop', 
-  loss = 'sparse_categorical_crossentropy',
+  loss = 'CategoricalCrossentropy',
   metrics = c('accuracy')
 ) 
 
