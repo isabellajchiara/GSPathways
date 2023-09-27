@@ -2,10 +2,6 @@ library(tidyverse)
 library(keras)
 library(readr)
 
-#BUILD ANN using PYT TP ##
-
-## create GRM ##
-
 ## create GRM ##
 geno <- as.matrix(M)
 GM <- tcrossprod(geno)/dim(geno)
@@ -25,47 +21,35 @@ X_test <- X[-train_index, ]
 Y_test <- Y[-train_index, ]
 
 
-## Build model using pipe operator ##
-N_Units = ncol(X_train)
-No_Epoch = 100
+## define input and number of epochs ##
+inputs = layer_input(shape=(ncol(X_train))) 
+nEpoch = 100
+batchSize = 100
+valSplit = 0.2
 
+# add layers
+predictions <- inputs %>% 
+  layer_dense(units = ncol(X_train), activation = 'relu') %>% 
+  layer_dropout(rate = 0.2) %>%
+  layer_dense(units = 1)
 
-build_model <- function() {
-  model <- keras_model_sequential()
-  model %>%
-    layer_dense(units =N_Units, activation = "relu", input_shape = c(dim
-                                                                     (X_train)[2])) %>%
-    layer_dropout(rate = 0.5) %>%
-    layer_dense(units = 1, activation = "linear")
-  model %>% compile(
-    loss = "mse",
-    optimizer = "rmsprop",
-    metrics = c("mse"))
-  model}
+# create and compile model 
+model <- keras_model(inputs = inputs, outputs = predictions) 
+model %>% compile( 
+  optimizer = 'rmsprop', 
+  loss = 'binary_crossentropy',
+  metrics = c('accuracy')
+) 
 
-## build and view model ##
-
-model <- build_model()
-model %>% summary()
-
-## inner training and validation ##
-
-model_fit <- model %>% fit(
-  X_train, Y_train,
-  shuffle=F,
-  epochs = No_Epoch, batch_size = 10,
-  validation_split = 0.2,
-  verbose = 0)
-
-## Refit model using early stopping ##
-
-early_stop <- callback_early_stopping(monitor="val_loss", mode='min', patience =50)
-
-model_Final <- build_model()
-model_fit_Final <- model_Final%>%fit(
-  X, Y,
-  shuffle=F,
-  epochs = No_Epoch, batch_size=10,
-  validation_split = 0.2,
-  verbose=0, callbacks = list(early_stop)
+fit(
+  model,
+  x = X_train,
+  y = Y_train,
+  batch_size = batchSize,
+  epochs = nEpoch,
+  verbose = 0,
+  validation_split = valSplit 
 )
+
+
+

@@ -84,9 +84,7 @@ if (args$model == "ann_random"){
 
     getEBV <- function(gen){
         geno <- as.matrix(pullSegSiteGeno(gen))
-        model_Final %>% predict(geno)
-
-        as.matrix(EBV)
+        predict(model,geno)
     }
 }
 
@@ -97,6 +95,6 @@ if (args$model == "ann_stratifiedclusters"){
 
     getEBV <- function(gen){
         geno <- as.matrix(pullSegSiteGeno(gen))
-        model_Final %>% predict(geno)
+        predict(model,geno)
     }
 }

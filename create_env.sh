@@ -1,16 +1,21 @@
 
-module load python gcc r/4.2.2
-virtualenv --no-download venv
-source venv/bin/activate
+#module load python gcc r/4.2.2
+#virtualenv --no-download venv
+#source venv/bin/activate
 
-pip install --no-index --upgrade pip
-pip install keras
-pip install tensorflow
+#pip install --no-index --upgrade pip
+#pip install keras
+#pip install tensorflow
 
-deactivate
+#deactivate
 
 ### subsequent sessions
 module load python gcc r/4.2.2
 source ANN/bin/activate
+cd projects
+cd def-haricots
+cd ich
+cd MultipleCycles-main
+R
 
 
