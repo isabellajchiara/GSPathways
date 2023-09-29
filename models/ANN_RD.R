@@ -39,6 +39,10 @@ predictions <- inputs %>%
 # create and compile model 
 
 model <- keras_model(inputs = inputs, outputs = predictions) 
+
+earlyStopping <- callback_early_stopping(monitor = "val_loss", min_delta = 0.1, patience = 10,
+   mode = "auto")
+
 model %>% compile( 
   optimizer = 'Adam', 
   loss = 'mean_squared_error',
@@ -52,7 +56,8 @@ fit(
   batch_size = batchSize,
   epochs = nEpoch,
   verbose = 0,
-  validation_split = valSplit 
+  validation_split = valSplit,
+  callbacks = list(earlyStopping)
 )
 
 
