@@ -20,25 +20,29 @@ Y_train <- Y[train_index,]
 X_test <- X[-train_index, ]
 Y_test <- Y[-train_index, ]
 
-## define input and number of epochs ##
-inputs = layer_input(shape=(ncol(X_train))) 
+## define hyperparameters##
+
 nEpoch = 100
 batchSize = 100
 valSplit = 0.2
 
 
 # add layers
+
+inputs = layer_input(shape=(ncol(X_train))) 
+
 predictions <- inputs %>% 
   layer_dense(units = ncol(X_train), activation = 'relu') %>% 
   layer_dropout(rate = 0.5) %>%
   layer_dense(units = 1)
 
 # create and compile model 
+
 model <- keras_model(inputs = inputs, outputs = predictions) 
 model %>% compile( 
-  optimizer = 'rmsprop', 
-  loss = 'CategoricalCrossentropy',
-  metrics = c('accuracy')
+  optimizer = 'Adam', 
+  loss = 'mean_squared_error',
+  metrics = c('mean_squared_error')
 ) 
 
 fit(
