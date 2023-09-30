@@ -40,7 +40,7 @@ predictions <- inputs %>%
 
 model <- keras_model(inputs = inputs, outputs = predictions) 
 
-earlyStopping <- callback_early_stopping(monitor = "val_accuracy", min_delta = 0.1, patience = 10,
+earlyStopping <- callback_early_stopping(monitor = "mean_squared_error", min_delta = 0.1, patience = 10,
    mode = "auto")
 
 model %>% compile( 
