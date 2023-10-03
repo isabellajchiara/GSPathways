@@ -22,17 +22,26 @@ repMode = matrix(nrow=120,ncol=nSNP)
 nrow = 120
 ncol = nSNP
 
-  for (x in 1:nrow){ # for every inividual
-    for (y in 1:ncol){ # for every locus
-      for (z in 1:nreps){ #for every rep
-        rep = allelelist[[z]] #pull one rep
-        cellVals = matrix(nrow=1, ncol=nreps) # create empty matrix
-        cellVals[[x,y]] = rep[[x,y]] #fill matrix with values for an individual at each locus
-        mode = which.max(cellVals) #pull out the mode for that locus across reps 
-        repMode[x,y] = mode } #assign genotype to final matrix
-    } # finish one row, every locus and then move on to the next row 
+ x = 1
+  while (x < nrow){
+    while (y < ncol){
+      while (z < nreps){
+        y = 1
+        z = 1
+        rep = allelelist[[z]] 
+        cellVals = matrix(nrow=1, ncol=nreps)
+        geno = as.numeric(rep[x,y])
+        cellVals[,y] == geno
+        mode = as.numeric(max(cellVals))
+        repMode[x,y] = mode 
+        y = y + 1
+      }
+      z= z+1
+    }
+    x = X+1
   }
 
+        
         
         
         
