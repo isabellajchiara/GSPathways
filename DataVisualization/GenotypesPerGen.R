@@ -1,10 +1,9 @@
-# depending on ncycles and nreps, this can be a very slow script
-# consider running in the cluster if your machine doesn't have a ton of memory
+# to pull out mode genotypes across reps for visualiztion of genotypes 
 
-cycle = 1
-nreps=15
-nSNP = 3547
-gen = "PYT"
+cycle = 1 # one cycle at a time for computational purposes
+nreps=15 # how manyr eps 
+nSNP = 3547 #how many sites
+gen = "PYT" #which gen are you viewing
 
 allelelist <- list()
 datalist <- list()
@@ -23,16 +22,17 @@ repMode = matrix(nrow=120,ncol=nSNP)
 nrow = 120
 ncol = nSNP
 
-  for (x in 1:nrow){
-    for (y in 1:ncol){
-      for (z in 1:nreps){
-        rep = allelelist[[z]] 
-        cellVals = matrix(nrow=1, ncol=nreps)
-        cellVals[[y]] = rep[x,y]
-        mode = which.max(cellVals)
-        repMode[x,y] = mode }
-    }
+  for (x in 1:nrow){ # for every inividual
+    for (y in 1:ncol){ # for every locus
+      for (z in 1:nreps){ #for every rep
+        rep = allelelist[[z]] #pull one rep
+        cellVals = matrix(nrow=1, ncol=nreps) # create empty matrix
+        cellVals[[x,y]] = rep[[x,y]] #fill matrix with values for an individual at each locus
+        mode = which.max(cellVals) #pull out the mode for that locus across reps 
+        repMode[x,y] = mode } #assign genotype to final matrix
+    } # finish one row, every locus and then move on to the next row 
   }
 
+        
         
         
