@@ -1,9 +1,10 @@
-# to pull out mode genotypes across reps for visualiztion of genotypes 
+# depending on ncycles and nreps, this can be a very slow script
+# consider running in the cluster if your machine doesn't have a ton of memory
 
-cycle = 1 # one cycle at a time for computational purposes
-nreps=15 # how manyr eps 
-nSNP = 3547 #how many sites
-gen = "PYT" #which gen are you viewing
+cycle = 1
+nreps=15
+nSNP = 3547
+gen = "PYT"
 
 allelelist <- list()
 datalist <- list()
@@ -22,7 +23,7 @@ repMode = matrix(nrow=120,ncol=nSNP)
 nrow = 120
 ncol = nSNP
 
- x = 1
+x = 1
   while (x < nrow){
     while (y < ncol){
       while (z < nreps){
@@ -38,7 +39,7 @@ ncol = nSNP
       }
       z= z+1
     }
-    x = X+1
+    x = x+1
   }
 
         
