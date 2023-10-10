@@ -146,10 +146,8 @@ getVariances <- function(variances){
 trainModel <- function(){
 
   if (args$trainingData == "F2") { 
-    M <- as.data.frame(pullSegSiteGeno(gen$F2))
-    M <<- M[1:240,]
-    y <- as.data.frame(pheno(gen$F2))
-    y <<- y[1:240,]}
+    M <<- as.data.frame(pullSegSiteGeno(gen$F2))
+    y <<- as.data.frame(pheno(gen$F2))}
 
   if (args$trainingData == "F5") {
     M <<- as.data.frame(pullSegSiteGeno(gen$F5))
@@ -157,13 +155,11 @@ trainModel <- function(){
 
   if (args$trainingData == "F2_and_F5") {
     F2M = as.data.frame(pullSegSiteGeno(gen$F2))
-    F2M = F2M[1:240,]
     F2y = as.data.frame(pheno(gen$F2))
-    F2y = F2y[1:240,]
     F5M = as.data.frame(pullSegSiteGeno(gen$F5))
     F5y = as.data.frame(pheno(gen$F5))
     M <<- rbind(F2M,F5M)
-    y <<- rbind(F2y,F5y)
+    y <<- rbind(F2y,F5y)}
 
   source(file.path(MODEL_DIR, fileTrain))
 }
@@ -209,4 +205,3 @@ appendMat <- function(lis, mat){
     lis[[ length(lis)+1 ]] <- mat
     lis
 }
-)
