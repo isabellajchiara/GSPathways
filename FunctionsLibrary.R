@@ -161,9 +161,9 @@ trainModel <- function(){
     F5M = as.data.frame(pullSegSiteGeno(gen$F5))
     F5y = as.data.frame(pheno(gen$F5))
     M <- rbind(F2M,F5M)
-    M <<- M[-c(1:000),]
+    M <<- M[-c(1:1000),]
     y <- rbind(F2y,F5y)
-    y <<- y[-c(1:000),]}
+    y <<- y[-c(1:1000),]}
 
   source(file.path(MODEL_DIR, fileTrain))
 }
