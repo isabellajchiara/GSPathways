@@ -209,3 +209,4 @@ appendMat <- function(lis, mat){
     lis[[ length(lis)+1 ]] <- mat
     lis
 }
+)
