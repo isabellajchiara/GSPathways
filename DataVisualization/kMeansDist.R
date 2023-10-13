@@ -57,4 +57,4 @@ fviz_cluster(k2, data = newgeno,geom="point",ggtheme=theme_minimal(), ellipse = 
 
 #visualize distances on genotype matrix
 distance <- get_dist(newgeno)
-fviz_dist(distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
+fviz_dist(distance, show_labels = FALSE, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
