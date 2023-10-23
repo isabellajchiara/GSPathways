@@ -180,6 +180,7 @@ trainModel <- function(){
 
   source(file.path(MODEL_DIR, fileTrain))
 }
+}
 
 updateResults <- function(ind, genObj, genName){
   varMat[ind,] <<- varG(genObj) 
