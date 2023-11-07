@@ -1,5 +1,10 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
 suppressMessages(library(AlphaSimR))
+suppressMessages(library(argparse))
+suppressMessages(library(tictoc))
+suppressMessages(library(reticulate))
+suppressMessages(library(doParallel))
+suppressMessages(library(AlphaSimR))
 source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
@@ -12,6 +17,15 @@ activeLog <- args$nCores == 1 || modelParallelism
 if (activeLog)
   cli_text("Generating parent population...")
 
+## For the ANN model
+Sys.setenv(OMP_NUM_THREADS = 1, OPENBLAS_NUM_THREADS = 1) 
+
+DATA_DIR <- "data"
+MODEL_DIR <- "models"
+
+if (args$noInteraction == FALSE)
+  interactive_menu()
+
 # Data to be returned
 ret <- list( 
   geneticvalues = list(),
@@ -20,6 +34,26 @@ ret <- list(
   alleles = list(),
   bv_ebv = list()
 )
+DATA_DIR <- "data"
+MODEL_DIR <- "models"
+
+nModels = 7
+nGen = 10
+nVar = 9
+
+#load data and establish founder pop at outset so we do not reload data with every rep
+
+genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
+haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
+
+
+founderPop = newMapPop(genMap, 
+                       haplotypes, 
+                       inbred = FALSE, 
+                       ploidy = 2L)
+
+## Create model definitions
+source("ModelVariables.R")
 
 #Create Results Matrices
 
@@ -32,10 +66,6 @@ gen <- list()
 
 # establish simulation parameters
 
-founderPop = newMapPop(genMap, 
-                       haplotypes, 
-                       inbred = FALSE, 
-                       ploidy = 2L)
 
 defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 #yield = (10,8.8,0.25)
