@@ -49,26 +49,21 @@ TopFamily <- function(gen,nFam,criterion){
 StratClusTRN <- function(y,M) { #y= matrix of training phenotypes M= matrix training genotypes
   
   newgeno <- M %>%  select(where(~ n_distinct(.) > 1))
-  
   colnames(newgeno) =NULL
   
   PCAgeno <- prcomp(newgeno, center=TRUE, scale=TRUE) ##take out categorical columns##
-  
   PCAselected = as.data.frame(-PCAgeno$x[,1:3])
   
   silhouette <- fviz_nbclust(PCAselected, kmeans, method = 'silhouette')
   kvalues <- silhouette$data ##largest value tells how many clusters are optimal ##
   kvalues <- kvalues[order(-kvalues$y),]
-  
   k=as.numeric(kvalues[1,1])
   
   kmeans_geno = kmeans(PCAselected, centers = k, nstart = 50)
+  
   clusters <- fviz_cluster(kmeans_geno, data = PCAselected)
-  
   clusterData <- clusters$data
-  
   clusterData <- clusterData[order(clusterData$cluster),]
-  
   nclusters <- as.numeric(clusterData[as.numeric(nrow(clusterData)),as.numeric(ncol(clusterData))])
   
   datalist = vector("list", length = nclusters)
