@@ -32,6 +32,10 @@ gen <- list()
 
 # establish simulation parameters
 
+founderPop = newMapPop(genMap, 
+                       haplotypes, 
+                       inbred = FALSE, 
+                       ploidy = 2L)
 
 defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
 #yield = (10,8.8,0.25)

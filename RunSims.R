@@ -30,11 +30,6 @@ genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genM
 haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
 
-founderPop = newMapPop(genMap, 
-                       haplotypes, 
-                       inbred = FALSE, 
-                       ploidy = 2L)
-
 ## Create model definitions
 source("ModelVariables.R")
 
