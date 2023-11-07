@@ -12,7 +12,6 @@ Sys.setenv(OMP_NUM_THREADS = 1, OPENBLAS_NUM_THREADS = 1)
 
 DATA_DIR <- "data"
 MODEL_DIR <- "models"
-
 args <- parseArgs()
 
 if (args$noInteraction == FALSE)
@@ -30,10 +29,13 @@ genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genM
 haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
 
+founderPop = newMapPop(genMap, 
+                       haplotypes, 
+                       inbred = FALSE, 
+                       ploidy = 2L)
+
 ## Create model definitions
 source("ModelVariables.R")
-
-## establish empty matrices to hold outputs for Selfing and Recombination Population ##
 
 ## Run repeat loop to run reps ##
 if (args$nCores == 1 || modelParallelism) { # Run reps serially
