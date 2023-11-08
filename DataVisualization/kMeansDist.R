@@ -1,26 +1,26 @@
-library(devtools)
+
+# in Terminal - salloc session
+
 library(dplyr)
-library(tidyverse)
-library(ggplot2)
 library(cluster)
 library(factoextra)
-library(ggpubr)
 
-cycle = 2
-genList = c("F2","F5")
+cycle = 3
+genList = c("F2")
 genoList = list()
 
 for (gen in genList){
-filename = paste("C", cycle, "_rrblup_random_trainAtF5_trainWithF2_F2Parents_alleles_snp_yield.rds", sep="")
-genotypes <- readRDS(filename) #read in each cycle's SNP data
-repMat = genotypes[[1]]
-geno = repMat[repMat$Gen==gen,]
-M = geno[,-1]
-
+  filename = paste("C",cycle,"_ann_random_trainAtF5_trainWithF2_F2Parents_alleles_snp_yield.rds", sep="")
+  genotypes <- readRDS(filename) #read in each cycle's SNP data
+  repMat = genotypes[[1]]
+  geno = repMat[repMat$Gen==gen,]
+  M = geno[,-1]
+  
   if (gen == "F2"){
-      M = M[1:240,]}
-
-assign(paste0("M",gen),M)}
+    M = M[1:500,]}
+  
+  assign(paste0("M",gen),M)
+  }
 
 if (length(genList) > 1){
   M  = rbind(MF2,MF5)
@@ -29,10 +29,30 @@ if (length(genList) > 1){
 #prepare DF
 newgeno <- M %>%  select(where(~ n_distinct(.) > 1))
 newgeno = scale(newgeno)
-colnames(newgeno) =NULL
-rownames(newgeno) = c(paste0("geno",1:nrow(newgeno)))
+colnames(newgeno) = NULL
+rownames(newgeno) = NULL
+saveRDS(newgeno,paste("newgenoC",cycle,"mat.RDS"))
+          
+#visualize distances on genotype matrix
+distance <- get_dist(newgeno)
+saveRDS(distance,paste("distanceC",cycle,"mat.RDS"))
+
+
+#
+#
+#
+#
+# in RStudio Console 
+
+library(dplyr)
+library(cluster)
+library(factoextra)
+
+distance = readRDS("distanceC3mat.RDS")
+fviz_dist(distance,show_labels = FALSE ,gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
 
 # optimize K
+newgeno = readRDS("newgenoC3mat.RDS")
 PCAgeno <- prcomp(newgeno, center=TRUE, scale=TRUE) ##take out categorical columns##
 PCAselected = as.data.frame(-PCAgeno$x[,1:3])
 silhouette <- fviz_nbclust(PCAselected, kmeans, method = 'silhouette')
@@ -41,7 +61,7 @@ kvalues <- kvalues[order(-kvalues$y),]
 k=as.numeric(kvalues[1,1])
 
 if (length(genList) > 1){
-main = paste(genList[[1]],genList[[2]])
+  main = paste(genList[[1]],genList[[2]])
 }else{
   main=genList}
 
@@ -55,6 +75,3 @@ fviz_cluster(k2, data = newgeno,geom="point",ggtheme=theme_minimal(), ellipse = 
 
 
 
-#visualize distances on genotype matrix
-distance <- get_dist(newgeno)
-fviz_dist(distance, show_labels = FALSE, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
