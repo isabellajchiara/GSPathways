@@ -56,19 +56,21 @@ Modes <- function(x) {
 
 finalModes = list()
 for (DF in 1:length(indListDF)){
-  ind = as.data.frame(indListDF[[DF]])
-  for (col in 1:nLoci){
-    locus = as.data.frame((ind[,col])) # take one locus
+  indMode = matrix(nrow=1,ncol=nLoci)
+  for (loc in 1:nLoci){
+    ind = as.data.frame(indListDF[[DF]]) #take one individual, all reps(rows), all loci(columns)
+    locus = as.data.frame((ind[,loc])) # take one locus
     mode = Modes(locus) # find mode state
     if (nrow(mode) > 1){
       mode = mode[1,1]
     }
-    indMode = matrix(nrow=1,ncol=nLoci) #create output for all modes 
-    indMode[1,col] = mode #add mode to new output and repeat for all loci
+    mode = as.matrix(mode)
+    indMode[1,loc] = mode #add mode to new output and repeat for all loci
   }
   finalModes[[DF]] = indMode #collect modes for each ind 
 }
-PYTalleles = do.call(rbind,finalModes)
+
+M = do.call(rbind,finalModes)
       
 #prepare DF
 newgeno <- M %>%  select(where(~ n_distinct(.) > 1))
