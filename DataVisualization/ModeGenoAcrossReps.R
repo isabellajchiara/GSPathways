@@ -8,7 +8,14 @@ genList = c("PYT")
 repList = list()
 reps = 15
 
-filename = paste("C3_ann_random_trainAtF2_trainWithF2_and_F5_F2Parents_alleles_snp_yield.rds")
+#third file pasted
+
+model = "ann"
+trainGen = "F5"
+traindata = "F5"
+parentGen = "F2"
+
+filename = paste("C3_",model,"_trainAt",trainGen,"_trainWith",traindata,"_",parentGen,"Parents_alleles_snp_yield.rds",sep="")
 genotypes <- readRDS(filename) #read in each cycle's SNP data
 
 reps = 15
@@ -35,11 +42,13 @@ for (rep in 1:length(repList)){
   for (x in 1:nInd){
     repMat = repList[[rep]] #pull on rep
     ind = as.matrix(repMat[x,]) #take x ind
-    matrix = indList[[x]] #pull out the x ind matrix
+    matrix = as.matrix(indList[[x]])#pull out the x ind matrix
     matrix[[rep]] = ind #assign rep values to the matrix
     indList[[x]] = matrix #replace matrix in IndList with new values
+  }
 }
-}
+
+
 
 indListDF = list()
 for (list in 1:length(indList)){
@@ -69,8 +78,11 @@ for (DF in 1:length(indListDF)){
   }
   finalModes[[DF]] = indMode #collect modes for each ind 
 }
+M = as.data.frame(do.call(rbind,finalModes))
 
-M = do.call(rbind,finalModes)
+outputName =paste("PYT_",model,"_trainAt",trainGen,"_trainWith",traindata,"_",parentGen,"Parents_alleles_snp_yield.csv",sep="")
+
+write.csv(M,outuputName)
       
 #prepare DF
 newgeno <- M %>%  select(where(~ n_distinct(.) > 1))
