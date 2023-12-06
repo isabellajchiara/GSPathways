@@ -141,37 +141,46 @@ getVariances <- function(variances){
 trainModel <- function(){
 
   if (args$trainingData == "F2") { 
-    M <<- as.data.frame(pullSegSiteGeno(gen$F2))
-    y <<- as.data.frame(pheno(gen$F2))}
+    M <- trainingGenotypes[[2]]
+    y <- trainingPhenotypes[[2]]
+    nIndF5 =nInd(gen$F5)
+    nIndF2 = nInd(gen$F2)
+    remove = nIndF2-nIndF5
+    M <<- M[-c(1:remove),]
+    y <<- y[-c(1:remove),]
+    }
 
   if (args$trainingData == "F5") {
-    M <<- as.data.frame(pullSegSiteGeno(gen$F5))
-    y <<- as.data.frame(pheno(gen$F5)) }
+    M <<- trainingGenotypes[[5]]
+    y <<- trainingPhenotypes[[5]] }
   
   if (args$trainingData == "ALL") {
-    F2 <- as.data.frame(pullSegSiteGeno(gen$F2))
-    y2 <<- as.data.frame(pheno(gen$F2)) 
-    F3 <- as.data.frame(pullSegSiteGeno(gen$F3))
-    y3 <<- as.data.frame(pheno(gen$F3)) 
-    F4 <- as.data.frame(pullSegSiteGeno(gen$F4))
-    y4 <<- as.data.frame(pheno(gen$F4)) 
-    F5 <- as.data.frame(pullSegSiteGeno(gen$F5))
-    y5 <<- as.data.frame(pheno(gen$F5)) 
-    F6 <- as.data.frame(pullSegSiteGeno(gen$PYT))
-    y6 <<- as.data.frame(pheno(gen$PYT))
-    F7 <- as.data.frame(pullSegSiteGeno(gen$AYT))
-    y7 <<- as.data.frame(pheno(gen$AYT)) 
-    M <<- rbind(F2,F3,F4,F5,F6,F7)
-    y <<- rbind(y2,y3,y4,y5,y6,y7)
+    F2 <- trainingGenotypes[[2]]
+    y2 <- trainingPhenotypes[[2]]
+    F3 <- trainingGenotypes[[3]]
+    y3 <- trainingPhenotypes[[3]] 
+    F4 <- trainingGenotypes[[4]]
+    y4 <- trainingPhenotypes[[4]] 
+    F5 <- trainingGenotypes[[5]]
+    y5 <- trainingPhenotypes[[5]]
+    PYT <- trainingGenotypes[[6]]
+    y6 <- trainingPhenotypes[[6]]  
+    M <<- rbind(F2,F3,F4,F5,PYT)
+    y <<- rbind(y2,y3,y4,y5,y6)
   }
 
   if (args$trainingData == "F2_and_F5") {
-    F2M = as.data.frame(pullSegSiteGeno(gen$F2))
-    F2y = as.data.frame(pheno(gen$F2))
-    F5M = as.data.frame(pullSegSiteGeno(gen$F5))
-    F5y = as.data.frame(pheno(gen$F5))
-    M <<- M[-c(1:11000),]
-    y <<- y[-c(1:11000),]}
+    F2M = trainingGenotypes[[2]]
+    F2y = trainingPhenotypes[[2]] 
+    F5M = trainingGenotypes[[5]]
+    F5y = trainingPhenotypes[[5]] 
+    M = rbind(F2M,F5M)
+    y = rbind(F2y, F5y)
+    nIndF5 =nInd(gen$F5)
+    nIndF2 = nInd(gen$F2)
+    remove = nIndF2-nIndF5
+    M <<- M[-c(1:remove),]
+    y <<- y[-c(1:remove),]}
 
   source(file.path(MODEL_DIR, fileTrain))
 }

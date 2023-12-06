@@ -1,9 +1,7 @@
 
 
-trainIndex <- as.matrix(sample(1:nrow(M)), 0.75*(nrow(M)))
-
-phenoTrain <- y[trainIndex,]
-genoTrain <- M[trainIndex,]
+phenoTrain <- y
+genoTrain <- M
 
 GM=tcrossprod(genoTrain)/dim(genoTrain)
 

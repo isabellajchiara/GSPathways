@@ -11,22 +11,10 @@ source("FunctionsLibrary.R")
 source("ModelVariables.R")
 loadModelLibs()
 
-# Log only if reps are being run serially
-activeLog <- args$nCores == 1 || modelParallelism
-
 if (activeLog)
   cli_text("Generating parent population...")
 
-## For the ANN model
-Sys.setenv(OMP_NUM_THREADS = 1, OPENBLAS_NUM_THREADS = 1) 
-
-DATA_DIR <- "data"
-MODEL_DIR <- "models"
-
-if (args$noInteraction == FALSE)
-  interactive_menu()
-
-# Data to be returned
+# data to be returned
 ret <- list( 
   geneticvalues = list(),
   correlations = list(),
@@ -34,87 +22,88 @@ ret <- list(
   alleles = list(),
   bv_ebv = list()
 )
-DATA_DIR <- "data"
-MODEL_DIR <- "models"
 
-nModels = 7
-nGen = 10
-nVar = 9
+# create results matrices
 
-#load data and establish founder pop at outset so we do not reload data with every rep
-
-genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
-haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
-
-
-founderPop = newMapPop(genMap, 
-                       haplotypes, 
-                       inbred = FALSE, 
-                       ploidy = 2L)
-
-## Create model definitions
-source("ModelVariables.R")
-
-#Create Results Matrices
-
-gvMat <- matrix(nrow=10, ncol=1)
-corMat <- matrix(nrow=7, ncol=1)
-varMat <- matrix(nrow=9, ncol=1)
+gvMat <- matrix(nrow=nGen, ncol=1)
+corMat <- matrix(nrow=nModels, ncol=1)
+varMat <- matrix(nrow=nVar, ncol=1)
 allelesMat <- NULL
 
 gen <- list()
 
 # establish simulation parameters
 
+set.seed(1206)
 
-defineTraitAEG(10,8.8,0.25) # nQtl per chr, mean,heritability
-#yield = (10,8.8,0.25)
-#flowering = (5,35,0.8) and use defineTraitA
+defineTraitAEG(40,3.6,0.25) # nQtl per chr, mean,heritability
 
-### FIRST CYCLE TO BUILD INITIAL TRAINING POP
+## FIRST CYCLE TO BUILD INITIAL TRAINING POP
 
-## create base pop randomly cross 200 parents 
+# create base pop randomly cross 200 parents 
 
 Base = newPop(founderPop)
 Base = setPheno(Base)
 
-newParents <- selectNewParents(Base,10,"pheno")
+newParents <- selectNewParents(Base,5,"pheno")
 gen$F1 = randCross(newParents, 200, nProgeny=3)
 
-## self and bulk gen$F1 to form gen$F2 ##
+# self and bulk gen$F1 to form gen$F2 
 
-gen$F2 = self(gen$F1, nProgeny = 30)
+gen$F2 = self(gen$F1, nProgeny = 20)
 gen$F2 = setPheno(gen$F2)
 
-## select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
-gen$F3 = TopWithinFam(gen$F2,10,100,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
+# select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
+gen$F3 = TopWithinFam(gen$F2,5,200,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
 gen$F3 = setPheno(gen$F3)
 
-## select top individuals within gen$F3 families to form gen$F4 
+# select top individuals within gen$F3 families to form gen$F4 
 
-gen$F4 = TopWithinFam(gen$F3,5,50,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
+gen$F4 = TopWithinFam(gen$F3,5,30,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
 gen$F4 = setPheno(gen$F4)
 
-## select top families from gen$F4 to form gen$F5 
+# select top families from gen$F4 to form gen$F5 
 
 gen$F5 = TopFamily(gen$F4,4,"pheno") #select top 4 F4 families 
 gen$F5 = setPheno(gen$F5)
 
-## select top families from gen$F5 for PYTs 
+# select top families from gen$F5 for PYTs 
 
-gen$PYT = TopFamily(gen$F5, 3,"pheno") #select top 3 F5 families
+gen$PYT = TopFamily(gen$F5, 2,"pheno") #select top 3 F5 families
 gen$PYT = setPheno(gen$PYT, reps=2)
 
 gvMat[1,] <- mean(gv(gen$PYT))
 varMat[1,] <- varG(gen$PYT)
 
-## use PYTs as training data and GS Prediction Model
-trainModel()
+# use PYTs as training data for initial parent selections
+
+genoTrain = pullSegSiteGeno(PYT)
+phenoTrain = pheno(PYT)
+GM=tcrossprod(genoTrain)/dim(genoTrain)
+BV <- phenoTrain
+EBVans <-mixed.solve(BV, Z=GM, K=NULL, SE=FALSE, return.Hinv=FALSE)
+markerEffects <- EBVans$u
+markerEffects <- as.vector(markerEffects)
+
 
 # calculate EBVs of PYTs
 EBV <- getEBV(gen$PYT) #get EBVs
 gen$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+
+# collect data for next cycle's model training
+
+trainingGenotypes = list()
+trainingPhenotypes = list()
+  x = 1
+  for generation in (gen){
+    gen = gen$generation
+    M = pullSegSiteGeno(gen)
+    y = pheno(gen)
+    trainingGenotypes[[x]] = M
+    trainingPhenotypes[[x]] = y
+    x = x+1
+  }
 
 # INITAL TRAINING POP IS BUILT, START NEW CYCLE. WE WILL CALL THIS CYCLE 1 
 for (cycle in 1:args$nCycles){
@@ -222,7 +211,33 @@ for (cycle in 1:args$nCycles){
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
 
-  ###collect bvs and ebvs###
+  # collect data to be used for next cycle's training
+
+  trainingGenotypes = list()
+  trainingPhenotypes = list()
+  x = 1
+  for generation in (gen){
+    gen = gen$generation
+    M = pullSegSiteGeno(gen)
+    y = pheno(gen)
+    trainingGenotypes[[x]] = M
+    trainingPhenotypes[[x]] = y
+    x = x+1
+  }
+
+  F2M = pullSegSiteGeno(gen$F2)
+  F3M = pullSegSiteGeno(gen$F3)
+  F4M = pullSegSiteGeno(gen$F4)
+  F5M = pullSegSiteGeno(gen$F5)
+  PYTM = pullSegSiteGeno(gen$PYT)
+  AYTM = pullSegSiteGeno(gen$AYT)
+  VM = pullSegSiteGeno(gen$Variety)
+
+
+
+
+
+  # collect bvs and ebvs
 
   bvebv0 <- getBvEbv(newParents, "NP")
   bvebv1 <- getBvEbv(gen$F2, "F2")
@@ -239,5 +254,7 @@ for (cycle in 1:args$nCycles){
   ret$variances[[cycle]] <- varMat
   ret$alleles[[cycle]] <- allelesMat
   ret$bv_ebv[[cycle]] <- bv_ebv_df
+
+
 }
 
