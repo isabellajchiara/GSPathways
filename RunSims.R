@@ -7,15 +7,18 @@ source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
 
-## For the ANN model
+
+# For the ANN model
 Sys.setenv(OMP_NUM_THREADS = 1, OPENBLAS_NUM_THREADS = 1) 
 
 DATA_DIR <- "data"
 MODEL_DIR <- "models"
+
 args <- parseArgs()
 
 if (args$noInteraction == FALSE)
   interactive_menu()
+
 
 ## define variables ##
 
@@ -28,14 +31,12 @@ nVar = 9
 genMap <- readRDS(file.path(DATA_DIR, "genMapSNPs.RData")) # can load other genMaps 
 haplotypes <- readRDS(file.path(DATA_DIR, "haplotypesSNPs.RData")) # can load other genotype data, must match genMap
 
+set.seed(1206)
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
                        inbred = FALSE, 
                        ploidy = 2L)
-
-## Create model definitions
-source("ModelVariables.R")
 
 ## Run repeat loop to run reps ##
 if (args$nCores == 1 || modelParallelism) { # Run reps serially
