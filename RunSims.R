@@ -7,9 +7,6 @@ source("ParameterSettings.R")
 source("InterfaceLibrary.R")
 source("FunctionsLibrary.R")
 
-## Create model definitions
-source("ModelVariables.R")
-
 ## For the ANN model
 Sys.setenv(OMP_NUM_THREADS = 1, OPENBLAS_NUM_THREADS = 1) 
 

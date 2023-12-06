@@ -11,6 +11,8 @@ source("FunctionsLibrary.R")
 source("ModelVariables.R")
 loadModelLibs()
 
+activeLog <- args$nCores == 1 || hasParallelVersion
+
 if (activeLog)
   cli_text("Generating parent population...")
 
@@ -32,9 +34,10 @@ allelesMat <- NULL
 
 gen <- list()
 
-# establish simulation parameters
+if (activeLog)
+  cli_text("Created outputs")
 
-set.seed(1206)
+# establish simulation parameters
 
 defineTraitAEG(40,3.6,0.25) # nQtl per chr, mean,heritability
 
@@ -48,42 +51,63 @@ Base = setPheno(Base)
 newParents <- selectNewParents(Base,5,"pheno")
 gen$F1 = randCross(newParents, 200, nProgeny=3)
 
+if (activeLog)
+  cli_text("Generated F1s...")
+
 # self and bulk gen$F1 to form gen$F2 
 
 gen$F2 = self(gen$F1, nProgeny = 20)
 gen$F2 = setPheno(gen$F2)
 
+if (activeLog)
+  cli_text("Generated F2s...")
+
 # select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
 gen$F3 = TopWithinFam(gen$F2,5,200,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
 gen$F3 = setPheno(gen$F3)
+
+if (activeLog)
+  cli_text("Generated F3s...")
 
 # select top individuals within gen$F3 families to form gen$F4 
 
 gen$F4 = TopWithinFam(gen$F3,5,30,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
 gen$F4 = setPheno(gen$F4)
 
+if (activeLog)
+  cli_text("Generated F4s...")
+
 # select top families from gen$F4 to form gen$F5 
 
 gen$F5 = TopFamily(gen$F4,4,"pheno") #select top 4 F4 families 
 gen$F5 = setPheno(gen$F5)
+
+if (activeLog)
+  cli_text("Generated F5s...")
 
 # select top families from gen$F5 for PYTs 
 
 gen$PYT = TopFamily(gen$F5, 2,"pheno") #select top 3 F5 families
 gen$PYT = setPheno(gen$PYT, reps=2)
 
+if (activeLog)
+  cli_text("Generated PYTs...")
+
 gvMat[1,] <- mean(gv(gen$PYT))
 varMat[1,] <- varG(gen$PYT)
 
 # use PYTs as training data for initial parent selections
 
-genoTrain = pullSegSiteGeno(PYT)
-phenoTrain = pheno(PYT)
-GM=tcrossprod(genoTrain)/dim(genoTrain)
-BV <- phenoTrain
-EBVans <-mixed.solve(BV, Z=GM, K=NULL, SE=FALSE, return.Hinv=FALSE)
+genoTrain = pullSegSiteGeno(gen$PYT)
+phenoTrain = pheno(gen$PYT)
+y = as.matrix(phenoTrain)
+M = as.matrix(genoTrain)
+EBVans <-mixed.solve(y, Z=M, K=NULL, SE=FALSE, return.Hinv=FALSE)
 markerEffects <- EBVans$u
 markerEffects <- as.vector(markerEffects)
+
+if (activeLog)
+  cli_text("calculated marker effects")
 
 
 # calculate EBVs of PYTs
@@ -91,19 +115,25 @@ EBV <- getEBV(gen$PYT) #get EBVs
 gen$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
 
+if (activeLog)
+  cli_text("set PYT ebvs")
+
 # collect data for next cycle's model training
 
 trainingGenotypes = list()
 trainingPhenotypes = list()
   x = 1
-  for generation in (gen){
-    gen = gen$generation
-    M = pullSegSiteGeno(gen)
-    y = pheno(gen)
+  for (generation in 1:length(gen)){
+    set = gen[[generation]]
+    M = pullSegSiteGeno(set)
+    y = pheno(set)
     trainingGenotypes[[x]] = M
     trainingPhenotypes[[x]] = y
     x = x+1
   }
+  
+  if (activeLog)
+    cli_text("initial cycle complete")
 
 # INITAL TRAINING POP IS BUILT, START NEW CYCLE. WE WILL CALL THIS CYCLE 1 
 for (cycle in 1:args$nCycles){
@@ -216,26 +246,14 @@ for (cycle in 1:args$nCycles){
   trainingGenotypes = list()
   trainingPhenotypes = list()
   x = 1
-  for generation in (gen){
-    gen = gen$generation
-    M = pullSegSiteGeno(gen)
-    y = pheno(gen)
+  for (generation in 1:length(gen)){
+    set = gen[[generation]]
+    M = pullSegSiteGeno(set)
+    y = pheno(set)
     trainingGenotypes[[x]] = M
     trainingPhenotypes[[x]] = y
     x = x+1
   }
-
-  F2M = pullSegSiteGeno(gen$F2)
-  F3M = pullSegSiteGeno(gen$F3)
-  F4M = pullSegSiteGeno(gen$F4)
-  F5M = pullSegSiteGeno(gen$F5)
-  PYTM = pullSegSiteGeno(gen$PYT)
-  AYTM = pullSegSiteGeno(gen$AYT)
-  VM = pullSegSiteGeno(gen$Variety)
-
-
-
-
 
   # collect bvs and ebvs
 
