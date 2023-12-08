@@ -201,7 +201,7 @@ updateResults <- function(ind, genObj, genName){
 updatePheno <- function(genObj,genName){
   existing=nrow(phenoMat)
   new = nInd(genObj)
-  phenoMat[existing + 1): (existing + new),] <- pheno(genObj)
+  phenoMat[(existing + 1):(existing + new),] <- pheno(genObj)
   Gen <- as.data.frame(rep(genName, times=nInd(genObj)))
   colnames(Gen) <- "Gen"
   phenoMat <- cbind(Gen, phenoMat)
