@@ -112,15 +112,12 @@ getBvEbv <- function(genObj, genName){
 
 ## Functions to build dataframes
 
-getAllGeneticValues <- function(geneticValues, lin1, lin2){
+getAllGeneticValues <- function(geneticValues){
   geneticValues <- as.data.frame(geneticValues)
   colnames(geneticValues) <- 1:args$nReps
-  gain <- as.data.frame(geneticValues[lin1,] - geneticValues[lin2,])
-  colnames(gain) <- 1:args$nReps
-  AllgeneticValues <- as.data.frame(rbind(geneticValues, gain))
-  rownames(AllgeneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety","meanGV")
-  colnames(AllgeneticValues) <- c(1:args$nReps)
-  AllgeneticValues
+  rownames(geneticValues) <- c("PrevCycPYT","NewParents","F1","F2","F3","F4","F5","PYT","AYT","Variety")
+  colnames(geneticValues) <- c(1:args$nReps)
+  geneticValues
 }
 
 getCorrelations <- function(correlations){
