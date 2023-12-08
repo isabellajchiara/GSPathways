@@ -22,7 +22,8 @@ ret <- list(
   correlations = list(),
   variances = list(),
   alleles = list(),
-  bv_ebv = list()
+  bv_ebv = list(),
+  pheno = list()
 )
 
 # create results matrices
@@ -30,6 +31,7 @@ ret <- list(
 gvMat <- matrix(nrow=nGen, ncol=1)
 corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
+phenoMat <- matrix()
 allelesMat <- NULL
 
 gen <- list()
@@ -95,6 +97,7 @@ if (activeLog)
 
 gvMat[1,] <- mean(gv(gen$PYT))
 varMat[1,] <- varG(gen$PYT)
+phenoMat[1:nInd(PYT),] = pheno(PYT)
 
 # use PYTs as training data for initial parent selections
 
@@ -150,10 +153,14 @@ for (cycle in 1:args$nCycles){
   }
 
   updateResults(2, newParents, "NP")
+  updatePheno(newParents,"NP")
+  
   ## 200 random crosses of new parents
 
   gen$F1 = randCross(newParents, 200,nProgeny=3)
   updateResults(3, gen$F1, "F1")
+  updatePheno(F1,"F1")
+
                               
   ## self and bulk gen$F1 to form gen$F2 ##
   
@@ -162,6 +169,7 @@ for (cycle in 1:args$nCycles){
   
   gen$F2 = self(gen$F1, nProgeny = 20) 
   updateResults(4, gen$F2, "F2")
+  updatePheno(F2,"F2")
   
     
   ## set EBV using RRBLUP model
@@ -176,6 +184,7 @@ for (cycle in 1:args$nCycles){
   gen$F3 = TopWithinFam(gen$F2, 5,200 , "ebv")
   gen$F3 = setPheno(gen$F3)
   updateResults(5, gen$F3, "F3")
+  updatePheno(F3,"F3")
 
   
 
@@ -192,6 +201,7 @@ for (cycle in 1:args$nCycles){
   gen$F4 = TopWithinFam(gen$F3, 5, 30, "ebv")
   gen$F4 = setPheno(gen$F4)
   updateResults(6, gen$F4, "F4")
+  updatePheno(F4,"F4")
 
 
   ##set EBV using BLUP model##
@@ -205,6 +215,8 @@ for (cycle in 1:args$nCycles){
   gen$F5 = TopFamily(gen$F4,4,"ebv")
   gen$F5 = setPheno(gen$F5)
   updateResults(7, gen$F5, "F5")
+  updatePheno(F5,"F5")
+
 
 
   ##set EBV using RRBLUP model##
@@ -216,6 +228,7 @@ for (cycle in 1:args$nCycles){
   gen$PYT = TopFamily(gen$F5,2,"ebv")
   gen$PYT = setPheno(gen$PYT, reps=2)
   updateResults(8, gen$PYT, "PYT")
+  updatePheno(PYT,"PYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$PYT)
@@ -227,6 +240,7 @@ for (cycle in 1:args$nCycles){
   gen$AYT = TopFamily(gen$PYT, 1, "ebv")
   gen$AYT = setPheno(gen$AYT, reps=5)
   updateResults(9, gen$AYT, "AYT")
+  updatePheno(AYT,"AYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$AYT)
@@ -237,6 +251,7 @@ for (cycle in 1:args$nCycles){
   VarietySel = selectInd(gen$AYT, 1, use="ebv")
   Variety = self(VarietySel)
   gvMat[10,] <- mean(gv(Variety))
+  updatePheno(Variety,"Variety")
 
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
@@ -271,6 +286,9 @@ for (cycle in 1:args$nCycles){
   ret$correlations[[cycle]] <- corMat
   ret$variances[[cycle]] <- varMat
   ret$alleles[[cycle]] <- allelesMat
+  ret$pheno[[cycle]] <- phenoMat
+
+  
   ret$bv_ebv[[cycle]] <- bv_ebv_df
 
 
