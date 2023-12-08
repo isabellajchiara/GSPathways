@@ -186,10 +186,20 @@ trainModel <- function(){
 updateResults <- function(ind, genObj, genName){
   varMat[ind,] <<- varG(genObj) 
   gvMat[ind,] <<- mean(gv(genObj)) 
-  
   curAllelesMat <- getAllelesMat(genObj, genName) 
   allelesMat <<- rbind(allelesMat, curAllelesMat)
 }
+
+updatePheno <- function(genObj,genName){
+  existing=nrow(phenoMat)
+  new = nInd(genObj)
+  phenoMat[existing + 1): (existing + new),] <- pheno(genObj)
+  Gen <- as.data.frame(rep(genName, times=nInd(genObj)))
+  colnames(Gen) <- "Gen"
+  phenoMat <- cbind(Gen, phenoMat)
+  phenoMat}
+  
+  
 
 # The simulation returns is a list of reps. Each rep has a series of variables.
 # This function unifies all the reps into one variable.
