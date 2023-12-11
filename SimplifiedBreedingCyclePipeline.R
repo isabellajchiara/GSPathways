@@ -108,13 +108,23 @@ phenoMat[1:nInd(gen$PYT),2] = rep("PYT", times=nInd(gen$PYT))
 
 # use PYTs as training data for initial parent selections
 
-genoTrain = pullSegSiteGeno(gen$PYT)
-phenoTrain = pheno(gen$PYT)
-y = as.matrix(phenoTrain)
-M = as.matrix(genoTrain)
-EBVans <-mixed.solve(y, Z=M, K=NULL, SE=FALSE, return.Hinv=FALSE)
-markerEffects <- EBVans$u
-markerEffects <- as.vector(markerEffects)
+if (args$model = "rrblup_random"){
+  genoTrain = pullSegSiteGeno(gen$PYT)
+  phenoTrain = pheno(gen$PYT)
+  y = as.matrix(phenoTrain)
+  M = as.matrix(genoTrain)
+  EBVans <-mixed.solve(y, Z=M, K=NULL, SE=FALSE, return.Hinv=FALSE)
+  markerEffects <- EBVans$u
+  markerEffects <- as.vector(markerEffects)
+}
+
+if (args$model = "ann_random"){
+  genoTrain = pullSegSiteGeno(gen$PYT)
+  phenoTrain = pheno(gen$PYT)
+  y = as.matrix(phenoTrain)
+  M = as.matrix(genoTrain)
+  source("models/ANN_RD.R")
+}
 
 if (activeLog)
   cli_alert_success("Calculated marker effects")
