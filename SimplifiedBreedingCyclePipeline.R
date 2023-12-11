@@ -45,7 +45,7 @@ if (activeLog)
   cli_text("Created outputs")
 
 # establish simulation parameters
-
+set.seed(1206)
 defineTraitAEG(40,3.6,0.25) # nQtl per chr, mean,heritability
 
 ## FIRST CYCLE TO BUILD INITIAL TRAINING POP
