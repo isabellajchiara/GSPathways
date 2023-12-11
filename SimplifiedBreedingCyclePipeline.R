@@ -31,8 +31,13 @@ ret <- list(
 gvMat <- matrix(nrow=nGen, ncol=1)
 corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
-phenoMat <- matrix()
 allelesMat <- NULL
+
+nSim = 13966
+phenoMat <- matrix(nrow=(60 + nSim*args$nCycles),ncol=2)
+
+allTrainingDataGeno = list()
+allTrainingDataPheno = list()
 
 gen <- list()
 
@@ -97,7 +102,9 @@ if (activeLog)
 
 gvMat[1,] <- mean(gv(gen$PYT))
 varMat[1,] <- varG(gen$PYT)
-phenoMat[1:nInd(PYT),] = pheno(PYT)
+phenoData = pheno(gen$PYT)
+phenoMat[1:nInd(gen$PYT),1] = phenoData
+phenoMat[1:nInd(gen$PYT),2] = rep("PYT", times=nInd(gen$PYT))
 
 # use PYTs as training data for initial parent selections
 
@@ -110,7 +117,7 @@ markerEffects <- EBVans$u
 markerEffects <- as.vector(markerEffects)
 
 if (activeLog)
-  cli_text("calculated marker effects")
+  cli_alert_success("Calculated marker effects")
 
 
 # calculate EBVs of PYTs
@@ -119,7 +126,7 @@ gen$PYT@ebv = EBV #set EBVs
 corMat[1,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
 
 if (activeLog)
-  cli_text("set PYT ebvs")
+  cli_text("Set PYT ebvs")
 
 # collect data for next cycle's model training
 
@@ -134,9 +141,11 @@ trainingPhenotypes = list()
     trainingPhenotypes[[x]] = y
     x = x+1
   }
-  
+allTrainingDataGeno[[1]] = trainingGenotypes
+allTrainingDataPheno[[1]] = trainingPhenotypes
+
   if (activeLog)
-    cli_text("initial cycle complete")
+    cli_text("Initial cycle complete")
 
 # INITAL TRAINING POP IS BUILT, START NEW CYCLE. WE WILL CALL THIS CYCLE 1 
 for (cycle in 1:args$nCycles){
@@ -148,18 +157,22 @@ for (cycle in 1:args$nCycles){
   if (cycle == 1) {
     newParents <- selectNewParents(gen$PYT, 5, "ebv")
   } else {
-    
     newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
   }
 
   updateResults(2, newParents, "NP")
-  updatePheno(newParents,"NP")
+  phenoData = pheno(newParents)
+  checkMat = as.data.frame(phenoMat)
+  from = nrow(phenoMat) - sum(is.na(checkMat[,1])) +1
+  to = from + nInd(newParents) -1
+  phenoMat[from:to,1] = phenoData
+  phenoMat[from:to,2] = rep("NP", times=nInd(newParents))
   
   ## 200 random crosses of new parents
 
   gen$F1 = randCross(newParents, 200,nProgeny=3)
   updateResults(3, gen$F1, "F1")
-  updatePheno(F1,"F1")
+  updatePheno(gen$F1,"F1")
 
                               
   ## self and bulk gen$F1 to form gen$F2 ##
@@ -169,7 +182,7 @@ for (cycle in 1:args$nCycles){
   
   gen$F2 = self(gen$F1, nProgeny = 20) 
   updateResults(4, gen$F2, "F2")
-  updatePheno(F2,"F2")
+  updatePheno(gen$F2,"F2")
   
     
   ## set EBV using RRBLUP model
@@ -184,7 +197,7 @@ for (cycle in 1:args$nCycles){
   gen$F3 = TopWithinFam(gen$F2, 5,200 , "ebv")
   gen$F3 = setPheno(gen$F3)
   updateResults(5, gen$F3, "F3")
-  updatePheno(F3,"F3")
+  updatePheno(gen$F3,"F3")
 
   
 
@@ -201,7 +214,7 @@ for (cycle in 1:args$nCycles){
   gen$F4 = TopWithinFam(gen$F3, 5, 30, "ebv")
   gen$F4 = setPheno(gen$F4)
   updateResults(6, gen$F4, "F4")
-  updatePheno(F4,"F4")
+  updatePheno(gen$F4,"F4")
 
 
   ##set EBV using BLUP model##
@@ -215,9 +228,7 @@ for (cycle in 1:args$nCycles){
   gen$F5 = TopFamily(gen$F4,4,"ebv")
   gen$F5 = setPheno(gen$F5)
   updateResults(7, gen$F5, "F5")
-  updatePheno(F5,"F5")
-
-
+  updatePheno(gen$F5,"F5")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$F5)
@@ -228,7 +239,7 @@ for (cycle in 1:args$nCycles){
   gen$PYT = TopFamily(gen$F5,2,"ebv")
   gen$PYT = setPheno(gen$PYT, reps=2)
   updateResults(8, gen$PYT, "PYT")
-  updatePheno(PYT,"PYT")
+  updatePheno(gen$PYT,"PYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$PYT)
@@ -240,7 +251,7 @@ for (cycle in 1:args$nCycles){
   gen$AYT = TopFamily(gen$PYT, 1, "ebv")
   gen$AYT = setPheno(gen$AYT, reps=5)
   updateResults(9, gen$AYT, "AYT")
-  updatePheno(AYT,"AYT")
+  updatePheno(gen$AYT,"AYT")
 
   ##set EBV using RRBLUP model##
   EBV <- getEBV(gen$AYT)
@@ -251,10 +262,19 @@ for (cycle in 1:args$nCycles){
   VarietySel = selectInd(gen$AYT, 1, use="ebv")
   Variety = self(VarietySel)
   gvMat[10,] <- mean(gv(Variety))
-  updatePheno(Variety,"Variety")
+  
+  phenoData = pheno(Variety)
+  checkMat = as.data.frame(phenoMat)
+  from = nrow(phenoMat) - sum(is.na(checkMat[,1])) +1
+  to = from + nInd(Variety) -1
+  phenoMat[from:to,1] <- phenoData
+  phenoMat[from:to,2] = rep("Variety", times=nInd(Variety))
 
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
+  
+  if (activeLog)
+    cli_alert_success("Finished cycle {cycle}/{args$nCycles}...")
 
   # collect data to be used for next cycle's training
 
@@ -269,7 +289,14 @@ for (cycle in 1:args$nCycles){
     trainingPhenotypes[[x]] = y
     x = x+1
   }
-
+  
+  allTrainingDataGeno[[cycle+1]] <- trainingGenotypes
+  allTrainingDataPheno[[cycle+1]] <- trainingPhenotypes
+  
+  
+  if (activeLog)
+    cli_alert_success("Collected training data for next cycle")
+  
   # collect bvs and ebvs
 
   bvebv0 <- getBvEbv(newParents, "NP")
@@ -290,7 +317,4 @@ for (cycle in 1:args$nCycles){
 
   
   ret$bv_ebv[[cycle]] <- bv_ebv_df
-
-
 }
-
