@@ -28,7 +28,7 @@ nVar = 9
 
 #load data and establish founder pop at outset so we do not reload data with every rep
 
-genMap <- readRDS(file.path(DATA_DIR, "genMap4616.rds")) # can load other genMaps 
+genMap <- readRDS(file.path(DATA_DIR, "genMap4616SNPs.rds")) # can load other genMaps 
 haplotypes <- readRDS(file.path(DATA_DIR, "doubleHaplo4616.rds")) # can load other genotype data, must match genMap
 
 set.seed(1206)
