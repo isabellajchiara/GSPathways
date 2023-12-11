@@ -134,70 +134,75 @@ getVariances <- function(variances){
   variances
 }
 
-
-getVariances <- function(variances){
-  variances <- as.data.frame(variances)
-  colnames(variances) <- c(1:args$nReps)
-  rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
-  variances
-}
-
 getPheno <- function(pheno){
   pheno <- as.data.frame(pheno)
-  colnames(pheno) <- c(1:args$nReps)
-  rownames(pheno) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT","Variety")
-  variances
+  pheno
 }
-
 
 # use trainGen to retrain the model
 trainModel <- function(){
 
   if (args$trainingData == "F2") { 
-    M <- trainingGenotypes[[2]]
-    y <- trainingPhenotypes[[2]]
+    traincycle = cycle
+    fullSetGeno = allTrainingDataGeno[[traincycle]]
+    fullSetPheno = allTrainingDataPheno[[traincycle]]
+    M <- fullSetGeno[[2]]
+    y <- fullSetPheno[[2]]
     nIndF5 =nInd(gen$F5)
     nIndF2 = nInd(gen$F2)
     remove = nIndF2-nIndF5
     M <<- M[-c(1:remove),]
-    y <<- y[-c(1:remove),]
+    y <<- as.matrix(y[-c(1:remove),])
     }
 
   if (args$trainingData == "F5") {
-    M <<- trainingGenotypes[[5]]
-    y <<- trainingPhenotypes[[5]] }
-  
-  if (args$trainingData == "ALL") {
-    F2 <- trainingGenotypes[[2]]
-    y2 <- trainingPhenotypes[[2]]
-    F3 <- trainingGenotypes[[3]]
-    y3 <- trainingPhenotypes[[3]] 
-    F4 <- trainingGenotypes[[4]]
-    y4 <- trainingPhenotypes[[4]] 
-    F5 <- trainingGenotypes[[5]]
-    y5 <- trainingPhenotypes[[5]]
-    PYT <- trainingGenotypes[[6]]
-    y6 <- trainingPhenotypes[[6]]  
-    M <<- rbind(F2,F3,F4,F5,PYT)
-    y <<- rbind(y2,y3,y4,y5,y6)
-  }
+    traincycle = cycle
+    fullSetGeno = allTrainingDataGeno[[traincycle]]
+    fullSetPheno = allTrainingDataPheno[[traincycle]]
+    M <<- fullSetGeno[[5]]
+    y <<- as.matrix(fullSetPheno[[5]])
+    }
 
   if (args$trainingData == "F2_and_F5") {
-    F2M = trainingGenotypes[[2]]
-    F2y = trainingPhenotypes[[2]] 
-    F5M = trainingGenotypes[[5]]
-    F5y = trainingPhenotypes[[5]] 
+    traincycle = cycle
+    fullSetGeno = allTrainingDataGeno[[traincycle]]
+    fullSetPheno = allTrainingDataPheno[[traincycle]]
+    F2M = fullSetGeno[[2]]
+    F2y = fullSetPheno[[2]] 
+    F5M = fullSetGeno[[5]]
+    F5y = fullSetPheno[[5]] 
     M = rbind(F2M,F5M)
     y = rbind(F2y, F5y)
     nIndF5 =nInd(gen$F5)
     nIndF2 = nInd(gen$F2)
     remove = nIndF2-nIndF5
     M <<- M[-c(1:remove),]
-    y <<- y[-c(1:remove),]}
-
+    y <<- as.matrix(y[-c(1:remove),])
+    }
+  
+  if (args$trainingData == "ALL") {
+    allDataGeno = list()
+    g = 1
+    for (traincycle in 1: args$nCycles){
+      fullSetGeno = allTrainingDataGeno[[traincycle]]
+      allDataGeno[[g]] = fullSetGeno[[2]]
+      allDataGeno[[g+1]] = fullSetGeno[[5]]
+      g = g+2
+    }
+    allDataPheno = list()
+    p = 1
+    for (traincycle in 1: args$nCycles){
+      fullSetPheno = allTrainingDataPheno[[traincycle]]
+      allDataPheno[[p]] = fullSetPheno[[2]]
+      allDataPheno[[p+1]] = fullSetPheno[[5]]
+      p = p+2
+    }
+    M <<- as.data.frame(do.call("rbind",allDataGeno))
+    y <<- as.data.frame(do.call("rbind",allDataPheno))
+  }
   source(file.path(MODEL_DIR, fileTrain))
 }
-}
+
 
 updateResults <- function(ind, genObj, genName){
   varMat[ind,] <<- varG(genObj) 
@@ -207,14 +212,15 @@ updateResults <- function(ind, genObj, genName){
 }
 
 updatePheno <- function(genObj,genName){
-  existing=nrow(phenoMat)
-  new = nInd(genObj)
-  phenoMat[(existing + 1):(existing + new),] <- pheno(genObj)
-  Gen <- as.data.frame(rep(genName, times=nInd(genObj)))
-  colnames(Gen) <- "Gen"
-  phenoMat <- cbind(Gen, phenoMat)
-  phenoMat}
-  
+  checkMat = as.data.frame(phenoMat)
+  from = nrow(phenoMat) - sum(is.na(checkMat[,1])) +1
+  to = from + nInd(genObj) -1
+  phenoMat[from:to,1] <<- pheno(genObj)
+  Gen <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
+  phenoMat[from:to,2] <<- Gen
+  phenoMat
+}
+
   
 
 # The simulation returns is a list of reps. Each rep has a series of variables.
