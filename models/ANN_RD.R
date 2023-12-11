@@ -2,9 +2,23 @@ library(tidyverse)
 library(keras)
 library(readr)
 
-ar <- array(M, c(nInd,3547,2)
-            
+## create GRM ##
+geno <- as.matrix(M)
+GM <- tcrossprod(geno)/dim(geno)
+LG <- GM
+
 Y <- as.matrix(y)
+X = LG
+
+X <- as.matrix(M)
+Y <- as.matrix(y)
+
+train_index <- sample(1:nrow(Y), 0.75 * nrow(Y))
+X_train <- X[train_index, ]
+Y_train <- Y[train_index,]
+
+X_test <- X[-train_index, ]
+Y_test <- Y[-train_index, ]
 
 ## define hyperparameters##
 
@@ -12,28 +26,24 @@ nEpoch = 100
 batchSize = 100
 valSplit = 0.2
 
+
 # add layers
 
-inputs = layer_input(shape=c(dim(ar)))
-
-If we create an array of dimension (2, 3, 4) then it creates 4 rectangular matrices 
-each with 2 rows and 3 columns. 
+inputs = layer_input(shape=(ncol(X_train))) 
 
 predictions <- inputs %>% 
-  layer_flatten(ar) %>% 
-  layer_dense(units = ncol(ar), activation = 'relu') %>% 
+  layer_dense(units = ncol(X_train), activation = 'relu') %>% 
   layer_dropout(rate = 0.5) %>%
-  layer_dense(units = ncol(ar), activation = 'relu') %>% 
+  layer_dense(units = ncol(X_train), activation = 'relu') %>% 
   layer_dropout(rate = 0.5) %>%
   layer_dense(units = 1)
-
 
 # create and compile model 
 
 model <- keras_model(inputs = inputs, outputs = predictions) 
 
 earlyStopping <- callback_early_stopping(monitor = "mean_squared_error", min_delta = 0.1, patience = 10,
-   mode = "auto")
+                                         mode = "auto")
 
 model %>% compile( 
   optimizer = 'Adam', 
@@ -51,6 +61,10 @@ fit(
   validation_split = valSplit,
   callbacks = list(earlyStopping)
 )
+
+cli_alert_success("Fit Neural Net")
+
+
 
 
 
