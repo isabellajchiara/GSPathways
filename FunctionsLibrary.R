@@ -134,6 +134,14 @@ getVariances <- function(variances){
   variances
 }
 
+
+getVariances <- function(variances){
+  variances <- as.data.frame(variances)
+  colnames(variances) <- c(1:args$nReps)
+  rownames(variances) <- c("PrevCycPYT", "newParents","F1","F2", "F3","F4", "F5", "PYT","AYT")
+  variances
+}
+
 getPheno <- function(pheno){
   pheno <- as.data.frame(pheno)
   colnames(pheno) <- c(1:args$nReps)

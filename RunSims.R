@@ -85,7 +85,7 @@ for (cycle in 1:args$nCycles){
   Allgeneticvalues[[cycle]] <- getAllGeneticValues(res$geneticvalues[[cycle]], 10, 2)
   res$correlations[[cycle]] <- getCorrelations(res$correlations[[cycle]])
   res$variances[[cycle]] <- getVariances(res$variances[[cycle]])
-  res$pheno[[cycle]] <- getPheno(res@pheno[[pheno]])
+  res$pheno[[cycle]] <- getPheno(res$pheno[[cycle]])
 
   write.csv(Allgeneticvalues[[cycle]], paste("C", cycle, "_", args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections, "Parents_gvs_snp_yield.csv", sep=""))
   write.csv(res$correlations[[cycle]], paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_cors_snp_yield.csv", sep=""))

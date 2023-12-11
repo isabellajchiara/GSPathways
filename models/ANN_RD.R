@@ -62,7 +62,7 @@ fit(
   callbacks = list(earlyStopping)
 )
 
-cli_alert_success("Fit Neural Net")
+cli_alert_success("Fit Neural Net at {args$trainGen} using {args$trainingData} data")
 
 
 
