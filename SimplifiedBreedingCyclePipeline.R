@@ -108,7 +108,7 @@ phenoMat[1:nInd(gen$PYT),2] = rep("PYT", times=nInd(gen$PYT))
 
 # use PYTs as training data for initial parent selections
 
-if (args$model = "rrblup_random"){
+if (args$model == "rrblup_random"){
   genoTrain = pullSegSiteGeno(gen$PYT)
   phenoTrain = pheno(gen$PYT)
   y = as.matrix(phenoTrain)
@@ -118,7 +118,7 @@ if (args$model = "rrblup_random"){
   markerEffects <- as.vector(markerEffects)
 }
 
-if (args$model = "ann_random"){
+if (args$model == "ann_random"){
   genoTrain = pullSegSiteGeno(gen$PYT)
   phenoTrain = pheno(gen$PYT)
   y = as.matrix(phenoTrain)
