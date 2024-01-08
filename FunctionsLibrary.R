@@ -181,8 +181,8 @@ trainModel <- function(){
     }
   
   if (args$trainingData == "ALL") {
-    M <<- as.data.frame(do.call("rbind",allTrainingDataGeno))
-    y <<- as.data.frame(do.call("rbind",allTrainingDataPheno))
+    M <<- as.data.frame(do.call("rbind",trainingGenotypes))
+    y <<- as.data.frame(do.call("rbind",trainingPhenotypes))
   }
   source(file.path(MODEL_DIR, fileTrain))
 }
