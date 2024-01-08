@@ -1,5 +1,6 @@
 library(tidyverse)
 library(keras)
+library(tensorflow)
 library(readr)
 
 ## create GRM ##
@@ -10,20 +11,22 @@ LG <- GM
 Y <- as.matrix(y)
 X = LG
 
-X <- as.matrix(M)
-Y <- as.matrix(y)
+X_train <- as.matrix(M)
+Y_train <- as.matrix(y)
 
-train_index <- sample(1:nrow(Y), 0.75 * nrow(Y))
-X_train <- X[train_index, ]
-Y_train <- Y[train_index,]
-
-X_test <- X[-train_index, ]
-Y_test <- Y[-train_index, ]
 
 ## define hyperparameters##
 
+cutoff =200
+
 nEpoch = 100
-batchSize = 100
+
+if (nrow(geno) < cutoff){
+  batchSize = 20
+}else{
+batchSize=500
+}
+
 valSplit = 0.2
 
 
@@ -63,6 +66,10 @@ fit(
 )
 
 cli_alert_success("Fit Neural Net at {args$trainGen} using {args$trainingData} data")
+
+
+
+
 
 
 
