@@ -181,24 +181,8 @@ trainModel <- function(){
     }
   
   if (args$trainingData == "ALL") {
-    allDataGeno = list()
-    g = 1
-    for (traincycle in 1: args$nCycles){
-      fullSetGeno = allTrainingDataGeno[[traincycle]]
-      allDataGeno[[g]] = fullSetGeno[[2]]
-      allDataGeno[[g+1]] = fullSetGeno[[5]]
-      g = g+2
-    }
-    allDataPheno = list()
-    p = 1
-    for (traincycle in 1: args$nCycles){
-      fullSetPheno = allTrainingDataPheno[[traincycle]]
-      allDataPheno[[p]] = fullSetPheno[[2]]
-      allDataPheno[[p+1]] = fullSetPheno[[5]]
-      p = p+2
-    }
-    M <<- as.data.frame(do.call("rbind",allDataGeno))
-    y <<- as.data.frame(do.call("rbind",allDataPheno))
+    M <<- as.data.frame(do.call("rbind",allTrainingDataGeno))
+    y <<- as.data.frame(do.call("rbind",allTrainingDataPheno))
   }
   source(file.path(MODEL_DIR, fileTrain))
 }
