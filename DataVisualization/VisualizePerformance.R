@@ -112,3 +112,5 @@ allData = rbind(RRBLUPDATA,ANNDATA)
 
 plot <- ggplot(allData[allData$model=="RRBLUP",], aes(x=estimated, y=true, color=gen)) +
   geom_point()
+
+plot + labs(title="RRBLUP Performance")
