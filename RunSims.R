@@ -31,7 +31,6 @@ nVar = 9
 genMap <- readRDS(file.path(DATA_DIR, "genMap4616SNPs.rds")) # can load other genMaps 
 haplotypes <- readRDS(file.path(DATA_DIR, "doubleHaplo4616.rds")) # can load other genotype data, must match genMap
 
-set.seed(1206)
 
 founderPop = newMapPop(genMap, 
                        haplotypes, 
