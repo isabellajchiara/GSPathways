@@ -205,11 +205,12 @@ updatePheno <- function(genObj,genName){
   tbvs = bv(genObj)
 
   if (genName == "F1") {
-    ebvs= rep(NA,times=nInd(gen$F1))
-  } else {
+    ebvs= as.matrix(rep(NA,times=nInd(gen$F1)))
+  }
+    if (genName != "F1"){
     ebvs = ebv(genObj)
   }
-
+}
 
   Gen <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
   valuesMat[from:to,1] = Gen
