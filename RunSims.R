@@ -22,7 +22,7 @@ if (args$noInteraction == FALSE)
 
 ## define variables ##
 
-nModels = 7
+nModels = 6
 nGen = 10
 nVar = 9
 

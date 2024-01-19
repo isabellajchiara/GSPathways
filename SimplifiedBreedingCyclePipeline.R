@@ -117,7 +117,7 @@ if (args$parentSelections == "F2"){
 gvMat[1,] <- mean(gv(gen$F2))
 varMat[1,] <- varG(gen$F2)
 phenoData = pheno(gen$F2)
-tvs = bv(gen$F2)
+tbvs = bv(gen$F2)
 phenoMat[1:nInd(gen$F2),1] = phenoData
 phenoMat[1:nInd(gen$F2),2] = tbvs
 phenoMat[1:nInd(gen$F2),3] = rep("ParentPool", times=nInd(gen$F2))
@@ -130,7 +130,7 @@ if (args$parentSelections == "F5"){
 gvMat[1,] <- mean(gv(gen$F5))
 varMat[1,] <- varG(gen$F5)
 phenoData = pheno(gen$F5)
-tvs = bv(gen$52)
+tbvs = bv(gen$F5)
 phenoMat[1:nInd(gen$F5),1] = phenoData
 phenoMat[1:nInd(gen$F5),2] = tbvs
 phenoMat[1:nInd(gen$F5),2] = rep("ParentPool", times=nInd(gen$F5))
@@ -174,6 +174,15 @@ for (cycle in 1:args$nCycles){
   if (activeLog)
     cli_text("Running cycle {cycle}/{args$nCycles}...")
   
+   if (cycle > 1) { 
+    newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
+    corMat[1,] = cor(bv(newParents), ebv(newParents)) #determine model performance
+    updateResults(2, newParents, "NP")
+    updatePheno(newParents,"NP")
+
+
+  }
+
   
   ## 200 random crosses of new parents
   
@@ -197,11 +206,11 @@ for (cycle in 1:args$nCycles){
   gen$F2@ebv = getEBV(gen$F2)
   
   if (args$model =="rrblup_random"){
-    corMat[2,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[1,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[2,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
+    corMat[1,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
   }#determine model performance
   
   ## select top individuals from gen$F2 bulk to form gen$F3 
@@ -219,11 +228,11 @@ for (cycle in 1:args$nCycles){
   
   gen$F3@ebv = getEBV(gen$F3)
   if (args$model =="rrblup_random"){
-    corMat[3,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[2,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[3,] = cor(pheno(gen$PYT), ebv(gen$PYT))
+    corMat[2,] = cor(pheno(gen$PYT), ebv(gen$PYT))
   } #determine model performance
   
   ## select top within familiy from gen$F3 to form gen$F4 
@@ -240,11 +249,11 @@ for (cycle in 1:args$nCycles){
   ##set EBV using BLUP model##
   gen$F4@ebv = getEBV(gen$F4)
   if (args$model =="rrblup_random"){
-    corMat[4,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[3,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[4,] = cor(pheno(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[3,] = cor(pheno(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   ## select top families from gen$F4 to form gen$F5 ##
   if (args$trainGen == "F5")
@@ -259,11 +268,11 @@ for (cycle in 1:args$nCycles){
   EBV <- getEBV(gen$F5)
   gen$F5@ebv = EBV
   if (args$model =="rrblup_random"){
-    corMat[5,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[4,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[5,] = cor(pheno(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[4,] = cor(pheno(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   ## select top gen$F5 families for preliminary yield trial ##
   gen$PYT = TopFamily(gen$F5,2,"ebv")
@@ -276,11 +285,11 @@ for (cycle in 1:args$nCycles){
   gen$PYT@ebv = EBV
   
   if (args$model =="rrblup_random"){
-    corMat[6,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[5,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[6,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
+    corMat[5,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
   }#determine model performance
   ## select top families from gen$PYT for gen$AYT ##
   
@@ -294,11 +303,11 @@ for (cycle in 1:args$nCycles){
   gen$AYT@ebv = EBV
   
   if (args$model =="rrblup_random"){
-    corMat[7,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
+    corMat[6,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
   
   if (args$model == "ann_random"){
-    corMat[7,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
+    corMat[6,] = cor(pheno(gen$PYT), ebv(gen$PYT)) 
   }#determine model performance
   
   ## select top plants to form variety ##
@@ -342,7 +351,6 @@ for (cycle in 1:args$nCycles){
   
   # collect bvs and ebvs
   
-  bvebv0 <- getBvEbv(gen$PYT1, "NP")
   bvebv1 <- getBvEbv(gen$F2, "F2")
   bvebv2 <- getBvEbv(gen$F3, "F3")
   bvebv3 <- getBvEbv(gen$F4, "F4")
