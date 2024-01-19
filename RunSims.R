@@ -91,7 +91,6 @@ for (cycle in 1:args$nCycles){
   write.csv(res$variances[[cycle]], paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_vars_snp_yield.csv", sep=""))
   write.csv(res$pheno[[cycle]], paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_pheno_snp_yield.csv", sep=""))
   saveRDS(res$alleles[[cycle]], file=paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_alleles_snp_yield.rds", sep=""))
-  saveRDS(res$bv_ebv[[cycle]], file=paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_bvebv_snp_yield.rds", sep=""))
 }
 
 cli_text("Time taken to write results:")

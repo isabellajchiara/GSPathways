@@ -199,15 +199,19 @@ updatePheno <- function(genObj,genName){
   checkMat = as.data.frame(phenoMat)
   from = nrow(phenoMat) - sum(is.na(checkMat[,1])) +1
   to = from + nInd(genObj) -1
-  phenoData =pheno(genObj)
+
+  phenos =pheno(genObj)
+  gvs = gv(genObj)
   tbvs = bv(genObj)
   ebvs= ebv(genObj)
 
   Gen <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
-  phenoMat[from:to,1] <<- Gen
+  phenoMat[from:to,1] = Gen
   phenoMat[from:to,2] = phenoData
-  phenoMat[from:to,3] = tbvs
-  phenoMat[from:to,4] = ebvs
+  phenoMat[from:to,3] = gvs
+  phenoMat[from:to,4] = tbvs
+  phenoMat[from:to,5] = ebvs
+
   
   phenoMat
 }
