@@ -126,7 +126,7 @@ varMat[1,] <- varG(gen$F5)
 phenos = pheno(gen$F5)
 tbvs = bv(gen$F5)
 gvs = gv(gen$F5)
-valuesMat[1:nInd(gen$F5),1] = rep("ParentPool", times=nInd(gen$52))
+valuesMat[1:nInd(gen$F5),1] = rep("ParentPool", times=nInd(gen$F2))
 valuesMat[1:nInd(gen$F5),2] = phenos
 valuesMat[1:nInd(gen$F5),2] = gvs
 valuesMat[1:nInd(gen$F5),4] = tbvs
