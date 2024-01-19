@@ -24,7 +24,6 @@ ret <- list(
   correlations = list(),
   variances = list(),
   alleles = list(),
-  bv_ebv = list(),
   pheno = list()
 )
 
