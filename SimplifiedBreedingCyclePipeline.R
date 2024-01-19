@@ -186,23 +186,23 @@ for (cycle in 1:args$nCycles){
           newParents <- selectNewParents(gen$F2, 5, "ebv")
             if (grepl("rrblup",args$model)==TRUE){
             corMat[1,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
-              }
+            }
   
             if (grepl("ann",args$model)==TRUE){
-           corMat[1,] = cor(pheno(gen$F2), ebv(gen$F2)) 
-  } #determine model performance
+            corMat[1,] = cor(pheno(gen$F2), ebv(gen$F2)) 
+            } #determine model performance
    
         }
 
         if (args$parentSelections == "F5"){
           newParents <- selectNewParents(gen$F5, 5, "ebv")
            if (grepl("rrblup",args$model)==TRUE){
-            corMat[1,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
-              }
+           corMat[1,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
+           }
   
-            if (grepl("ann",args$model)==TRUE){
+           if (grepl("ann",args$model)==TRUE){
            corMat[1,] = cor(pheno(gen$F5), ebv(gen$F5)) 
-  } #determine model performance
+           } #determine model performance
         }
 
         
