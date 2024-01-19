@@ -196,8 +196,15 @@ for (cycle in 1:args$nCycles){
   ## 200 random crosses of new parents
   
   gen$F1 = randCross(newParents, 200,nProgeny=3)
-  updateResults(3, gen$F1, "F1")
-  updatePheno(gen$F1,"F1")
+  phenoData = pheno(gen$F1)
+  gvs = gv(gen$F1)
+  tbvs = bv(gen$F1)
+        valuesMat[1:nInd(gen$F1),1] = rep("F1", times=nInd(gen$F1))
+        valuesMat[1:nInd(gen$F1),2] = phenoData
+        valuesMat[1:nInd(gen$F1),3] = gvs
+        valuesMat[1:nInd(gen$F1),4] = tbvs
+        valuesMat[1:nInd(gen$F1),5] = rep("NA", times=nInd(gen$F1))
+        updateResults(2, gen$F1, "NP")
   
   
   ## self and bulk gen$F1 to form gen$F2 ##
