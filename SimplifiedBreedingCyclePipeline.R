@@ -169,7 +169,7 @@ for (cycle in 1:args$nCycles){
 
         checkMat = as.data.frame(valuesMat)
         from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-        to = from + nInd(genObj) -1
+        to = from + nInd(gen$F5) -1
 
         phenoData = pheno(newParents)
         gvs = gv(newParents)
@@ -188,7 +188,7 @@ for (cycle in 1:args$nCycles){
         
         checkMat = as.data.frame(valuesMat)
         from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-        to = from + nInd(genObj) -1
+        to = from + nInd(newParents) -1
         phenoData = pheno(newParents)
         gvs = gv(newParents)
         tbvs = bv(newParents)
@@ -208,7 +208,7 @@ for (cycle in 1:args$nCycles){
 
         checkMat = as.data.frame(valuesMat)
         from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-        to = from + nInd(genObj) -1
+        to = from + nInd(gen$F1) -1
         phenoData = pheno(gen$F1)
         gvs = gv(gen$F1)
         tbvs = bv(gen$F1)
@@ -216,7 +216,7 @@ for (cycle in 1:args$nCycles){
         valuesMat[from:to,2] = phenoData
         valuesMat[from:to,3] = gvs
         valuesMat[from:to,4] = tbvs
-        valuesMat[from:to),5] = rep("NA", times=nInd(gen$F1))
+        valuesMat[from:to,5] = rep("NA", times=nInd(gen$F1))
 
     updateResults(2, gen$F1, "NP")
   
