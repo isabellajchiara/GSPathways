@@ -227,10 +227,11 @@ for (cycle in 1:args$nCycles){
     trainModel()
   
   gen$F2 = self(gen$F1, nProgeny = 20) 
+  gen$F2@ebv = getEBV(gen$F2)   ## set EBV 
+
   updateResults(4, gen$F2, "F2")
   updatePheno(gen$F2,"F2")
 
-  gen$F2@ebv = getEBV(gen$F2)   ## set EBV 
 
   
   if (grepl("rrblup",args$model)==TRUE){
@@ -248,10 +249,11 @@ for (cycle in 1:args$nCycles){
   
   gen$F3 = TopWithinFam(gen$F2, 5,200 , "ebv")
   gen$F3 = setPheno(gen$F3)
+  gen$F3@ebv = getEBV(gen$F3) #set EBVS
+
   updateResults(5, gen$F3, "F3")
   updatePheno(gen$F3,"F3")
     
-  gen$F3@ebv = getEBV(gen$F3) #set EBVS
 
     if (grepl("rrblup",args$model)==TRUE){
     corMat[3,] = cor(bv(gen$F3), ebv(gen$F3)) #determine model performance
@@ -268,10 +270,11 @@ for (cycle in 1:args$nCycles){
   
   gen$F4 = TopWithinFam(gen$F3, 5, 30, "ebv")
   gen$F4 = setPheno(gen$F4)
+  gen$F4@ebv = getEBV(gen$F4) #set EBV
+
   updateResults(6, gen$F4, "F4")
   updatePheno(gen$F4,"F4")
   
-  gen$F4@ebv = getEBV(gen$F4) #set EBV
 
 
    if (grepl("rrblup",args$model)==TRUE){
@@ -289,10 +292,11 @@ for (cycle in 1:args$nCycles){
   
   gen$F5 = TopFamily(gen$F4,4,"ebv")
   gen$F5 = setPheno(gen$F5)
+  gen$F5@ebv = getEBV(gen$F5) #set EBV
+
   updateResults(7, gen$F5, "F5")
   updatePheno(gen$F5,"F5")
   
-   gen$F5@ebv = getEBV(gen$F5) #set EBV
 
 
     if (grepl("rrblup",args$model)==TRUE){
@@ -306,10 +310,11 @@ for (cycle in 1:args$nCycles){
   ## select top gen$F5 families for preliminary yield trial ##
   gen$PYT = TopFamily(gen$F5,2,"ebv")
   gen$PYT = setPheno(gen$PYT, reps=2)
+  gen$PYT@ebv = getEBV(gen$PYT) #set EBV
+
   updateResults(8, gen$PYT, "PYT")
   updatePheno(gen$PYT,"PYT")
   
-   gen$PYT@ebv = getEBV(gen$PYT) #set EBV
 
   
     if (grepl("rrblup",args$model)==TRUE){
@@ -324,11 +329,12 @@ for (cycle in 1:args$nCycles){
   
   gen$AYT = TopFamily(gen$PYT, 1, "ebv")
   gen$AYT = setPheno(gen$AYT, reps=5)
+  gen$AYT@ebv = getEBV(gen$AYT)
+
   updateResults(9, gen$AYT, "AYT")
   updatePheno(gen$AYT,"AYT")
   
   ##set EBV using RRBLUP model##
-  gen$AYT@ebv = getEBV(gen$AYT)
   
   
     if (grepl("rrblup",args$model)==TRUE){
