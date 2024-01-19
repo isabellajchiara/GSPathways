@@ -204,7 +204,7 @@ updatePheno <- function(genObj,genName){
   gvs = gv(genObj)
   tbvs = bv(genObj)
 
-  if (genObj = gen$F1) {
+  if (genName == "F1") {
     ebvs= rep(NA,times=nInd(gen$F1))
   } else {
     ebvs = ebv(genObj)
