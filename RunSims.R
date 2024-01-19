@@ -81,7 +81,7 @@ tic()
 Allgeneticvalues <- list()
 for (cycle in 1:args$nCycles){
   cli_alert_info("Writing output files for cycle {cycle}...")
-  Allgeneticvalues[[cycle]] <- getAllGeneticValues(res$geneticvalues[[cycle]], 10, 2)
+  Allgeneticvalues[[cycle]] <- getAllGeneticValues(res$geneticvalues[[cycle]])
   res$correlations[[cycle]] <- getCorrelations(res$correlations[[cycle]])
   res$variances[[cycle]] <- getVariances(res$variances[[cycle]])
   res$pheno[[cycle]] <- getPheno(res$pheno[[cycle]])
