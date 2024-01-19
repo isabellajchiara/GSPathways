@@ -1,4 +1,6 @@
 ## PEDIGREE BREEDING METHOD USING GEBVs TO SELECT
+
+#load requirements 
 suppressMessages(library(AlphaSimR))
 suppressMessages(library(argparse))
 suppressMessages(library(tictoc))
@@ -33,6 +35,7 @@ corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
 allelesMat <- NULL
 
+# depending on parent selections, we will collect varying numbers of phenotypes
 if (args$parentSelections == "F2"){
 nSim = 13366
 }
@@ -52,8 +55,7 @@ if (activeLog)
   cli_text("Created outputs")
 
 # establish simulation parameters
-set.seed(1206)
-defineTraitAEG(40,3.6,0.25) # nQtl per chr, mean,heritability
+defineTraitAEG(4,3.6,0.25) # nQtl per chr, mean,heritability
 
 ## FIRST CYCLE TO BUILD INITIAL TRAINING POP
 
@@ -107,7 +109,6 @@ gen$PYT1 = setPheno(gen$PYT1, reps=2)
 if (activeLog)
   cli_text("Generated PYTs...")
 
-
 # train model for initial parent selections 
 
 
@@ -121,7 +122,7 @@ tbvs = bv(gen$F2)
 phenoMat[1:nInd(gen$F2),1] = phenoData
 phenoMat[1:nInd(gen$F2),2] = tbvs
 phenoMat[1:nInd(gen$F2),3] = rep("ParentPool", times=nInd(gen$F2))
-updateResults(1, F2, "ParentPool")
+updateResults(1, gen$F2, "ParentPool")
 
 }
 
@@ -134,7 +135,7 @@ tbvs = bv(gen$F5)
 phenoMat[1:nInd(gen$F5),1] = phenoData
 phenoMat[1:nInd(gen$F5),2] = tbvs
 phenoMat[1:nInd(gen$F5),2] = rep("ParentPool", times=nInd(gen$F5))
-updateResults(1, F5, "ParentPool")
+updateResults(1, gen$F5, "ParentPool")
 
 }
 
