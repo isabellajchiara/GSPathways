@@ -166,28 +166,37 @@ for (cycle in 1:args$nCycles){
 
         newParents <- selectNewParents(gen$F5, 5, "pheno")
         corMat[1,] = NA
+
+        checkMat = as.data.frame(valuesMat)
+        from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
+        to = from + nInd(genObj) -1
+
         phenoData = pheno(newParents)
         gvs = gv(newParents)
         tbvs = bv(newParents)
-        valuesMat[1:nInd(newParents),1] = rep("NP", times=nInd(newParents))
-        valuesMat[1:nInd(newParents),2] = phenoData
-        valuesMat[1:nInd(newParents),3] = gvs
-        valuesMat[1:nInd(newParents),4] = tbvs
-        valuesMat[1:nInd(newParents),5] = rep("NA", times=nInd(newParents))
+        valuesMat[from:to,1] = rep("NP", times=nInd(newParents))
+        valuesMat[from:to,2] = phenoData
+        valuesMat[from:to,3] = gvs
+        valuesMat[from:to,4] = tbvs
+        valuesMat[from:to,5] = rep("NA", times=nInd(newParents))
         updateResults(2, newParents, "NP")
 
       } else {
     
         newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
         corMat[1,] = cor(bv(args$parentSelections), ebv(args$parentSelections)) #determine model performance
+        
+        checkMat = as.data.frame(valuesMat)
+        from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
+        to = from + nInd(genObj) -1
         phenoData = pheno(newParents)
         gvs = gv(newParents)
         tbvs = bv(newParents)
-        valuesMat[1:nInd(newParents),1] = rep("NP", times=nInd(newParents))
-        valuesMat[1:nInd(newParents),2] = phenoData
-        valuesMat[1:nInd(newParents),3] = gvs
-        valuesMat[1:nInd(newParents),4] = tbvs
-        valuesMat[1:nInd(newParents),5] = rep("NA", times=nInd(newParents))
+        valuesMat[from:to,1] = rep("NP", times=nInd(newParents))
+        valuesMat[from:to,2] = phenoData
+        valuesMat[from:to,3] = gvs
+        valuesMat[from:to,4] = tbvs
+        valuesMat[from:to,5] = rep("NA", times=nInd(newParents))
         updateResults(2, newParents, "NP")
       }
 
@@ -196,15 +205,20 @@ for (cycle in 1:args$nCycles){
   ## 200 random crosses of new parents
   
   gen$F1 = randCross(newParents, 200,nProgeny=3)
-  phenoData = pheno(gen$F1)
-  gvs = gv(gen$F1)
-  tbvs = bv(gen$F1)
-        valuesMat[1:nInd(gen$F1),1] = rep("F1", times=nInd(gen$F1))
-        valuesMat[1:nInd(gen$F1),2] = phenoData
-        valuesMat[1:nInd(gen$F1),3] = gvs
-        valuesMat[1:nInd(gen$F1),4] = tbvs
-        valuesMat[1:nInd(gen$F1),5] = rep("NA", times=nInd(gen$F1))
-        updateResults(2, gen$F1, "NP")
+
+        checkMat = as.data.frame(valuesMat)
+        from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
+        to = from + nInd(genObj) -1
+        phenoData = pheno(gen$F1)
+        gvs = gv(gen$F1)
+        tbvs = bv(gen$F1)
+        valuesMat[from:to,1] = rep("F1", times=nInd(gen$F1))
+        valuesMat[from:to,2] = phenoData
+        valuesMat[from:to,3] = gvs
+        valuesMat[from:to,4] = tbvs
+        valuesMat[from:to),5] = rep("NA", times=nInd(gen$F1))
+
+    updateResults(2, gen$F1, "NP")
   
   
   ## self and bulk gen$F1 to form gen$F2 ##
