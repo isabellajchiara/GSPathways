@@ -207,7 +207,7 @@ updatePheno <- function(genObj,genName){
 
   Gen <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
   valuesMat[from:to,1] = Gen
-  valuesMat[from:to,2] = phenoData
+  valuesMat[from:to,2] = phenos
   valuesMat[from:to,3] = gvs
   valuesMat[from:to,4] = tbvs
   valuesMat[from:to,5] = ebvs
