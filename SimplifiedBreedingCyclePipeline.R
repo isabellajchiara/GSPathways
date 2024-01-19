@@ -185,11 +185,11 @@ for (cycle in 1:args$nCycles){
         if (args$parentSelections == "F2"){
           newParents <- selectNewParents(gen$F2, 5, "ebv")
             if (grepl("rrblup",args$model)==TRUE){
-            corMat[2,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
+            corMat[1,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
               }
   
             if (grepl("ann",args$model)==TRUE){
-           corMat[2,] = cor(pheno(gen$F2), ebv(gen$F2)) 
+           corMat[1,] = cor(pheno(gen$F2), ebv(gen$F2)) 
   } #determine model performance
    
         }
@@ -197,16 +197,14 @@ for (cycle in 1:args$nCycles){
         if (args$parentSelections == "F5"){
           newParents <- selectNewParents(gen$F5, 5, "ebv")
            if (grepl("rrblup",args$model)==TRUE){
-            corMat[2,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
+            corMat[1,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
               }
   
             if (grepl("ann",args$model)==TRUE){
-           corMat[2,] = cor(pheno(gen$F5), ebv(gen$F5)) 
+           corMat[1,] = cor(pheno(gen$F5), ebv(gen$F5)) 
   } #determine model performance
         }
 
-
-        corMat[1,] = cor(bv(args$parentSelections), ebv(args$parentSelections)) #determine model performance
         
         checkMat = as.data.frame(valuesMat)
         from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
