@@ -135,7 +135,7 @@ getVariances <- function(variances){
 }
 
 getPheno <- function(pheno){
-  pheno <- as.data.frame(pheno)
+  pheno <- as.data.frame(valuesMat)
   colnames(pheno) = c("gen","pheno","gv","tbv","ebv")
   pheno
 }
@@ -225,7 +225,7 @@ updatePhenoEx <- function(genObj,genName){
   gvs = gv(genObj)
   tbvs = bv(genObj)
   Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
-   
+
   valuesMat[from:to,1] = Gen
   valuesMat[from:to,2] = phenos
   valuesMat[from:to,3] = gvs
