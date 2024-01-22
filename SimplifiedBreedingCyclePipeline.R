@@ -237,7 +237,7 @@ for (cycle in 1:args$nCycles){
         valuesMat[from:to,4] = tbvs
         valuesMat[from:to,5] = rep("NA", times=nInd(gen$F1))
 
-    updateResults(2, gen$F1, "NP")
+    updateResults(3, gen$F1, "F1")
   
   
   ## self and bulk gen$F1 to form gen$F2 ##
@@ -369,12 +369,20 @@ for (cycle in 1:args$nCycles){
   Variety = self(VarietySel)
   gvMat[10,] <- mean(gv(Variety))
   
-  phenoData = pheno(Variety)
+  phenos = pheno(Variety)
   checkMat = as.data.frame(valuesMat)
   from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
   to = from + nInd(Variety) -1
-  valuesMat[from:to,1] <- phenoData
-  valuesMat[from:to,2] = rep("Variety", times=nInd(Variety))
+  phenos = pheno(Variety)
+  gvs = gv(Variety)
+  tbvs = bv(Variety)
+  valuesMat[from:to,1] = rep("Variety", times=nInd(Variety))
+  valuesMat[from:to,2] = phenos
+  valuesMat[from:to,3] = gvs
+  valuesMat[from:to,4] = tbvs
+  valuesMat[from:to,5] = rep("NA", times=nInd(Variety))
+  
+  updateResults(10, Variety, "Variety")
   
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
