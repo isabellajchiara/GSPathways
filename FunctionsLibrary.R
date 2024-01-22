@@ -205,20 +205,31 @@ updatePheno <- function(genObj,genName){
   gvs = gv(genObj)
   tbvs = bv(genObj)
   Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
-
-  if (genObj == newParents){
-     ebvs = rep("NA",times=nInd(genObj))
-  } else if (genObj == gen$F1){
-     ebvs = rep("NA",times=nInd(genObj))
-  } else {
-    ebvs = ebv(genObj)
-  }
+  ebvs = ebvs(genObj)
  
   valuesMat[from:to,1] = Gen
   valuesMat[from:to,2] = phenos
   valuesMat[from:to,3] = gvs
   valuesMat[from:to,4] = tbvs
   valuesMat[from:to,5] = ebvs
+  
+  valuesMat
+}
+
+updatePhenoEx <- function(genObj,genName){
+  checkMat = as.data.frame(valuesMat)
+  from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
+  to = from + nInd(genObj) -1
+
+  phenos =pheno(genObj)
+  gvs = gv(genObj)
+  tbvs = bv(genObj)
+  Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
+   
+  valuesMat[from:to,1] = Gen
+  valuesMat[from:to,2] = phenos
+  valuesMat[from:to,3] = gvs
+  valuesMat[from:to,4] = tbvs
   
   valuesMat
 }

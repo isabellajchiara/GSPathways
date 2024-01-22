@@ -163,7 +163,7 @@ for (cycle in 1:args$nCycles){
         newParents <- selectNewParents(gen$F5, 5, "pheno")
         corMat[1,] = 0
 
-        updatePheno(newParents,"NP")
+        updatePhenoEx(newParents,"NP")
         updateResults(2, newParents, "NP")
 
       } else {
@@ -190,10 +190,9 @@ for (cycle in 1:args$nCycles){
            } #determine model performance
         }
 
-        
-        updatePheno()
+        updatePhenoEx(newParents,"NP")
         updateResults(2, newParents, "NP")
-      }
+      }gv
 
    
 
@@ -201,7 +200,7 @@ for (cycle in 1:args$nCycles){
   
   gen$F1 = randCross(newParents, 200,nProgeny=3)
 
-    updatePheno(gen$F1,"F1")  
+    updatePhenoEx(gen$F1,"F1")  
     updateResults(3, gen$F1, "F1")
   
   
