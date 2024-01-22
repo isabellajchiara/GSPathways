@@ -206,9 +206,9 @@ updatePheno <- function(genObj,genName){
   tbvs = bv(genObj)
   Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
 
-  if (genObj = newParents){
+  if (genObj == newParents){
      ebvs = rep("NA",times=nInd(genObj))
-  } elif (genObj = gen$F1){
+  } elif (genObj == gen$F1){
      ebvs = rep("NA",times=nInd(genObj))
   } else {
     ebvs = ebv(genObj)
