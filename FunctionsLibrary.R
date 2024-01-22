@@ -204,15 +204,22 @@ updatePheno <- function(genObj,genName){
   phenos =pheno(genObj)
   gvs = gv(genObj)
   tbvs = bv(genObj)
-  ebvs = ebv(genObj)
+  Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
 
-  Gen <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
+  if (genObj = newParents){
+     ebvs = rep("NA",times=nInd(genObj))
+  } elif (genObj = gen$F1){
+     ebvs = rep("NA",times=nInd(genObj))
+  } else {
+    ebvs = ebv(genObj)
+  }
+ 
+  
   valuesMat[from:to,1] = Gen
   valuesMat[from:to,2] = phenos
   valuesMat[from:to,3] = gvs
   valuesMat[from:to,4] = tbvs
   valuesMat[from:to,5] = ebvs
-
   
   valuesMat
 }
