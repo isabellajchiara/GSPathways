@@ -136,6 +136,7 @@ getVariances <- function(variances){
 
 getPheno <- function(pheno){
   pheno <- as.data.frame(pheno)
+  colnames(pheno) = c("gen","pheno","gv","tbv","ebv")
   pheno
 }
 
