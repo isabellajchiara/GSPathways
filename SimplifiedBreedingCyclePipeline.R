@@ -381,9 +381,7 @@ for (cycle in 1:args$nCycles){
   valuesMat[from:to,3] = gvs
   valuesMat[from:to,4] = tbvs
   valuesMat[from:to,5] = rep("NA", times=nInd(Variety))
-  
-  updateResults(10, Variety, "Variety")
-  
+    
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
   
