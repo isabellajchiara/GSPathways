@@ -208,13 +208,12 @@ updatePheno <- function(genObj,genName){
 
   if (genObj == newParents){
      ebvs = rep("NA",times=nInd(genObj))
-  } elif (genObj == gen$F1){
+  } else if (genObj == gen$F1){
      ebvs = rep("NA",times=nInd(genObj))
   } else {
     ebvs = ebv(genObj)
   }
  
-  
   valuesMat[from:to,1] = Gen
   valuesMat[from:to,2] = phenos
   valuesMat[from:to,3] = gvs
