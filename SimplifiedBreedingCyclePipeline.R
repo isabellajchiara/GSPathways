@@ -164,7 +164,7 @@ for (cycle in 1:args$nCycles){
       if (cycle == 1) {
 
         newParents <- selectNewParents(gen$F5, 5, "pheno")
-        corMat[1,] = NA
+        corMat[1,] = 0
 
         checkMat = as.data.frame(valuesMat)
         from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
