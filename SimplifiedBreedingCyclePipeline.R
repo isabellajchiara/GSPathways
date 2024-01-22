@@ -114,8 +114,7 @@ valuesMat[1:nInd(gen$F2),2] = phenos
 valuesMat[1:nInd(gen$F2),2] = gvs
 valuesMat[1:nInd(gen$F2),4] = tbvs
 valuesMat[1:nInd(gen$F2),5] = rep(NA,times=nInd(gen$F2))
-updateResults(1, gen$F2, "ParentPool")
-
+updateResults(1, gen$F2, "F2")
 }
 
 if (args$parentSelections == "F5"){
@@ -125,12 +124,12 @@ varMat[1,] <- varG(gen$F5)
 phenos = pheno(gen$F5)
 tbvs = bv(gen$F5)
 gvs = gv(gen$F5)
-valuesMat[1:nInd(gen$F5),1] = rep("ParentPool", times=nInd(gen$F2))
+valuesMat[1:nInd(gen$F5),1] = rep("F2", times=nInd(gen$F2))
 valuesMat[1:nInd(gen$F5),2] = phenos
 valuesMat[1:nInd(gen$F5),2] = gvs
 valuesMat[1:nInd(gen$F5),4] = tbvs
 valuesMat[1:nInd(gen$F5),5] = rep(NA,times=nInd(gen$F5))
-updateResults(1, gen$F5, "ParentPool")
+updateResults(1, gen$F5, "F2")
 
 }
 
