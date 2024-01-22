@@ -45,7 +45,7 @@ allTrainingDataPheno = list()
       nSim = 1486
       }
 
-valuesMat <- matrix(nrow=(nSim*args$nCycles),ncol=5) #gen, pheno, gv,tbv,ebv
+valuesMat <- matrix(nrow=(4*nSim*args$nCycles),ncol=5) #gen, pheno, gv,tbv,ebv
 
 gen <- list()
 
@@ -192,7 +192,7 @@ for (cycle in 1:args$nCycles){
 
         updatePhenoEx(newParents,"NP")
         updateResults(2, newParents, "NP")
-      }gv
+      }
 
    
 
@@ -331,23 +331,11 @@ for (cycle in 1:args$nCycles){
   ## select top plants to form variety ##
   VarietySel = selectInd(gen$AYT, 1, use="ebv")
   Variety = self(VarietySel)
-  gvMat[10,] <- mean(gv(Variety))
   
-  phenos = pheno(Variety)
-  checkMat = as.data.frame(valuesMat)
-  from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-  to = from + nInd(Variety) -1
-  phenos = pheno(Variety)
-  gvs = gv(Variety)
-  tbvs = bv(Variety)
-  valuesMat[from:to,1] = rep("Variety", times=nInd(Variety))
-  valuesMat[from:to,2] = phenos
-  valuesMat[from:to,3] = gvs
-  valuesMat[from:to,4] = tbvs
-  valuesMat[from:to,5] = rep("NA", times=nInd(Variety))
-    
+  gvMat[10,] <- mean(gv(Variety))
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
+  updatePhenoEx(Variety,"Variety")
   
   if (activeLog)
     cli_alert_success("Finished cycle {cycle}/{args$nCycles}...")
