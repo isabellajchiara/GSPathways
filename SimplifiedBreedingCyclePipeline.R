@@ -262,7 +262,7 @@ for (cycle in 1:args$nCycles){
   gvMat[10,] <- mean(gv(Variety))
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
-  valuesMatVar <- getPheno(Variety,"Varirty")
+  valuesMatVar <- getPheno(Variety,"Variety")
   valuesMat <- rbind(valuesMat, valuesMatVar)
   
   if (activeLog)

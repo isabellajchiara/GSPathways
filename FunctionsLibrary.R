@@ -212,7 +212,7 @@ updatePheno <- function(genObj,genName){
   if (genName %in% noEBV == TRUE){
     valuesMat[,4] <- NA
     }else{
-    valuesMat[,4] <- bv(genObj)}
+    valuesMat[,4] <- ebv(genObj)}
     }
   valuesMat = as.data.frame(valuesMat)
   colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
