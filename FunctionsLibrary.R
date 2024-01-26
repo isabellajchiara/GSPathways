@@ -199,41 +199,26 @@ updateResults <- function(ind, genObj, genName){
 }
 
 updatePheno <- function(genObj,genName){
-  valuesMat = matrix(nrow=nInd(genObj,ncol=5)
-  phenos = pheno(genObj)
-  gvs = gv(genObj)
-  tbvs = bv(genObj)
-  Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
-  ebvs = ebv(genObj)
- 
-  valuesMat[from:to,1] <- Gen
-  valuesMat[from:to,2] <- phenos
-  valuesMat[from:to,3] <- gvs
-  valuesMat[from:to,4] <- tbvs
-  valuesMat[from:to,5] <- ebvs
-
-  valuesMat = as.data.frame(valuesMat)
-  colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
-  valuesMat
-}
-
-updatePhenoEx <- function(genObj,genName){
+  
   valuesMat = matrix(nrow=nInd(genObj,ncol=5)
                      
-  phenos =pheno(genObj)
-  gvs = gv(genObj)
-  tbvs = bv(genObj)
-  Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
+  valuesMat[,1] <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
+  valuesMat[,2] <- pheno(genObj)
+  valuesMat[,3] <- gv(genObj)
+  valuesMat[,5] <- bv(genObj)
 
-  valuesMat[from:to,1] <- Gen
-  valuesMat[from:to,2] <- phenos
-  valuesMat[from:to,3] <- gvs
-  valuesMat[from:to,4] <- tbvs
+  noEBV = c("NP", "F1","Variety")
+                     
+  if (genName %in% noEBV == TRUE){
+    valuesMat[,4] <- NA
+    }else{
+    valuesMat[,4] <- bv(genObj)}
+    }
   valuesMat = as.data.frame(valuesMat)
   colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
   valuesMat
 }
-
+                     
   
 
 # The simulation returns is a list of reps. Each rep has a series of variables.
