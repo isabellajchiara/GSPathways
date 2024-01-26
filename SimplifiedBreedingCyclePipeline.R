@@ -138,12 +138,13 @@ for (cycle in 1:args$nCycles){
             corMat[1,] = cor(pheno(gen[[args$parentSelections]]), ebv(gen[[args$parentSelections]])) 
           } #determine model performance
 
-    #collect data on new parents
-    updatePhenoEx(newParents,"NP")
-    updateResults(2, newParents, "NP")
+          #collect data on new parents
+          updatePhenoEx(newParents,"NP")
+          updateResults(2, newParents, "NP")
   
       } else { #for cycles 2+ we don't need to train the model, we alreay have it from lastcycle
-       
+
+            #select new parents
             newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
         
             if (grepl("rrblup",args$model)==TRUE){
@@ -153,15 +154,13 @@ for (cycle in 1:args$nCycles){
             if (grepl("ann",args$model)==TRUE){
             corMat[1,] = cor(pheno(gen$F2), ebv(gen$F2)) 
             } #determine model performance
-        
-        updatePhenoEx(newParents,"NP")
-        updateResults(2, newParents, "NP")
-      }
 
-   
+            #collect data on new parents
+            updatePhenoEx(newParents,"NP")
+            updateResults(2, newParents, "NP")
+            }
 
   ## 200 random crosses of new parents
-  
   gen$F1 = randCross(newParents, 200,nProgeny=3)
 
   updatePhenoEx(gen$F1,"F1")  
@@ -169,7 +168,6 @@ for (cycle in 1:args$nCycles){
   
   
   ## self and bulk gen$F1 to form gen$F2 ##
-  
   if (args$trainGen == "F2")
     trainModel()
   
@@ -179,8 +177,6 @@ for (cycle in 1:args$nCycles){
   updateResults(4, gen$F2, "F2")
   updatePheno(gen$F2,"F2")
 
-
-  
   if (grepl("rrblup",args$model)==TRUE){
     corMat[2,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
   }
@@ -190,7 +186,6 @@ for (cycle in 1:args$nCycles){
   } #determine model performance
   
   ## select top individuals from gen$F2 bulk to form gen$F3 
-
   if (args$trainGen == "F3")
     trainModel()
   
@@ -211,7 +206,6 @@ for (cycle in 1:args$nCycles){
   } #determine model performance
   
   ## select top within familiy from gen$F3 to form gen$F4 
-  
   if (args$trainGen == "F4")
     trainModel("F4", gen$F4)
   
@@ -222,8 +216,6 @@ for (cycle in 1:args$nCycles){
   updateResults(6, gen$F4, "F4")
   updatePheno(gen$F4,"F4")
   
-
-
    if (grepl("rrblup",args$model)==TRUE){
     corMat[4,] = cor(bv(gen$F4), ebv(gen$F4)) #determine model performance
   }
@@ -233,7 +225,6 @@ for (cycle in 1:args$nCycles){
   } #determine model performance
 
   ## select top families from gen$F4 to form gen$F5 ##
-
   if (args$trainGen == "F5")
     trainModel()
   
@@ -243,8 +234,6 @@ for (cycle in 1:args$nCycles){
 
   updateResults(7, gen$F5, "F5")
   updatePheno(gen$F5,"F5")
-  
-
 
     if (grepl("rrblup",args$model)==TRUE){
     corMat[5,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
@@ -262,8 +251,6 @@ for (cycle in 1:args$nCycles){
   updateResults(8, gen$PYT, "PYT")
   updatePheno(gen$PYT,"PYT")
   
-
-  
     if (grepl("rrblup",args$model)==TRUE){
     corMat[6,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
   }
@@ -273,17 +260,13 @@ for (cycle in 1:args$nCycles){
   } #determine model performance
 
   ## select top families from gen$PYT for gen$AYT ##
-  
   gen$AYT = TopFamily(gen$PYT, 1, "ebv")
   gen$AYT = setPheno(gen$AYT, reps=5)
   gen$AYT@ebv = getEBV(gen$AYT)
 
   updateResults(9, gen$AYT, "AYT")
   updatePheno(gen$AYT,"AYT")
-  
-  ##set EBV using RRBLUP model##
-  
-  
+    
     if (grepl("rrblup",args$model)==TRUE){
     corMat[7,] = cor(bv(gen$AYT), ebv(gen$AYT)) #determine model performance
   }
