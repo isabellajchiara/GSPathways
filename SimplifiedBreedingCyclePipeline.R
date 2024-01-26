@@ -32,19 +32,10 @@ gvMat <- matrix(nrow=nGen, ncol=1)
 corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
 allelesMat <- NULL
+valuesMat <- NULL
 allTrainingDataGeno = list()
 allTrainingDataPheno = list()
-
-      if (args$parentSelections == "F2"){# depending on parent selections, we will collect varying numbers of phenotypes
-      nSim = 13366
-      }
-
-      if (args$parentSelections == "F5"){
-      nSim = 1486
-      }
-
-valuesMat <- matrix(nrow=(4*nSim*args$nCycles),ncol=5) #gen, pheno, gv,tbv,ebv
-
+    
 gen <- list()
 
 if (activeLog)
