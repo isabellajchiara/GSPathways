@@ -194,43 +194,43 @@ updateResults <- function(ind, genObj, genName){
   gvMat[ind,] <<- mean(gv(genObj)) 
   curAllelesMat <- getAllelesMat(genObj, genName) 
   allelesMat <<- rbind(allelesMat, curAllelesMat)
+  curValuesMat <- updatePheno(genObj, genName) 
+  valuesMat <<- rbind(valuesMat, curValuesMat)
 }
 
 updatePheno <- function(genObj,genName){
-  checkMat = as.data.frame(valuesMat)
-  from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-  to = from + nInd(genObj) -1
-
+  valuesMat = matrix(nrow=nInd(genObj,ncol=5)
   phenos = pheno(genObj)
   gvs = gv(genObj)
   tbvs = bv(genObj)
   Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
   ebvs = ebv(genObj)
  
-  valuesMat[from:to,1] <<- Gen
-  valuesMat[from:to,2] <<- phenos
-  valuesMat[from:to,3] <<- gvs
-  valuesMat[from:to,4] <<- tbvs
-  valuesMat[from:to,5] <<- ebvs
-  
+  valuesMat[from:to,1] <- Gen
+  valuesMat[from:to,2] <- phenos
+  valuesMat[from:to,3] <- gvs
+  valuesMat[from:to,4] <- tbvs
+  valuesMat[from:to,5] <- ebvs
+
+  valuesMat = as.data.frame(valuesMat)
+  colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
   valuesMat
 }
 
 updatePhenoEx <- function(genObj,genName){
-  checkMat = as.data.frame(valuesMat)
-  from = nrow(valuesMat) - sum(is.na(checkMat[,1])) +1
-  to = from + nInd(genObj) -1
-
+  valuesMat = matrix(nrow=nInd(genObj,ncol=5)
+                     
   phenos =pheno(genObj)
   gvs = gv(genObj)
   tbvs = bv(genObj)
   Gen = as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
 
-  valuesMat[from:to,1] <<- Gen
-  valuesMat[from:to,2] <<- phenos
-  valuesMat[from:to,3] <<- gvs
-  valuesMat[from:to,4] <<- tbvs
-  
+  valuesMat[from:to,1] <- Gen
+  valuesMat[from:to,2] <- phenos
+  valuesMat[from:to,3] <- gvs
+  valuesMat[from:to,4] <- tbvs
+  valuesMat = as.data.frame(valuesMat)
+  colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
   valuesMat
 }
 
