@@ -124,7 +124,6 @@ for (cycle in 1:args$nCycles){
           trainModel()
           gen[[args$parentSelections]]@ebv = getEBV(gen[[args$parentSelections]]) # set EBVs for parent pool
           
-          updatePheno(gen[[args$parentSelections]],"ParentPool") #collect parent pool data
           updateResults(1, gen[[args$parentSelections]], "ParentPool")
         
           #select parents based on EBV
@@ -139,7 +138,6 @@ for (cycle in 1:args$nCycles){
           } #determine model performance
 
           #collect data on new parents
-          updatePhenoEx(newParents,"NP")
           updateResults(2, newParents, "NP")
   
       } else { #for cycles 2+ we don't need to train the model, we alreay have it from lastcycle
@@ -156,14 +154,12 @@ for (cycle in 1:args$nCycles){
             } #determine model performance
 
             #collect data on new parents
-            updatePhenoEx(newParents,"NP")
             updateResults(2, newParents, "NP")
             }
 
   ## 200 random crosses of new parents
   gen$F1 = randCross(newParents, 200,nProgeny=3)
 
-  updatePhenoEx(gen$F1,"F1")  
   updateResults(3, gen$F1, "F1")
   
   
@@ -175,8 +171,6 @@ for (cycle in 1:args$nCycles){
   gen$F2@ebv = getEBV(gen$F2)   ## set EBV 
 
   updateResults(4, gen$F2, "F2")
-  updatePheno(gen$F2,"F2")
-
   if (grepl("rrblup",args$model)==TRUE){
     corMat[2,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
   }
@@ -194,7 +188,6 @@ for (cycle in 1:args$nCycles){
   gen$F3@ebv = getEBV(gen$F3) #set EBVS
 
   updateResults(5, gen$F3, "F3")
-  updatePheno(gen$F3,"F3")
     
 
     if (grepl("rrblup",args$model)==TRUE){
@@ -214,7 +207,6 @@ for (cycle in 1:args$nCycles){
   gen$F4@ebv = getEBV(gen$F4) #set EBV
 
   updateResults(6, gen$F4, "F4")
-  updatePheno(gen$F4,"F4")
   
    if (grepl("rrblup",args$model)==TRUE){
     corMat[4,] = cor(bv(gen$F4), ebv(gen$F4)) #determine model performance
@@ -233,7 +225,6 @@ for (cycle in 1:args$nCycles){
   gen$F5@ebv = getEBV(gen$F5) #set EBV
 
   updateResults(7, gen$F5, "F5")
-  updatePheno(gen$F5,"F5")
 
     if (grepl("rrblup",args$model)==TRUE){
     corMat[5,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
@@ -249,7 +240,6 @@ for (cycle in 1:args$nCycles){
   gen$PYT@ebv = getEBV(gen$PYT) #set EBV
 
   updateResults(8, gen$PYT, "PYT")
-  updatePheno(gen$PYT,"PYT")
   
     if (grepl("rrblup",args$model)==TRUE){
     corMat[6,] = cor(bv(gen$PYT), ebv(gen$PYT)) #determine model performance
@@ -265,7 +255,6 @@ for (cycle in 1:args$nCycles){
   gen$AYT@ebv = getEBV(gen$AYT)
 
   updateResults(9, gen$AYT, "AYT")
-  updatePheno(gen$AYT,"AYT")
     
     if (grepl("rrblup",args$model)==TRUE){
     corMat[7,] = cor(bv(gen$AYT), ebv(gen$AYT)) #determine model performance
@@ -282,7 +271,8 @@ for (cycle in 1:args$nCycles){
   gvMat[10,] <- mean(gv(Variety))
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
-  updatePhenoEx(Variety,"Variety")
+  valuesMatVar <- getPheno(Variety,"Varirty")
+  valuesMat <- rbind(valuesMat, valuesMatVar)
   
   if (activeLog)
     cli_alert_success("Finished cycle {cycle}/{args$nCycles}...")
