@@ -160,12 +160,9 @@ for (cycle in 1:args$nCycles){
   
       if (cycle == 1) {
 
-        newParents <- selectNewParents(gen$F5, 5, "pheno")
-        corMat[1,] = 0
-
-        updatePhenoEx(newParents,"NP")
-        updateResults(2, newParents, "NP")
-
+        gen$F2@ebv = getEBV(gen$F2)
+        gen$F5@ebv = getEBV(gen$F5)
+  
       } else {
         if (args$parentSelections == "F2"){
           newParents <- selectNewParents(gen$F2, 5, "ebv")
