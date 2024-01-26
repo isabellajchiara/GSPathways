@@ -28,12 +28,10 @@ ret <- list(
 )
 
 # create results matrices
-
 gvMat <- matrix(nrow=nGen, ncol=1)
 corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
 allelesMat <- NULL
-
 allTrainingDataGeno = list()
 allTrainingDataPheno = list()
 
@@ -59,7 +57,6 @@ defineTraitAEG(4,3.6,0.14) # nQtl per chr, mean,heritability
 ## CYCLE 0 TO BUILD INITIAL TRAINING POP = Phenotypic Selection
 
 # create base pop randomly cross 200 parents 
-
 Base = newPop(founderPop)
 Base = setPheno(Base)
 
@@ -70,7 +67,6 @@ if (activeLog)
   cli_text("Generated F1s...")
 
 # self and bulk gen$F1 to form gen$F2 
-
 gen$F2 = self(gen$F1, nProgeny = 20)
 gen$F2 = setPheno(gen$F2)
 
@@ -78,7 +74,6 @@ if (activeLog)
   cli_text("Generated F2s...")
 
 # select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
-
 gen$F3 = TopWithinFam(gen$F2,5,200,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
 gen$F3 = setPheno(gen$F3)
 
@@ -86,7 +81,6 @@ if (activeLog)
   cli_text("Generated F3s...")
 
 # select top individuals within gen$F3 families to form gen$F4 
-
 gen$F4 = TopWithinFam(gen$F3,5,30,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
 gen$F4 = setPheno(gen$F4)
 
@@ -94,46 +88,13 @@ if (activeLog)
   cli_text("Generated F4s...")
 
 # select top families from gen$F4 to form gen$F5 
-
 gen$F5 = TopFamily(gen$F4,4,"pheno") #select top 4 F4 families 
 gen$F5 = setPheno(gen$F5)
 
 if (activeLog)
   cli_text("Generated F5s...")
 
-
-if (args$parentSelections == "F2"){
-
-gvMat[1,] <- mean(gv(gen$F2))
-varMat[1,] <- varG(gen$F2)
-phenos = pheno(gen$F2)
-tbvs = bv(gen$F2)
-gvs = gv(gen$F2)
-valuesMat[1:nInd(gen$F2),1] = rep("ParentPool", times=nInd(gen$F2))
-valuesMat[1:nInd(gen$F2),2] = phenos
-valuesMat[1:nInd(gen$F2),2] = gvs
-valuesMat[1:nInd(gen$F2),4] = tbvs
-updateResults(1, gen$F2, "ParentPool")
-}
-
-if (args$parentSelections == "F5"){
-
-gvMat[1,] <- mean(gv(gen$F5))
-varMat[1,] <- varG(gen$F5)
-phenos = pheno(gen$F5)
-tbvs = bv(gen$F5)
-gvs = gv(gen$F5)
-valuesMat[1:nInd(gen$F5),1] = rep("ParentPool", times=nInd(gen$F2))
-valuesMat[1:nInd(gen$F5),2] = phenos
-valuesMat[1:nInd(gen$F5),2] = gvs
-valuesMat[1:nInd(gen$F5),4] = tbvs
-updateResults(1, gen$F5, "ParentPool")
-
-}
-
-
 # collect data for next cycle's model training
-
 trainingGenotypes = list()
 trainingPhenotypes = list()
 x = 1
@@ -152,20 +113,39 @@ allTrainingDataPheno[[1]] = trainingPhenotypes
 if (activeLog)
   cli_text("Initial cycle complete")
 
-# INITAL TRAINING POP IS BUILT, START GEBV CYCLES
+# INITAL TRAINING POP IS BUILT, START GS CYCLES
 
 for (cycle in 1:args$nCycles){
   if (activeLog)
     cli_text("Running cycle {cycle}/{args$nCycles}...")
   
       if (cycle == 1) {
+        
+          trainModel()
+          gen[[args$parentSelections]]@ebv = getEBV(gen[[args$parentSelections]]) # set EBVs for parent pool
+          
+          updatePheno(gen[[args$parentSelections]],"ParentPool") #collect parent pool data
+          updateResults(1, gen[[args$parentSelections]], "ParentPool")
+        
+          #select parents based on EBV
+          newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv") 
 
-        gen$F2@ebv = getEBV(gen$F2)
-        gen$F5@ebv = getEBV(gen$F5)
+          if (grepl("rrblup",args$model)==TRUE){
+            corMat[1,] = cor(bv(gen[[args$parentSelections]]), ebv(gen[[args$parentSelections]])) #determine model performance
+          }
+    
+          if (grepl("ann",args$model)==TRUE){
+            corMat[1,] = cor(pheno(gen[[args$parentSelections]]), ebv(gen[[args$parentSelections]])) 
+          } #determine model performance
+
+    #collect data on new parents
+    updatePhenoEx(newParents,"NP")
+    updateResults(2, newParents, "NP")
   
-      } else {
-        if (args$parentSelections == "F2"){
-          newParents <- selectNewParents(gen$F2, 5, "ebv")
+      } else { #for cycles 2+ we don't need to train the model, we alreay have it from lastcycle
+       
+            newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
+        
             if (grepl("rrblup",args$model)==TRUE){
             corMat[1,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
             }
@@ -173,20 +153,7 @@ for (cycle in 1:args$nCycles){
             if (grepl("ann",args$model)==TRUE){
             corMat[1,] = cor(pheno(gen$F2), ebv(gen$F2)) 
             } #determine model performance
-   
-        }
-
-        if (args$parentSelections == "F5"){
-          newParents <- selectNewParents(gen$F5, 5, "ebv")
-           if (grepl("rrblup",args$model)==TRUE){
-           corMat[1,] = cor(bv(gen$F5), ebv(gen$F5)) #determine model performance
-           }
-  
-           if (grepl("ann",args$model)==TRUE){
-           corMat[1,] = cor(pheno(gen$F5), ebv(gen$F5)) 
-           } #determine model performance
-        }
-
+        
         updatePhenoEx(newParents,"NP")
         updateResults(2, newParents, "NP")
       }
@@ -197,8 +164,8 @@ for (cycle in 1:args$nCycles){
   
   gen$F1 = randCross(newParents, 200,nProgeny=3)
 
-    updatePhenoEx(gen$F1,"F1")  
-    updateResults(3, gen$F1, "F1")
+  updatePhenoEx(gen$F1,"F1")  
+  updateResults(3, gen$F1, "F1")
   
   
   ## self and bulk gen$F1 to form gen$F2 ##
