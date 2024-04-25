@@ -302,3 +302,136 @@ appendMat <- function(lis, mat){
     lis
 }
 
+readGenVals <- function() {
+  #collect results from all cycles into a DF
+  
+  nCycle = 3
+  datalist = list()
+  
+  for (cycle in 1:nCycle) {
+    filename = paste("C", cycle, "_", args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections, "Parents_gvs_snp_yield.csv", sep="")
+    data = read.csv(filename)
+    datalist[[cycle]] = data
+  }
+  geneticValues <- do.call(rbind, datalist)
+  geneticValues <- geneticValues[-c(11,21),]
+  gens = as.data.frame(geneticValues[-1,1])
+  values = as.matrix(geneticValues[,-1])
+  
+  
+  cumulativeGain = matrix(nrow = (nrow(values)-1), ncol = (ncol(values)))
+  
+  #find the cumulative gain across each generation from the start of the sim
+  for (x in 1:(nrow(values)-1)) {
+    gen1 = as.numeric((values[x+1,]))
+    gen2 = as.numeric((values[1,]))
+    change = gen1 - gen2
+    cumulativeGain[x,] <- change
+  }
+  
+  #find the mean cumulative gain across reps 
+  cumulativeGain = as.data.frame(cumulativeGain)
+  meanGain = as.data.frame(rowMeans(cumulativeGain))
+  resultsGVs = cbind(gens, meanGain) # this DF has each genetic value in consecutive order from the beginning of C1 to the end of C3
+  
+  #find standard deviation of cumulative mean across reps (columns)
+  stdMat = matrix(nrow=nrow(cumulativeGain), ncol=1)
+  for (x in 1:nrow(cumulativeGain)) {
+    row = cumulativeGain[x,]
+    sd = sd(row)
+    stdMat[x,1] = sd
+  }
+  std = as.data.frame(stdMat)
+  
+  FINAL = cbind(resultsGVs, std)
+  FINAL = FINAL[-c(10,19),]
+  write.csv(FINAL, paste("GV_", filename, ".csv", sep=""))
+}
+
+readPCCs <- function(){
+  nCycle = 3
+  datalist = list()
+
+for (cycle in 1:nCycle) {
+  filename = paste("C", cycle, "_", args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections, "Parents_cors_snp_yield.csv", sep="")
+  data = read.csv(filename)
+  datalist[[cycle]] = data
+}
+
+correlationValues <- do.call(rbind, datalist)
+correlationValues = correlationValues[rowSums(is.na(correlationValues))==0,]
+correlationValues = correlationValues[ , colSums(is.na(correlationValues))==0] #remove columns(reps) containing an NA
+
+# take the mean across reps 
+values = correlationValues[,-1]
+means = rowMeans(values)
+gens = as.data.frame(correlationValues[,1])
+resultsCORs = cbind(gens,means) # this DF has each correlation value in consecutive order from the beginning of C1 to the end of C3
+
+#find standard deviation of cumulative mean across reps (columns)
+stdMat = matrix(nrow=nrow(correlationValues), ncol=1)
+for (x in 1:nrow(correlationValues)) {
+  row = correlationValues[x,-1]
+  sd = sd(row)
+  stdMat[x,1] = sd
+}
+std = as.data.frame(stdMat)
+
+FINAL = cbind(resultsCORs, std)
+write.csv(FINAL, paste("COR_", filename, ".csv", sep=""))
+}
+
+readVars <- function(){
+  nCycle=3
+  datalist = list()
+  
+  model = "rrblup"
+  trainGen = "F2"
+  trainingData="F2"
+  parentSelections="F2"
+  
+  
+  for (cycle in 1:nCycle) {
+    filename = paste("C", cycle, "_", args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections, "Parents_vars_snp_yield.csv", sep="")
+    data = read.csv(filename)
+    datalist[[cycle]] = data
+  }
+  
+  varianceValues <- do.call(rbind, datalist)
+  varianceValues = varianceValues[ , colSums(is.na(varianceValues))==0] #remove columns(reps) containing an NA
+  varianceValues = varianceValues[-c(10,19),]
+  
+  values = as.matrix(varianceValues[,-1])
+  cumulativeVar = matrix(nrow = (nrow(values)-1), ncol = (ncol(values)))
+  
+  #find the cumulative delta variance across each generation from the start of the sim
+  for (x in 1:(nrow(values)-1)) {
+    gen1 = as.numeric((values[x+1,]))
+    gen2 = as.numeric((values[1,]))
+    change = gen1 - gen2
+    cumulativeVar[x,] <- change
+  }
+  
+  
+  #find the mean cumulative delta variance across reps 
+  gens = as.data.frame(varianceValues[-1,1])
+  cumulativeVar = as.data.frame(cumulativeVar)
+  meanVar = as.data.frame(rowMeans(cumulativeVar))
+  resultsVars = cbind(gens, meanVar) # this DF has each variance value in consecutive order from the beginning of C1 to the end of C3
+  
+  
+  #find standard deviation of cumulative mean across reps (columns)
+  stdMat = matrix(nrow=nrow(cumulativeVar), ncol=1)
+  for (x in 1:nrow(cumulativeVar)) {
+    row = cumulativeVar[x,]
+    sd = sd(row)
+    stdMat[x,1] = sd
+  }
+  std = as.data.frame(stdMat)
+  
+  FINAL = cbind(resultsVars, std)
+  write.csv(FINAL, paste("VAR_", filename, ".csv", sep=""))
+  
+}
+  
+
