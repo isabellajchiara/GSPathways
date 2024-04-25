@@ -136,12 +136,58 @@ getVariances <- function(variances){
 
 getPheno <- function(pheno){
   pheno <- as.data.frame(valuesMat)
-  colnames(pheno) = c("gen","pheno","gv","tbv","ebv")
   pheno
 }
 
 # use trainGen to retrain the model
 trainModel <- function(){
+  
+  if(cycle ==1){
+    if (args$trainingData == "F2") { 
+      traincycle = cycle
+      fullSetGeno = allTrainingDataGeno[[traincycle]]
+      fullSetPheno = allTrainingDataPheno[[traincycle]]
+      M <- fullSetGeno[[2]]
+      y <- fullSetPheno[[2]]
+      nIndF5 =nInd(genZero$F5)
+      nIndF2 = nInd(genZero$F2)
+      remove = nIndF2-nIndF5
+      M <<- M[-c(1:remove),]
+      y <<- as.matrix(y[-c(1:remove),])
+    }
+    
+    if (args$trainingData == "F5") {
+      traincycle = cycle
+      fullSetGeno = allTrainingDataGeno[[traincycle]]
+      fullSetPheno = allTrainingDataPheno[[traincycle]]
+      M <<- fullSetGeno[[5]]
+      y <<- as.matrix(fullSetPheno[[5]])
+    }
+    
+    if (args$trainingData == "F2_and_F5") {
+      traincycle = cycle
+      fullSetGeno = allTrainingDataGeno[[traincycle]]
+      fullSetPheno = allTrainingDataPheno[[traincycle]]
+      F2M = fullSetGeno[[2]]
+      F2y = fullSetPheno[[2]] 
+      F5M = fullSetGeno[[5]]
+      F5y = fullSetPheno[[5]] 
+      M = rbind(F2M,F5M)
+      y = rbind(F2y, F5y)
+      nIndF5 =nInd(genZero$F5)
+      nIndF2 = nInd(genZero$F2)
+      remove = nIndF2-nIndF5
+      M <<- M[-c(1:remove),]
+      y <<- as.matrix(y[-c(1:remove),])
+    }
+    
+    if (args$trainingData == "ALL") {
+      M <<- as.data.frame(do.call("rbind",trainingGenotypes))
+      y <<- as.data.frame(do.call("rbind",trainingPhenotypes))
+    }
+    
+  }else{
+
 
   if (args$trainingData == "F2") { 
     traincycle = cycle
@@ -185,6 +231,7 @@ trainModel <- function(){
     M <<- as.data.frame(do.call("rbind",trainingGenotypes))
     y <<- as.data.frame(do.call("rbind",trainingPhenotypes))
   }
+  }
   source(file.path(MODEL_DIR, fileTrain))
 }
 
@@ -200,20 +247,20 @@ updateResults <- function(ind, genObj, genName){
 
 updatePheno <- function(genObj,genName){
   
-  valuesMat = matrix(nrow=nInd(genObj,ncol=5)
+  valuesMat = matrix(nrow=nInd(genObj),ncol=5)
                      
   valuesMat[,1] <- as.matrix(rep(paste0(genName,"C",cycle,sep=""), times=nInd(genObj)))
   valuesMat[,2] <- pheno(genObj)
   valuesMat[,3] <- gv(genObj)
-  valuesMat[,5] <- bv(genObj)
+  valuesMat[,4] <- bv(genObj)
 
   noEBV = c("NP", "F1","Variety")
                      
   if (genName %in% noEBV == TRUE){
-    valuesMat[,4] <- NA
+    valuesMat[,5] <- NA
     }else{
-    valuesMat[,4] <- ebv(genObj)}
-    }
+    valuesMat[,5] <- ebv(genObj)}
+    
   valuesMat = as.data.frame(valuesMat)
   colnames(valuesMat) = c("gen","pheno","gv","tbv","ebv")
   valuesMat
@@ -254,3 +301,4 @@ appendMat <- function(lis, mat){
     lis[[ length(lis)+1 ]] <- mat
     lis
 }
+
