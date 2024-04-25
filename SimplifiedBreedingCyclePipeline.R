@@ -13,12 +13,13 @@ source("FunctionsLibrary.R")
 source("ModelVariables.R")
 loadModelLibs()
 
+
 activeLog <- args$nCores == 1 || hasParallelVersion
 
 if (activeLog)
   cli_text("Generating parent population...")
+## define variables ##
 
-# data to be returned
 ret <- list( 
   geneticvalues = list(),
   correlations = list(),
@@ -33,9 +34,8 @@ corMat <- matrix(nrow=nModels, ncol=1)
 varMat <- matrix(nrow=nVar, ncol=1)
 allelesMat <- NULL
 valuesMat <- NULL
-allTrainingDataGeno = list()
-allTrainingDataPheno = list()
-    
+
+
 gen <- list()
 
 if (activeLog)
@@ -43,66 +43,17 @@ if (activeLog)
 
 # establish simulation parameters
 
-defineTraitAEG(4,3.6,0.14) # nQtl per chr, mean,heritability
-
-## CYCLE 0 TO BUILD INITIAL TRAINING POP = Phenotypic Selection
-
-# create base pop randomly cross 200 parents 
-Base = newPop(founderPop)
-Base = setPheno(Base)
-
-newParents <- selectNewParents(Base,5,"pheno")
-gen$F1 = randCross(newParents, 200, nProgeny=3)
-
-if (activeLog)
-  cli_text("Generated F1s...")
-
-# self and bulk gen$F1 to form gen$F2 
-gen$F2 = self(gen$F1, nProgeny = 20)
-gen$F2 = setPheno(gen$F2)
-
-if (activeLog)
-  cli_text("Generated F2s...")
-
-# select top individuals from each family to form gen$F2. Bulk and self to form gen$F3
-gen$F3 = TopWithinFam(gen$F2,5,200,"pheno") # top 10 F2 fam, 100 ind per fam using pheno
-gen$F3 = setPheno(gen$F3)
-
-if (activeLog)
-  cli_text("Generated F3s...")
-
-# select top individuals within gen$F3 families to form gen$F4 
-gen$F4 = TopWithinFam(gen$F3,5,30,"pheno") # top 5 F3 fam, 50 ind per fam using pheno
-gen$F4 = setPheno(gen$F4)
-
-if (activeLog)
-  cli_text("Generated F4s...")
-
-# select top families from gen$F4 to form gen$F5 
-gen$F5 = TopFamily(gen$F4,4,"pheno") #select top 4 F4 families 
-gen$F5 = setPheno(gen$F5)
-
 if (activeLog)
   cli_text("Generated F5s...")
-
-# collect data for next cycle's model training
-trainingGenotypes = list()
-trainingPhenotypes = list()
-x = 1
-for (generation in 1:length(gen)){
-  set = gen[[generation]]
-  M = pullSegSiteGeno(set)
-  y = pheno(set)
-  trainingGenotypes[[x]] = M
-  trainingPhenotypes[[x]] = y
-  x = x+1
-}
-allTrainingDataGeno[[1]] = trainingGenotypes
-allTrainingDataPheno[[1]] = trainingPhenotypes
 
 
 if (activeLog)
   cli_text("Initial cycle complete")
+
+if (activeLog)
+  cli_text("Generating parent population...")
+
+
 
 # INITAL TRAINING POP IS BUILT, START GS CYCLES
 
@@ -113,28 +64,28 @@ for (cycle in 1:args$nCycles){
       if (cycle == 1) {
         
           trainModel()
-          gen[[args$parentSelections]]@ebv = getEBV(gen[[args$parentSelections]]) # set EBVs for parent pool
+          genZero[[args$parentSelections]]@ebv = getEBV(genZero[[args$parentSelections]]) # set EBVs for parent pool
           
-          updateResults(1, gen[[args$parentSelections]], "ParentPool")
+          updateResults(1, genZero[[args$parentSelections]], "ParentPool")
         
           #select parents based on EBV
-          newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv") 
+          newParents <- selectNewParents(genZero[[args$parentSelections]], 5, "ebv") 
 
           if (grepl("rrblup",args$model)==TRUE){
-            corMat[1,] = cor(bv(gen[[args$parentSelections]]), ebv(gen[[args$parentSelections]])) #determine model performance
+            corMat[1,] = cor(bv(genZero[[args$parentSelections]]), ebv(genZero[[args$parentSelections]])) #determine model performance
           }
     
           if (grepl("ann",args$model)==TRUE){
-            corMat[1,] = cor(pheno(gen[[args$parentSelections]]), ebv(gen[[args$parentSelections]])) 
+            corMat[1,] = cor(pheno(genZero[[args$parentSelections]]), ebv(genZero[[args$parentSelections]])) 
           } #determine model performance
 
           #collect data on new parents
           updateResults(2, newParents, "NP")
   
-      } else { #for cycles 2+ we don't need to train the model, we alreay have it from lastcycle
+      } else { #for cycles 2+ we don't need to train the model, we already have it from last cycle
 
             #select new parents
-            newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv")
+            newParents <- selectNewParents(gen[[args$parentSelections]], 5, "ebv") 
         
             if (grepl("rrblup",args$model)==TRUE){
             corMat[1,] = cor(bv(gen$F2), ebv(gen$F2)) #determine model performance
@@ -262,9 +213,17 @@ for (cycle in 1:args$nCycles){
   gvMat[10,] <- mean(gv(Variety))
   allelesMatVar <- getAllelesMat(Variety, "Variety")
   allelesMat <- rbind(allelesMat, allelesMatVar)
-  valuesMatVar <- getPheno(Variety,"Variety")
-  valuesMat <- rbind(valuesMat, valuesMatVar)
   
+  curValuesMat = matrix(nrow=nInd(Variety),ncol=5)
+  curValuesMat[,1] <- as.matrix(rep(paste0("Variety","C",cycle,sep=""), times=nInd(Variety)))
+  curValuesMat[,2] <- pheno(Variety)
+  curValuesMat[,3] <- gv(Variety)
+  curValuesMat[,4] <- bv(Variety)
+  curValuesMat[,5] <- NA
+  colnames(curValuesMat) = c("gen","pheno","gv","tbv","ebv")
+  valuesMat <<- rbind(valuesMat, curValuesMat)
+  valuesMat = as.data.frame(valuesMat)
+
   if (activeLog)
     cli_alert_success("Finished cycle {cycle}/{args$nCycles}...")
   
