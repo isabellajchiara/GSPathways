@@ -15,7 +15,7 @@ getDirName <- function(){
 
 sim_params <- list(
     model = list("-m", "--model",
-        choices=c("rrblup_random","rrblup_stratifiedclusters", "rf_random","rf_stratifiedclusters", "svm_random","svm_stratifiedclusters", "ann_random", "ann_stratifiedclusters"),
+        choices=c("NoModel","rrblup_random","rrblup_stratifiedclusters", "rf_random","rf_stratifiedclusters", "svm_random","svm_stratifiedclusters", "ann_random", "ann_stratifiedclusters"),
         type="character", 
         default="rrblup_random",
         help="Model to be trained"),
@@ -27,7 +27,7 @@ sim_params <- list(
 
     nReps = list("-nr", "--nReps", 
         type="integer", 
-        default=15,
+        default=10,
         help="Number of replicas"),
 
     trainGen = list("-tg", "--trainGen",
@@ -69,3 +69,4 @@ ignored_params <- list(
 )
 
 parameters <- c(sim_params, run_params, ignored_params)
+
