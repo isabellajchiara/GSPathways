@@ -158,9 +158,13 @@ for (cycle in 1:args$nCycles){
   saveRDS(res$alleles[[cycle]], file=paste("C", cycle, "_",args$model,"_trainAt",args$trainGen,"_trainWith",args$trainingData,"_",args$parentSelections,"Parents_alleles_snp_yield.rds", sep=""))
 }
 
+readGenVals()
+readPCCs()
+readVars()
 
 cli_text("Time taken to write results:")
 toc()
 cli_text()
 cli_alert_success("Results saved!")
 setwd(workingDir) # Go back to previous directory
+
