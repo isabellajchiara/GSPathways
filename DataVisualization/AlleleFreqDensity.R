@@ -1,12 +1,12 @@
 # depending on ncycles and nreps, this can be a very slow script
 # consider running in the cluster if your machine doesn't have a ton of memory
 
-ncycles = 3
+ncycles = 1
 nreps=10
 nSNP = 3547
 genList=c("NP","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
-traingen = "F5"
+traingen = "F2"
 trainwith = "F2"
 parents = "F2"
 
@@ -17,7 +17,7 @@ for (cycle in 1:ncycles){
   for (i in 1:nreps) {
     for(gen in genList){
       
-      filename = paste("C", cycle, "_rrblup_random_trainAt",traingen,"_trainWith",trainwith,"_, "parents",Parents_alleles_snp_yield.rds", sep="")
+      filename = paste("C", cycle, "_rrblup_random_trainAt",traingen,"_trainWith",trainwith,"_", parents,"Parents_alleles_snp_yield.rds", sep="")
       genotypes <- readRDS(filename) #read in each cycle's SNP data
       
       repMat <- genotypes[[i]] #pull out one rep
@@ -35,7 +35,7 @@ for (cycle in 1:ncycles){
     datalist[[i]] <- freqList #add the freqList for 1 rep to the dataList
     cat("finished rep", i,"of", nreps, "for cycle", cycle,'\n')
   }
-  datalistDF = as.data.frame(do.call("rbind",datalist)) # turn to DF
+  datalistDF = as.data.frame(datalist) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
   cat("finished cycle", cycle, "of",ncycles,'\n')
   
