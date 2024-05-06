@@ -80,21 +80,23 @@ Alldata = do.call("cbind",FinalAlleleFreq) # now we have a data frame with the m
 colnames(Alldata) = c(rep(genList, times=ncycles))
 
 write.csv(Alldata,paste("MAF_trainAt",traingen,"_trainWith",trainwith,"_",parents,"Parents.csv")
+
+
                       
 ###
+
+Alldata = read.csv(paste("MAF_trainAt",traingen,"_trainWith",trainwith,"_",parents,"Parents.csv"))
+          
 BOC <- as.data.frame(Alldata[,1]) # take the fist gen of the cycle
 BOC$base <- rep(c("C1"), times = nrow(BOC))
 colnames(BOC) <- c("freq","stage")
                       
-MOC <- as.data.frame(Alldata[,ncol(Alldata*0.5)]) #take the middle of the 3 cycles 
-MOC$base <- rep(c("C2"), times = nrow(MOC))
-colnames(MOC) <- c("freq","stage")
                       
 EOC <- as.data.frame(Alldata[,ncol(Alldata)]) # take the last gen in the cycle 
 EOC$base <- rep(c("C3"), times = nrow(EOC))
 colnames(EOC) <- c("freq","stage")
                       
-alldata <- cbind(BOC,MOC,EOC) # we will look at just these 3 gens for simplicity
+alldata <- cbind(BOC,EOC) # visualize beginning and end of experiment
                       
     
 library(ggplot2)
