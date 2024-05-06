@@ -2,9 +2,13 @@
 # consider running in the cluster if your machine doesn't have a ton of memory
 
 ncycles = 3
-nreps=15
+nreps=10
 nSNP = 3547
 genList=c("NP","F1","F2","F3","F4","F5","PYT","AYT","Variety")
+
+traingen = "F5"
+trainwith = "F2"
+parents = "F2"
 
 freqList <- list()
 datalist <- list()
@@ -13,7 +17,7 @@ for (cycle in 1:ncycles){
   for (i in 1:nreps) {
     for(gen in genList){
       
-      filename = paste("C", cycle, "_rrblup_random_F2_F5_F2_alleles_snp_yield.rds", sep="")
+      filename = paste("C", cycle, "_rrblup_random_trainAt",traingen,"_trainWith",trainwith,"_, "parents",Parents_alleles_snp_yield.rds", sep="")
       genotypes <- readRDS(filename) #read in each cycle's SNP data
       
       repMat <- genotypes[[i]] #pull out one rep
@@ -49,7 +53,7 @@ MeanFreq = matrix(nrow=nSNP, ncol=length(genList))
 AllData = list()
 
 for (cycle in 1:ncycles) {
-    for (gen in (1:length(genList))){
+  for (gen in (1:length(genList))){
     datafile = paste("datalistC",cycle,".rds", sep="") #read in the datalist file for each cycle
     DF = readRDS(datafile) 
     DF = t(do.call(cbind,DF)) # turn to DF with each generation (all reps) representing 1 column
@@ -58,10 +62,10 @@ for (cycle in 1:ncycles) {
     genDF1 <- do.call("cbind",genDF) # turn to DF 
     genMeans <- as.matrix(rowMeans(genDF1)) #find the mean frequency across all reps 
     MeanFreq[,gen] = genMeans # add to the MeanFreq matrix
-    }
+  }
   assign(paste0("meanFreqsC",cycle),MeanFreq) 
   saveRDS(MeanFreq,paste("MeanFreqC",cycle,".rds",sep=""))
-  } 
+} 
 
 
 FinalAlleleFreq =list()
@@ -74,6 +78,8 @@ for (x in 1:ncycles){
 
 Alldata = do.call("cbind",FinalAlleleFreq) # now we have a data frame with the mean freq for reps for each consecutive gen
 colnames(Alldata) = c(rep(genList, times=ncycles))
+
+write.csv(Alldata,paste("MAF_trainAt",traingen,"_trainWith",trainwith,"_",parents,"Parents.csv")
                       
 ###
 BOC <- as.data.frame(Alldata[,1]) # take the fist gen of the cycle
