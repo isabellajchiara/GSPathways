@@ -55,11 +55,12 @@ for (cycle in 1:ncycles) {
   for (gen in (1:length(genList))){
     datafile = paste("datalistC",cycle,".rds", sep="") #read in the datalist file for each cycle
     DF = readRDS(datafile) 
-    values = data.frame(nrows=4616)
+    values = matrix(nrow=0,ncol=9)
+    colnames(values) = c(1:9)
     for (x in 1:nreps):
       rep = data.frame(DF[x])
-      values = cbind(values,rep)
-    values = values[,-1]
+      colnames(rep) = c(1:9)
+      values = rbind(values,rep)
     genDF <- data.frame(values[,gen])
     repList = list()
     n = 1
@@ -73,11 +74,10 @@ for (cycle in 1:ncycles) {
       m = m + 1
       }
      #pull out one generation from the cycle
-    genDF1 <- do.call("rbind",repList) # turn to DF 
+    genDF1 <- t(do.call("rbind",repList)) # turn to DF 
     genMeans <- as.matrix(rowMeans(genDF1)) #find the mean frequency across all reps 
     MeanFreq[,gen] = genMeans # add to the MeanFreq matrix
   }
- quit( 
   saveRDS(MeanFreq,paste("MeanFreqC",cycle,".rds",sep=""))
 } 
 }
