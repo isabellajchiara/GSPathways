@@ -1,9 +1,9 @@
 # depending on ncycles and nreps, this can be a very slow script
 # consider running in the cluster if your machine doesn't have a ton of memory
 
-ncycles = 1
-nreps=10
-nSNP = 3547
+ncycles = 3
+nreps=3
+nSNP = 4616
 genList=c("NP","F1","F2","F3","F4","F5","PYT","AYT","Variety")
 
 traingen = "F2"
@@ -32,10 +32,9 @@ for (cycle in 1:ncycles){
       #cycle through all gens for a given rep
     }
     freqDF <- do.call(cbind, freqList) #turn list into DF
-    datalist[[i]] <- freqList #add the freqList for 1 rep to the dataList
+    datalist[[i]] <- freqDF #add the freqList for 1 rep to the dataList
     cat("finished rep", i,"of", nreps, "for cycle", cycle,'\n')
   }
-  datalistDF = as.data.frame(datalist) # turn to DF
   saveRDS(datalist,paste("datalistC",cycle,".rds", sep="")) #we will have one dataList for each cycle
   cat("finished cycle", cycle, "of",ncycles,'\n')
   
@@ -56,16 +55,33 @@ for (cycle in 1:ncycles) {
   for (gen in (1:length(genList))){
     datafile = paste("datalistC",cycle,".rds", sep="") #read in the datalist file for each cycle
     DF = readRDS(datafile) 
-    DF = t(do.call(cbind,DF)) # turn to DF with each generation (all reps) representing 1 column
-    colnames(DF) = c(1:length(genList)) # number the columns
-    genDF <- DF[,gen] #pull out one generation from the cycle
-    genDF1 <- do.call("cbind",genDF) # turn to DF 
+    values = data.frame(nrows=4616)
+    for (x in 1:nreps):
+      rep = data.frame(DF[x])
+      values = cbind(values,rep)
+    values = values[,-1]
+    genDF <- data.frame(values[,gen])
+    repList = list()
+    n = 1
+    m = 0
+    while (n < nreps) {
+      start = nSNP*m +1
+      end = nSNP*n
+      sample = data.frame(genDF[start:end,])
+      repList[n] = sample
+      n = n + 1
+      m = m + 1
+      }
+     #pull out one generation from the cycle
+    genDF1 <- do.call("rbind",repList) # turn to DF 
     genMeans <- as.matrix(rowMeans(genDF1)) #find the mean frequency across all reps 
     MeanFreq[,gen] = genMeans # add to the MeanFreq matrix
   }
-  assign(paste0("meanFreqsC",cycle),MeanFreq) 
+ quit( 
   saveRDS(MeanFreq,paste("MeanFreqC",cycle,".rds",sep=""))
 } 
+}
+
 
 
 FinalAlleleFreq =list()
