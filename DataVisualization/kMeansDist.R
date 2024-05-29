@@ -6,25 +6,18 @@ library(cluster)
 library(factoextra)
 
 cycle = 3
-genList = c("F2")
+genList = c("PYT")
 genoList = list()
 
-for (gen in genList){
-  filename = paste("C",cycle,"_ann_random_trainAtF5_trainWithF2_F2Parents_alleles_snp_yield.rds", sep="")
-  genotypes <- readRDS(filename) #read in each cycle's SNP data
-  repMat = genotypes[[1]]
-  geno = repMat[repMat$Gen==gen,]
-  M = geno[,-1]
-  
-  if (gen == "F2"){
-    M = M[1:500,]}
-  
-  assign(paste0("M",gen),M)
-  }
-
-if (length(genList) > 1){
-  M  = rbind(MF2,MF5)
-}
+for (i in 1:nreps){
+    
+    filename = paste("C",cycle,"_ann_random_trainAtF5_trainWithF2_F2Parents_alleles_snp_yield.rds", sep="")
+    genotypes <- readRDS(filename) #read in each cycle's SNP data
+    repMat = genotypes[[i]]
+    geno = repMat[repMat$Gen==gen,]
+    M = geno[,-1]
+    genoList[i] = M
+    }
 
 #prepare DF
 newgeno <- M %>%  select(where(~ n_distinct(.) > 1))
