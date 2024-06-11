@@ -1,0 +1,13 @@
+#summary is a DF with 3 columns. "Value" "Performance "Model"
+
+summary = read.csv("p4Models.csv")
+
+summary_diamonds <- summary %>% 
+  group_by(Model) %>% 
+  summarise(lower = min(Performance), upper = max(Performance), p = median(Performance))
+
+
+ggplot(data = summary_diamonds, mapping = aes(x = Model, y = p)) +
+  geom_pointrange(mapping = aes(ymin = lower, ymax = upper)) +
+  ggtitle("Pathway 4 Model Performance") +
+  xlab("Model") + ylab("PCC")
