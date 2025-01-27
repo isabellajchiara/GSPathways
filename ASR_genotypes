@@ -1,0 +1,74 @@
+ChrList = list(Chr1,Chr2,Chr3,Chr4,Chr5,Chr6,Chr7,Chr8,Chr9,Chr10,Chr11) # ChrList is a list of positions for all loci, one for each Chr 
+
+# confirm number of loci
+start = 0
+for (list in 1:length(ChrList)){
+  chromosome = ChrList[[list]]
+  value = nrow(chromosome)
+  total = start + value
+  start = total
+  print(total)
+}
+
+
+# adjust unit for positions
+for (x in 1:length(ChrList)){
+  data = ChrList[[x]]
+  pos = as.matrix(data[,2])
+  pos = pos/1000000
+  assign(paste0("Chr",x, sep=""),pos)
+}
+
+#haplo is your matrix ofgenotypes, nXm ,  n ind , m loci
+haplo[[haplo=="OO"] <- "0,0"
+haplo[[haplo=="11"] <- "1,1"
+haplo[[haplo=="01"] <- "0,1"
+haplo[[haplo=="10"] <- "1,0"
+
+#the above format allows for us to separate our genotypes into individual chromosomes below
+
+# separate large geno matrix into indiviudal chromosomes 
+
+haplotypes = list()
+
+start = 1
+for (x in 1:length(genMap)){
+ chromosome = genMap[[x]]
+ from = start
+ 
+ if (x == 1){
+ to = nrow(chromosome)
+ 
+ }else{
+ to = from + nrow(chromosome) - 1  
+ }
+ 
+ haploData = haplo[,from:to]
+ start = to + 1
+ haplotypes[[x]]<- assign(paste0("HaploChr",x),haploData)
+}
+
+#haplotypes is now a list of DF, each DF representing genotypes separated by chromosome 
+
+#next we separate genotypes into double stranded haplotypes
+
+doubleHaplo = list()
+for (chr in 1:length(haplotypes)){
+  singleChr = as.data.frame(haplotypes[[chr]])
+  singleChr = t(singleChr)
+  doublehaplo = list()
+  for (str in 1:ncol(singleChr)){
+    newcols = read.table(text=singleChr[,str], sep=',', fill=T, h=F, dec = '/')
+    doublehaplo[[str]] = newcols
+  }
+  DF = do.call(cbind, doublehaplo)
+  DF = t(DF)
+  doubleHaplo[[chr]] = DF
+}
+
+# these lists should work with the newMapPop function in ASR. Check below
+
+founderPop = newMapPop(genMap, 
+                       doubleHaplo, 
+                       inbred = FALSE, 
+                       ploidy = 2L)
